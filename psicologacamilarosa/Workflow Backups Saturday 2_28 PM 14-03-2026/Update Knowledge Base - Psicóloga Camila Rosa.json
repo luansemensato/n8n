@@ -1,0 +1,1069 @@
+[
+  {
+    "updatedAt": "2025-06-14T16:44:00.839Z",
+    "createdAt": "2025-01-20T00:53:19.960Z",
+    "id": "dXXOFiKju7KpEtb0",
+    "name": "Update Knowledge Base - Psicóloga Camila Rosa",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "mode": "insert",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+        "typeVersion": 1,
+        "position": [
+          1500,
+          940
+        ],
+        "id": "9b3fa388-f085-42b5-8f78-7070e64c9e2c",
+        "name": "Postgres PGVector Store",
+        "credentials": {
+          "postgres": {
+            "id": "xcChrcP2kgtUv74O",
+            "name": "Postgres - pgvectorstore - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          1500,
+          1120
+        ],
+        "id": "997c4ed0-9f82-49ba-b55b-035d8509ed16",
+        "name": "Embeddings OpenAI",
+        "credentials": {
+          "openAiApi": {
+            "id": "QBE26nTS8bfWjvAM",
+            "name": "OpenAi n8n psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsonMode": "expressionData",
+          "jsonData": "={{ $json.texto }}",
+          "options": {
+            "metadata": {
+              "metadataValues": [
+                {
+                  "name": "workflow_project_name",
+                  "value": "psicologacamilarosa"
+                },
+                {
+                  "name": "file_id",
+                  "value": "={{ $('arquivo_id1').item.json.file_id }}"
+                },
+                {
+                  "name": "file_name",
+                  "value": "={{ $('arquivo_id1').item.json.file_name }}"
+                }
+              ]
+            }
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1,
+        "position": [
+          1660,
+          1120
+        ],
+        "id": "0b621da5-7461-430f-9a2d-db6440a34754",
+        "name": "Default Data Loader1"
+      },
+      {
+        "parameters": {
+          "chunkOverlap": 100,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "typeVersion": 1,
+        "position": [
+          1680,
+          1300
+        ],
+        "id": "0b39b736-6296-4b98-8119-3be517459d7c",
+        "name": "Recursive Character Text Splitter1"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "=DELETE FROM public.n8n_vectors\nWHERE metadata->>'file_id' LIKE '%{{$json.file_id}}%';\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.5,
+        "position": [
+          480,
+          940
+        ],
+        "id": "dd51bff7-a509-49d1-bc4c-10bebcd36ba6",
+        "name": "delete_old_file",
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "xcChrcP2kgtUv74O",
+            "name": "Postgres - pgvectorstore - psicologacamilarosa"
+          }
+        },
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "triggerOn": "specificFolder",
+          "folderToWatch": {
+            "__rl": true,
+            "value": "1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z",
+            "mode": "list",
+            "cachedResultName": "Knowledge Base",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z"
+          },
+          "event": "fileCreated",
+          "options": {}
+        },
+        "id": "38fe86ec-a047-4bbd-b6d7-25bda6226955",
+        "name": "arquivo_criado2",
+        "type": "n8n-nodes-base.googleDriveTrigger",
+        "typeVersion": 1,
+        "position": [
+          100,
+          840
+        ],
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jMgFKhNE396du7BE",
+            "name": "Google Drive - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "triggerOn": "specificFolder",
+          "folderToWatch": {
+            "__rl": true,
+            "value": "1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z",
+            "mode": "list",
+            "cachedResultName": "Knowledge Base",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z"
+          },
+          "event": "fileUpdated",
+          "options": {}
+        },
+        "id": "885003db-afea-4888-997a-974cf67599f6",
+        "name": "arquivo_alterado2",
+        "type": "n8n-nodes-base.googleDriveTrigger",
+        "typeVersion": 1,
+        "position": [
+          100,
+          1040
+        ],
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jMgFKhNE396du7BE",
+            "name": "Google Drive - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "download",
+          "fileId": {
+            "__rl": true,
+            "value": "={{ $('arquivo_id1').item.json.file_id }}",
+            "mode": "id"
+          },
+          "options": {
+            "googleFileConversion": {
+              "conversion": {
+                "docsToFormat": "text/plain"
+              }
+            }
+          }
+        },
+        "id": "aed6aa57-3bdf-446a-b4e4-04ff2611e389",
+        "name": "download_arquivo2",
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3,
+        "position": [
+          660,
+          940
+        ],
+        "executeOnce": true,
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jMgFKhNE396du7BE",
+            "name": "Google Drive - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "options": {}
+        },
+        "id": "5e9da742-4f19-41fe-919a-3bc6d8461e90",
+        "name": "extrair_pdf2",
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          1060,
+          840
+        ],
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "aecaf0bd-b800-40b7-b348-c1a8ff636ef1",
+                "name": "texto",
+                "value": "={{ $json.text }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "a77d282d-946d-4655-af0d-fea3164a02af",
+        "name": "exportar_texto2",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1300,
+          940
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "text",
+          "destinationKey": "text",
+          "options": {}
+        },
+        "id": "2eb5ed8a-7e64-47ad-9f15-764d613eeaf8",
+        "name": "extrair_texto2",
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          1060,
+          1040
+        ]
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('arquivo_id1').item.json.file_mime_type }}",
+                      "rightValue": "application/pdf",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "PDF"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "d67dd12c-f3be-40aa-bc38-e37b75e7d768",
+                      "leftValue": "={{ $('arquivo_id1').item.json.file_mime_type }}",
+                      "rightValue": "application/vnd.google-apps.document",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "GOOGLE-TEXTO"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "8b509775-8ae2-4627-8dbf-4cd2360f7c3e",
+        "name": "tipo_arquivo2",
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          840,
+          940
+        ]
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "10646eae-ae46-4327-a4dc-9987c2d76173",
+                "name": "file_id",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "c9e1ed84-5dcc-43c3-999b-cf1d095eba32",
+                "name": "file_mime_type",
+                "value": "={{ $json.mimeType }}",
+                "type": "string"
+              },
+              {
+                "id": "ffa1204c-e926-454a-a3db-f97423fe8e6f",
+                "name": "file_name",
+                "value": "={{ $json.name }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "f04a48c7-3697-4762-bb3d-82c715513613",
+        "name": "arquivo_id1",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          300,
+          940
+        ]
+      }
+    ],
+    "connections": {
+      "Embeddings OpenAI": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Default Data Loader1": {
+        "ai_document": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Recursive Character Text Splitter1": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Default Data Loader1",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "delete_old_file": {
+        "main": [
+          [
+            {
+              "node": "download_arquivo2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "arquivo_criado2": {
+        "main": [
+          [
+            {
+              "node": "arquivo_id1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "arquivo_alterado2": {
+        "main": [
+          [
+            {
+              "node": "arquivo_id1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "download_arquivo2": {
+        "main": [
+          [
+            {
+              "node": "tipo_arquivo2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "extrair_pdf2": {
+        "main": [
+          [
+            {
+              "node": "exportar_texto2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "exportar_texto2": {
+        "main": [
+          [
+            {
+              "node": "Postgres PGVector Store",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "extrair_texto2": {
+        "main": [
+          [
+            {
+              "node": "exportar_texto2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "tipo_arquivo2": {
+        "main": [
+          [
+            {
+              "node": "extrair_pdf2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "extrair_texto2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "arquivo_id1": {
+        "main": [
+          [
+            {
+              "node": "delete_old_file",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "America/Sao_Paulo",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "QXFrfjYJi0JXm241"
+    },
+    "staticData": {
+      "node:arquivo_criado": {
+        "lastTimeChecked": "2025-03-16T06:12:36Z"
+      },
+      "node:arquivo_alterado": {
+        "lastTimeChecked": "2025-03-16T06:12:37Z"
+      },
+      "node:arquivo_criado2": {
+        "lastTimeChecked": "2026-02-28T01:09:44Z"
+      },
+      "node:arquivo_alterado2": {
+        "lastTimeChecked": "2026-02-28T01:09:45Z"
+      }
+    },
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "7c11100e-857d-460a-92cb-899c8e5e37fb",
+    "activeVersionId": "7c11100e-857d-460a-92cb-899c8e5e37fb",
+    "triggerCount": 2,
+    "shared": [
+      {
+        "updatedAt": "2025-01-20T00:53:19.960Z",
+        "createdAt": "2025-01-20T00:53:19.960Z",
+        "role": "workflow:owner",
+        "workflowId": "dXXOFiKju7KpEtb0",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": {
+      "updatedAt": "2026-01-28T12:32:27.095Z",
+      "createdAt": "2026-01-28T12:32:27.095Z",
+      "versionId": "7c11100e-857d-460a-92cb-899c8e5e37fb",
+      "workflowId": "dXXOFiKju7KpEtb0",
+      "nodes": [
+        {
+          "parameters": {
+            "mode": "insert",
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+          "typeVersion": 1,
+          "position": [
+            1500,
+            940
+          ],
+          "id": "9b3fa388-f085-42b5-8f78-7070e64c9e2c",
+          "name": "Postgres PGVector Store",
+          "credentials": {
+            "postgres": {
+              "id": "xcChrcP2kgtUv74O",
+              "name": "Postgres - pgvectorstore - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+          "typeVersion": 1.2,
+          "position": [
+            1500,
+            1120
+          ],
+          "id": "997c4ed0-9f82-49ba-b55b-035d8509ed16",
+          "name": "Embeddings OpenAI",
+          "credentials": {
+            "openAiApi": {
+              "id": "QBE26nTS8bfWjvAM",
+              "name": "OpenAi n8n psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "jsonMode": "expressionData",
+            "jsonData": "={{ $json.texto }}",
+            "options": {
+              "metadata": {
+                "metadataValues": [
+                  {
+                    "name": "workflow_project_name",
+                    "value": "psicologacamilarosa"
+                  },
+                  {
+                    "name": "file_id",
+                    "value": "={{ $('arquivo_id1').item.json.file_id }}"
+                  },
+                  {
+                    "name": "file_name",
+                    "value": "={{ $('arquivo_id1').item.json.file_name }}"
+                  }
+                ]
+              }
+            }
+          },
+          "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+          "typeVersion": 1,
+          "position": [
+            1660,
+            1120
+          ],
+          "id": "0b621da5-7461-430f-9a2d-db6440a34754",
+          "name": "Default Data Loader1"
+        },
+        {
+          "parameters": {
+            "chunkOverlap": 100,
+            "options": {}
+          },
+          "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+          "typeVersion": 1,
+          "position": [
+            1680,
+            1300
+          ],
+          "id": "0b39b736-6296-4b98-8119-3be517459d7c",
+          "name": "Recursive Character Text Splitter1"
+        },
+        {
+          "parameters": {
+            "operation": "executeQuery",
+            "query": "=DELETE FROM public.n8n_vectors\nWHERE metadata->>'file_id' LIKE '%{{$json.file_id}}%';\n",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.postgres",
+          "typeVersion": 2.5,
+          "position": [
+            480,
+            940
+          ],
+          "id": "dd51bff7-a509-49d1-bc4c-10bebcd36ba6",
+          "name": "delete_old_file",
+          "alwaysOutputData": true,
+          "credentials": {
+            "postgres": {
+              "id": "xcChrcP2kgtUv74O",
+              "name": "Postgres - pgvectorstore - psicologacamilarosa"
+            }
+          },
+          "onError": "continueRegularOutput"
+        },
+        {
+          "parameters": {
+            "pollTimes": {
+              "item": [
+                {
+                  "mode": "everyMinute"
+                }
+              ]
+            },
+            "triggerOn": "specificFolder",
+            "folderToWatch": {
+              "__rl": true,
+              "value": "1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z",
+              "mode": "list",
+              "cachedResultName": "Knowledge Base",
+              "cachedResultUrl": "https://drive.google.com/drive/folders/1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z"
+            },
+            "event": "fileCreated",
+            "options": {}
+          },
+          "id": "38fe86ec-a047-4bbd-b6d7-25bda6226955",
+          "name": "arquivo_criado2",
+          "type": "n8n-nodes-base.googleDriveTrigger",
+          "typeVersion": 1,
+          "position": [
+            100,
+            840
+          ],
+          "credentials": {
+            "googleDriveOAuth2Api": {
+              "id": "jMgFKhNE396du7BE",
+              "name": "Google Drive - n8n-web-client - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "pollTimes": {
+              "item": [
+                {
+                  "mode": "everyMinute"
+                }
+              ]
+            },
+            "triggerOn": "specificFolder",
+            "folderToWatch": {
+              "__rl": true,
+              "value": "1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z",
+              "mode": "list",
+              "cachedResultName": "Knowledge Base",
+              "cachedResultUrl": "https://drive.google.com/drive/folders/1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z"
+            },
+            "event": "fileUpdated",
+            "options": {}
+          },
+          "id": "885003db-afea-4888-997a-974cf67599f6",
+          "name": "arquivo_alterado2",
+          "type": "n8n-nodes-base.googleDriveTrigger",
+          "typeVersion": 1,
+          "position": [
+            100,
+            1040
+          ],
+          "credentials": {
+            "googleDriveOAuth2Api": {
+              "id": "jMgFKhNE396du7BE",
+              "name": "Google Drive - n8n-web-client - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "operation": "download",
+            "fileId": {
+              "__rl": true,
+              "value": "={{ $('arquivo_id1').item.json.file_id }}",
+              "mode": "id"
+            },
+            "options": {
+              "googleFileConversion": {
+                "conversion": {
+                  "docsToFormat": "text/plain"
+                }
+              }
+            }
+          },
+          "id": "aed6aa57-3bdf-446a-b4e4-04ff2611e389",
+          "name": "download_arquivo2",
+          "type": "n8n-nodes-base.googleDrive",
+          "typeVersion": 3,
+          "position": [
+            660,
+            940
+          ],
+          "executeOnce": true,
+          "credentials": {
+            "googleDriveOAuth2Api": {
+              "id": "jMgFKhNE396du7BE",
+              "name": "Google Drive - n8n-web-client - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "operation": "pdf",
+            "options": {}
+          },
+          "id": "5e9da742-4f19-41fe-919a-3bc6d8461e90",
+          "name": "extrair_pdf2",
+          "type": "n8n-nodes-base.extractFromFile",
+          "typeVersion": 1,
+          "position": [
+            1060,
+            840
+          ],
+          "alwaysOutputData": true
+        },
+        {
+          "parameters": {
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "aecaf0bd-b800-40b7-b348-c1a8ff636ef1",
+                  "name": "texto",
+                  "value": "={{ $json.text }}",
+                  "type": "string"
+                }
+              ]
+            },
+            "options": {}
+          },
+          "id": "a77d282d-946d-4655-af0d-fea3164a02af",
+          "name": "exportar_texto2",
+          "type": "n8n-nodes-base.set",
+          "typeVersion": 3.4,
+          "position": [
+            1300,
+            940
+          ]
+        },
+        {
+          "parameters": {
+            "operation": "text",
+            "destinationKey": "text",
+            "options": {}
+          },
+          "id": "2eb5ed8a-7e64-47ad-9f15-764d613eeaf8",
+          "name": "extrair_texto2",
+          "type": "n8n-nodes-base.extractFromFile",
+          "typeVersion": 1,
+          "position": [
+            1060,
+            1040
+          ]
+        },
+        {
+          "parameters": {
+            "rules": {
+              "values": [
+                {
+                  "conditions": {
+                    "options": {
+                      "caseSensitive": true,
+                      "leftValue": "",
+                      "typeValidation": "strict",
+                      "version": 2
+                    },
+                    "conditions": [
+                      {
+                        "leftValue": "={{ $('arquivo_id1').item.json.file_mime_type }}",
+                        "rightValue": "application/pdf",
+                        "operator": {
+                          "type": "string",
+                          "operation": "equals"
+                        }
+                      }
+                    ],
+                    "combinator": "and"
+                  },
+                  "renameOutput": true,
+                  "outputKey": "PDF"
+                },
+                {
+                  "conditions": {
+                    "options": {
+                      "caseSensitive": true,
+                      "leftValue": "",
+                      "typeValidation": "strict",
+                      "version": 2
+                    },
+                    "conditions": [
+                      {
+                        "id": "d67dd12c-f3be-40aa-bc38-e37b75e7d768",
+                        "leftValue": "={{ $('arquivo_id1').item.json.file_mime_type }}",
+                        "rightValue": "application/vnd.google-apps.document",
+                        "operator": {
+                          "type": "string",
+                          "operation": "equals",
+                          "name": "filter.operator.equals"
+                        }
+                      }
+                    ],
+                    "combinator": "and"
+                  },
+                  "renameOutput": true,
+                  "outputKey": "GOOGLE-TEXTO"
+                }
+              ]
+            },
+            "options": {}
+          },
+          "id": "8b509775-8ae2-4627-8dbf-4cd2360f7c3e",
+          "name": "tipo_arquivo2",
+          "type": "n8n-nodes-base.switch",
+          "typeVersion": 3.2,
+          "position": [
+            840,
+            940
+          ]
+        },
+        {
+          "parameters": {
+            "assignments": {
+              "assignments": [
+                {
+                  "id": "10646eae-ae46-4327-a4dc-9987c2d76173",
+                  "name": "file_id",
+                  "value": "={{ $json.id }}",
+                  "type": "string"
+                },
+                {
+                  "id": "c9e1ed84-5dcc-43c3-999b-cf1d095eba32",
+                  "name": "file_mime_type",
+                  "value": "={{ $json.mimeType }}",
+                  "type": "string"
+                },
+                {
+                  "id": "ffa1204c-e926-454a-a3db-f97423fe8e6f",
+                  "name": "file_name",
+                  "value": "={{ $json.name }}",
+                  "type": "string"
+                }
+              ]
+            },
+            "options": {}
+          },
+          "id": "f04a48c7-3697-4762-bb3d-82c715513613",
+          "name": "arquivo_id1",
+          "type": "n8n-nodes-base.set",
+          "typeVersion": 3.4,
+          "position": [
+            300,
+            940
+          ]
+        }
+      ],
+      "connections": {
+        "Embeddings OpenAI": {
+          "ai_embedding": [
+            [
+              {
+                "node": "Postgres PGVector Store",
+                "type": "ai_embedding",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Default Data Loader1": {
+          "ai_document": [
+            [
+              {
+                "node": "Postgres PGVector Store",
+                "type": "ai_document",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Recursive Character Text Splitter1": {
+          "ai_textSplitter": [
+            [
+              {
+                "node": "Default Data Loader1",
+                "type": "ai_textSplitter",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "delete_old_file": {
+          "main": [
+            [
+              {
+                "node": "download_arquivo2",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "arquivo_criado2": {
+          "main": [
+            [
+              {
+                "node": "arquivo_id1",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "arquivo_alterado2": {
+          "main": [
+            [
+              {
+                "node": "arquivo_id1",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "download_arquivo2": {
+          "main": [
+            [
+              {
+                "node": "tipo_arquivo2",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "extrair_pdf2": {
+          "main": [
+            [
+              {
+                "node": "exportar_texto2",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "exportar_texto2": {
+          "main": [
+            [
+              {
+                "node": "Postgres PGVector Store",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "extrair_texto2": {
+          "main": [
+            [
+              {
+                "node": "exportar_texto2",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "tipo_arquivo2": {
+          "main": [
+            [
+              {
+                "node": "extrair_pdf2",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            [
+              {
+                "node": "extrair_texto2",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "arquivo_id1": {
+          "main": [
+            [
+              {
+                "node": "delete_old_file",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      },
+      "authors": "system migration",
+      "name": null,
+      "description": null,
+      "autosaved": false
+    },
+    "tags": []
+  }
+]

@@ -1,0 +1,696 @@
+[
+  {
+    "updatedAt": "2025-02-25T00:24:51.702Z",
+    "createdAt": "2025-02-25T00:24:12.350Z",
+    "id": "7lvuBJbXZXh23bR0",
+    "name": "Pagamento - Stripe",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "fromEmail": "contato@psicologacamilarosa.com.br",
+          "toEmail": "={{$node['Stripe paymentSucceeded'].json['body']['data']['object']['billing_details']['email']}}",
+          "bccEmail": "=",
+          "subject": "Sua sessão está confirmada!",
+          "text": "=Olá, {{$node['Stripe paymentSucceeded'].json['body']['data']['object']['billing_details']['name']}}.\n\nObrigado pelo pagamento!\n\nPsicóloga Camila Rosa",
+          "html": "=",
+          "options": {}
+        },
+        "name": "Send Confirmation Email",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 1,
+        "position": [
+          -620,
+          820
+        ],
+        "id": "3d500912-d12a-4977-827c-4f59c41a424f",
+        "credentials": {
+          "smtp": {
+            "id": "olJyC1pWfLHMpFBP",
+            "name": "SMTP account - contato@psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "headerAuth",
+          "url": "=https://api.baserow.io/api/database/rows/table/311112/?user_field_names=true&filter__field_calendly_user_uri=eq.{{ $json.calendly_created_by }}",
+          "options": {}
+        },
+        "name": "Search Client in Baserow",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 1,
+        "position": [
+          -620,
+          120
+        ],
+        "id": "bed2e7e6-3fe5-454e-ba45-1ddb0f9fb6bf",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "29K1JK7FRa88LLM3",
+            "name": "Baserow API Key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "headerAuth",
+          "requestMethod": "POST",
+          "url": "https://api.baserow.io/api/database/rows/table/311112/?user_field_names=true",
+          "options": {},
+          "bodyParametersUi": {
+            "parameter": [
+              {
+                "name": "email",
+                "value": "={{$node['New Event - Calendly'].json['body']['payload']['email']}}"
+              },
+              {
+                "name": "name",
+                "value": "={{$node['New Event - Calendly'].json['body']['payload']['name']}}"
+              },
+              {
+                "name": "calendly_user_uri",
+                "value": "={{$node['New Event - Calendly'].json['body']['created_by']}}"
+              },
+              {
+                "name": "status",
+                "value": "=true"
+              },
+              {
+                "name": "events",
+                "value": "={{$node['Create Baserow Event'].json['id']}}"
+              },
+              {
+                "name": "phone",
+                "value": "={{$node['New Event - Calendly'].json['body']['payload']['questions_and_answers'][0]['answer']}}"
+              }
+            ]
+          }
+        },
+        "name": "Create New Client",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 1,
+        "position": [
+          0,
+          220
+        ],
+        "condition": [
+          {
+            "expression": "$node['Check if Client Exists'].json['clientExists'] === false"
+          }
+        ],
+        "id": "9e6f129d-8e9e-4e98-82bc-8b33a94f9a9e",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "29K1JK7FRa88LLM3",
+            "name": "Baserow API Key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "headerAuth",
+          "requestMethod": "PATCH",
+          "url": "=https://api.baserow.io/api/database/rows/table/311119/{{$node['Create Baserow Event'].json['id']}}/?user_field_names=true",
+          "options": {},
+          "bodyParametersUi": {
+            "parameter": [
+              {
+                "name": "clients",
+                "value": "={{ $json.results[0].id }}"
+              }
+            ]
+          }
+        },
+        "name": "Update Event Clients",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 1,
+        "position": [
+          0,
+          0
+        ],
+        "condition": [
+          {
+            "expression": "$node['Check if Client Exists'].json['clientExists'] === true"
+          }
+        ],
+        "id": "85798a58-f0c9-4be9-8f90-f4b3f50116d1",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "29K1JK7FRa88LLM3",
+            "name": "Baserow API Key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "1f587674-7e4f-4711-af75-bc9deb595770",
+                "leftValue": "={{ $json.results.length }}",
+                "rightValue": 0,
+                "operator": {
+                  "type": "number",
+                  "operation": "gt"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "3fd0edfc-948f-42b6-a431-fa6e9fdd07dd",
+        "name": "If",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          -320,
+          120
+        ]
+      },
+      {
+        "parameters": {
+          "authentication": "basicAuth",
+          "requestMethod": "POST",
+          "url": "https://api.stripe.com/v1/payment_links",
+          "options": {
+            "bodyContentType": "form-urlencoded"
+          },
+          "bodyParametersUi": {
+            "parameter": [
+              {
+                "name": "line_items[0][price]",
+                "value": "price_1PR6r408UbdTfqkiByiSw5Ii"
+              },
+              {
+                "name": "line_items[0][quantity]",
+                "value": "1"
+              },
+              {
+                "name": "metadata[payment_id]",
+                "value": "={{ $json.id }}"
+              },
+              {
+                "name": "metadata[event_id]",
+                "value": "={{ $node['Create Baserow Event'].json['id'] }}"
+              },
+              {
+                "name": "metadata[event_name]",
+                "value": "={{ $node['Create Baserow Event'].json['name'] }}"
+              }
+            ]
+          }
+        },
+        "name": "Create Payment Link",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 1,
+        "position": [
+          -620,
+          480
+        ],
+        "id": "602a219f-678e-4c68-a7e8-ba54e9578ee5",
+        "alwaysOutputData": false,
+        "credentials": {
+          "httpBasicAuth": {
+            "id": "uvblnbr7CkEF0Vax",
+            "name": "Stripe API Key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "headerAuth",
+          "requestMethod": "POST",
+          "url": "https://api.baserow.io/api/database/rows/table/311120/?user_field_names=true",
+          "options": {},
+          "bodyParametersUi": {
+            "parameter": [
+              {
+                "name": "events",
+                "value": "={{ $node['Create Baserow Event'].json.id }}"
+              },
+              {
+                "name": "status",
+                "value": "pending"
+              },
+              {
+                "name": "stripe_payment_url",
+                "value": "={{ $json.url }}"
+              },
+              {
+                "name": "name",
+                "value": "=Pagamento - {{ $node['Create Baserow Event'].json.name}}"
+              },
+              {
+                "name": "stripe_payment_link_id",
+                "value": "={{ $json.id }}"
+              }
+            ]
+          }
+        },
+        "name": "Create Baserow Payment Event",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 1,
+        "position": [
+          -320,
+          480
+        ],
+        "id": "3ec588a6-8cc8-408d-ae33-e98184178b98",
+        "alwaysOutputData": false,
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "29K1JK7FRa88LLM3",
+            "name": "Baserow API Key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+          "toEmail": "={{ $node['New Event - Calendly'].json.body.payload.email }}",
+          "subject": "=Efetue o pagamento para concluir o agendamento da sua sessão",
+          "text": "=",
+          "html": "={{ $json.html }}",
+          "options": {}
+        },
+        "name": "Send Payment Link Email",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 1,
+        "position": [
+          300,
+          480
+        ],
+        "id": "8f5064fa-fe13-4ac7-8a83-ff4caa339c70",
+        "credentials": {
+          "smtp": {
+            "id": "olJyC1pWfLHMpFBP",
+            "name": "SMTP account - contato@psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "html": "\n<!DOCTYPE html>\n<html lang=\"pt-br\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Efetue o pagamento para concluir o agendamento da sua sessão</title>\n  </head>\n  <body>\n    <div class=\"container\">\n      <p>Olá {{ $node['New Event - Calendly'].json.body.payload.name }}!</p>\n\n      <p>\n        Para finalizar o agendamento da sua sessão efetue o pagamento através do\n        link:\n      </p>\n      <p><strong><a href=\"{{ $node['Create Baserow Payment Event'].json.stripe_payment_url }}?prefilled_email={{ $node['New Event - Calendly'].json.body.payload.email }}\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: #ff6d5a\">{{ $node['Create Baserow Payment Event'].json.stripe_payment_url }}</a></strong></p>\n\n      <p>Obrigado e até breve!</p>\n      \n      <div class=\"footer\">\n        <p>\n          <strong>Camila Rosa</strong><br />\n          Psicóloga<br />\n        </p>\n      </div>\n    </div>\n  </body>\n</html>\n\n<style>\n  * {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-size: 16px;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n      \"Helvetica Neue\", Arial, sans-serif;\n  }\n\n  .container {\n    background-color: #ffffff;\n    font-family: sans-serif;\n    padding: 32px 16px;\n    border-radius: 8px;\n  }\n\n   a {\n    color: #ff6d5a;\n    font-weight: bold;\n    margin-top: 12px;\n  }\n\n  p {\n    color: #606060;\n    line-height: 1.6;\n    margin-bottom: 8px;\n  }\n\n  .footer {\n    margin-top: 20px;\n  }\n\n  .footer > p {\n    font-size: 14px;\n    color: #9d9d9d;\n  }\n</style>\n"
+        },
+        "id": "d1f60c3f-7e55-4502-a603-30eab6b9f835",
+        "name": "HTML",
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          0,
+          480
+        ]
+      },
+      {
+        "parameters": {
+          "events": [
+            "payment_intent.succeeded"
+          ]
+        },
+        "id": "54664c7f-68ec-4ddf-a04f-749a68601dab",
+        "name": "Stripe paymentSucceeded",
+        "type": "n8n-nodes-base.stripeTrigger",
+        "typeVersion": 1,
+        "position": [
+          -1180,
+          820
+        ],
+        "webhookId": "16f65f0a-9ea8-40e7-8546-38f8b9b42a2c",
+        "credentials": {
+          "stripeApi": {
+            "id": "sd9ZCsPc1HsRzRmE",
+            "name": "Stripe account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "databaseId": 117970,
+          "tableId": 311120,
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": 2300599,
+                "fieldValue": "={{$node['Stripe paymentSucceeded'].json.data.object.id}}"
+              },
+              {
+                "fieldId": 2248242,
+                "fieldValue": "={{$node['Stripe paymentSucceeded'].json.type}}"
+              },
+              {
+                "fieldId": 2300595,
+                "fieldValue": "={{$node['Stripe paymentSucceeded'].json.data.object.receipt_email}}"
+              },
+              {
+                "fieldId": 2248246,
+                "fieldValue": "succeeded"
+              }
+            ]
+          }
+        },
+        "id": "de0f1e80-88d6-4306-9454-bb761d2a2fc2",
+        "name": "Baserow",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          -900,
+          820
+        ],
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "databaseId": 117970,
+          "tableId": 311119,
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": 2248237,
+                "fieldValue": "{{ $json.body.payload.scheduled_event.name }}"
+              },
+              {
+                "fieldId": 2248241,
+                "fieldValue": "{{ $json.body.payload.uri }}"
+              },
+              {
+                "fieldId": 2248781,
+                "fieldValue": "{{ $json.body.created_by }}"
+              },
+              {
+                "fieldId": 2248784,
+                "fieldValue": "{{ $json.body.payload.scheduled_event.start_time }}"
+              }
+            ]
+          }
+        },
+        "id": "12979782-a615-457c-b14a-f64e216793cc",
+        "name": "Baserow - createEvent",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          -900,
+          120
+        ],
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "calendly-event-created",
+          "options": {}
+        },
+        "name": "New Event - Calendly",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          -1180,
+          120
+        ],
+        "webhookId": "gerado-pelo-n8n",
+        "id": "28d757f4-183e-493c-9666-266cdc83af44"
+      }
+    ],
+    "connections": {
+      "Search Client in Baserow": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "Update Event Clients",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Create New Client",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create Payment Link": {
+        "main": [
+          [
+            {
+              "node": "Create Baserow Payment Event",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Create Baserow Payment Event": {
+        "main": [
+          [
+            {
+              "node": "HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML": {
+        "main": [
+          [
+            {
+              "node": "Send Payment Link Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Stripe paymentSucceeded": {
+        "main": [
+          [
+            {
+              "node": "Baserow",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow": {
+        "main": [
+          [
+            {
+              "node": "Send Confirmation Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - createEvent": {
+        "main": [
+          [
+            {
+              "node": "Search Client in Baserow",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "New Event - Calendly": {
+        "main": [
+          [
+            {
+              "node": "Baserow - createEvent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {
+      "Search Client in Baserow": [
+        {
+          "json": {
+            "count": 1,
+            "next": null,
+            "previous": null,
+            "results": [
+              {
+                "id": 8,
+                "order": "1.00000000000000000000",
+                "name": "Luan Semensato Ribeiro",
+                "notes": null,
+                "status": true,
+                "UUID": "de656f0b-1427-4a43-9789-83a8869e4308",
+                "email": "luansemensato@gmail.com",
+                "phone": "+55 41 99678-7181",
+                "services": [],
+                "events": [
+                  {
+                    "id": 11,
+                    "value": "Sessão de 50 minutos"
+                  },
+                  {
+                    "id": 12,
+                    "value": "Sessão de 50 minutos"
+                  },
+                  {
+                    "id": 14,
+                    "value": "Sessão de 50 minutos"
+                  },
+                  {
+                    "id": 15,
+                    "value": "Sessão de 50 minutos"
+                  }
+                ],
+                "calendly_user_uri": "https://api.calendly.com/users/a413b2fd-6159-464b-8f41-c35d7afd7b93"
+              }
+            ]
+          }
+        }
+      ],
+      "Update Event Clients": [
+        {
+          "json": {
+            "id": 16,
+            "order": "5.00000000000000000000",
+            "name": "Sessão de 50 minutos",
+            "notes": null,
+            "UUID": "491f5853-b133-4c94-bb95-f5faaa352aaf",
+            "calendly_uri": "https://api.calendly.com/scheduled_events/37c993fe-17fb-4dea-b763-1d2a5c75d895/invitees/64b7b154-2245-4d4c-aaf7-8b454140e490",
+            "payments": [],
+            "clients": [
+              {
+                "id": 8,
+                "value": "Luan Semensato Ribeiro"
+              }
+            ],
+            "calendly_created_by": "https://api.calendly.com/users/a413b2fd-6159-464b-8f41-c35d7afd7b93",
+            "start_time": "2024-06-21T17:00:00.000000Z"
+          }
+        }
+      ],
+      "Stripe paymentSucceeded": [
+        {
+          "json": {
+            "id": "evt_3PWUrb08UbdTfqki17S7rcMU",
+            "object": "event",
+            "api_version": "2024-04-10",
+            "created": 1719542920,
+            "data": {
+              "object": {
+                "id": "pi_3PWUrb08UbdTfqki1prvk7of",
+                "object": "payment_intent",
+                "amount": 50,
+                "amount_capturable": 0,
+                "amount_details": {
+                  "tip": {}
+                },
+                "amount_received": 50,
+                "application": null,
+                "application_fee_amount": null,
+                "automatic_payment_methods": null,
+                "canceled_at": null,
+                "cancellation_reason": null,
+                "capture_method": "automatic_async",
+                "client_secret": "pi_3PWUrb08UbdTfqki1prvk7of_secret_qTCIqcGvSEU1AVQXAO6JwoPfO",
+                "confirmation_method": "automatic",
+                "created": 1719542919,
+                "currency": "brl",
+                "customer": null,
+                "description": null,
+                "invoice": null,
+                "last_payment_error": null,
+                "latest_charge": "ch_3PWUrb08UbdTfqki1MsT0Vr2",
+                "livemode": false,
+                "metadata": {},
+                "next_action": null,
+                "on_behalf_of": null,
+                "payment_method": "pm_1PWUra08UbdTfqkiQKAoFw4u",
+                "payment_method_configuration_details": null,
+                "payment_method_options": {
+                  "card": {
+                    "installments": null,
+                    "mandate_options": null,
+                    "network": null,
+                    "request_three_d_secure": "automatic"
+                  }
+                },
+                "payment_method_types": [
+                  "card"
+                ],
+                "processing": null,
+                "receipt_email": "luansemensato@gmail.com",
+                "review": null,
+                "setup_future_usage": null,
+                "shipping": null,
+                "source": null,
+                "statement_descriptor": null,
+                "statement_descriptor_suffix": null,
+                "status": "succeeded",
+                "transfer_data": null,
+                "transfer_group": null
+              }
+            },
+            "livemode": false,
+            "pending_webhooks": 1,
+            "request": {
+              "id": "req_CE37NxFRKQosxN",
+              "idempotency_key": "8154195a-790d-4e63-b7ec-6dc603368543"
+            },
+            "type": "payment_intent.succeeded"
+          }
+        }
+      ]
+    },
+    "versionId": "db3e0115-53e0-4201-922b-9e47ea22895d",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2025-02-25T00:24:12.350Z",
+        "createdAt": "2025-02-25T00:24:12.350Z",
+        "role": "workflow:owner",
+        "workflowId": "7lvuBJbXZXh23bR0",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]

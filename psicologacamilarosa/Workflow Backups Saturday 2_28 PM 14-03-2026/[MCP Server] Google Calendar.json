@@ -1,0 +1,210 @@
+[
+  {
+    "updatedAt": "2025-04-14T20:13:31.420Z",
+    "createdAt": "2025-04-14T20:12:06.506Z",
+    "id": "eLlXckO3aVDGXmQX",
+    "name": "[MCP Server] Google Calendar",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "getAll",
+          "calendar": {
+            "__rl": true,
+            "value": "psicologacamilarosa@gmail.com",
+            "mode": "list",
+            "cachedResultName": "Psicóloga Camila Rosa"
+          },
+          "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+          "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+          "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+          "options": {}
+        },
+        "id": "8211c0ff-a034-4bfe-8cf6-d632cfe5293a",
+        "name": "SearchEvent",
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "position": [
+          100,
+          360
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "jwBpLc9Qwkx7Dq0D",
+            "name": "Google Calendar - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "calendar": {
+            "__rl": true,
+            "value": "psicologacamilarosa@gmail.com",
+            "mode": "list",
+            "cachedResultName": "Psicóloga Camila Rosa"
+          },
+          "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+          "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+          "additionalFields": {
+            "description": "={{ $fromAI(\"event_description\", \"The event description\", \"string\") }}",
+            "summary": "={{ $fromAI(\"event_title\", \"The event title\", \"string\") }}"
+          }
+        },
+        "id": "6874a265-969a-4b93-890b-6c80161342d3",
+        "name": "CreateEvent",
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "position": [
+          220,
+          360
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "jwBpLc9Qwkx7Dq0D",
+            "name": "Google Calendar - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "calendar": {
+            "__rl": true,
+            "value": "psicologacamilarosa@gmail.com",
+            "mode": "list",
+            "cachedResultName": "Psicóloga Camila Rosa"
+          },
+          "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+          "updateFields": {
+            "description": "={{ $fromAI(\"event_description\", \"The event description\", \"string\") }}",
+            "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+            "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+            "summary": "={{ $fromAI(\"event_title\", \"The event title\", \"string\") }}"
+          }
+        },
+        "id": "eab7dbe3-2627-4715-86a6-02cfe9df21ef",
+        "name": "UpdateEvent",
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "position": [
+          340,
+          360
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "jwBpLc9Qwkx7Dq0D",
+            "name": "Google Calendar - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "calendar": {
+            "__rl": true,
+            "value": "psicologacamilarosa@gmail.com",
+            "mode": "list",
+            "cachedResultName": "Psicóloga Camila Rosa"
+          },
+          "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+          "options": {}
+        },
+        "id": "6bc8fb04-14cf-423b-8089-fccf37a9db30",
+        "name": "DeleteEvent",
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "position": [
+          460,
+          360
+        ],
+        "typeVersion": 1.3,
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "jwBpLc9Qwkx7Dq0D",
+            "name": "Google Calendar - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "path": "google-calendar/v1"
+        },
+        "id": "c243204c-1ca5-4b4f-837b-661f41c9f4fb",
+        "name": "Google Calendar MCP",
+        "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+        "position": [
+          180,
+          160
+        ],
+        "webhookId": "f9d9d5ea-6f83-42c8-ae50-ee6c71789bca",
+        "typeVersion": 1
+      }
+    ],
+    "connections": {
+      "SearchEvent": {
+        "ai_tool": [
+          [
+            {
+              "node": "Google Calendar MCP",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "CreateEvent": {
+        "ai_tool": [
+          [
+            {
+              "node": "Google Calendar MCP",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "UpdateEvent": {
+        "ai_tool": [
+          [
+            {
+              "node": "Google Calendar MCP",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "DeleteEvent": {
+        "ai_tool": [
+          [
+            {
+              "node": "Google Calendar MCP",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "4c5e7494-5727-4cbd-b7a1-1bbf21973576",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2025-04-14T20:12:06.506Z",
+        "createdAt": "2025-04-14T20:12:06.506Z",
+        "role": "workflow:owner",
+        "workflowId": "eLlXckO3aVDGXmQX",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]

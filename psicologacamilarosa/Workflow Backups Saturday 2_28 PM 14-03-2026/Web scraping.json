@@ -1,0 +1,263 @@
+[
+  {
+    "updatedAt": "2025-01-13T02:37:01.558Z",
+    "createdAt": "2025-01-09T21:36:13.262Z",
+    "id": "4rzlhGOjOtHylEl8",
+    "name": "Web scraping",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {}
+            ]
+          }
+        },
+        "id": "4e22c0f1-fd3d-4a0f-b20f-4a7b8f79a675",
+        "name": "Schedule Trigger",
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          880,
+          360
+        ]
+      },
+      {
+        "parameters": {
+          "url": "https://loja.ifood.com.br/supermercadosikeda/521de33b-9449-43be-9c61-97b76c4d78d2/categoria/825ab6f7-8bfa-44d8-9088-e7b4fb574d70",
+          "options": {}
+        },
+        "id": "556c2b55-9ac0-4099-8cc5-bcddb1be552e",
+        "name": "Obtém HTML da página",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1100,
+          360
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "extractHtmlContent",
+          "extractionValues": {
+            "values": [
+              {}
+            ]
+          },
+          "options": {}
+        },
+        "id": "45a23727-315d-4cfc-87f6-935e9a84ba95",
+        "name": "Extrai os elementos do HTML",
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          1320,
+          360
+        ]
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "2be9e6ab-ae47-4b94-96ad-e022db2c3bbd",
+        "name": "Gera lista de itens",
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          1540,
+          360
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "dbee5514-4c99-4add-970f-3f98adb5788c",
+                "leftValue": "",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "79a9081d-dc29-43b1-a00f-cfe894510c0d",
+        "name": "Filter",
+        "type": "n8n-nodes-base.filter",
+        "typeVersion": 2,
+        "position": [
+          1760,
+          360
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json.myNewField = 1;\n}\n\nreturn $input.all();"
+        },
+        "id": "33c87451-1d8d-4fa5-8473-16526fca405c",
+        "name": "Atribui tags HTML e id customizado",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1960,
+          360
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "b8d5b670-153f-4b27-8638-bb10e36925bf",
+        "name": "Gera tabela html",
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          2180,
+          360
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "9b19c120-aac1-45e1-87d7-00e7185cd7f2",
+        "name": "Gera o HTML",
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          2400,
+          360
+        ]
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "8183c99f-5897-4aba-8bba-38d3e69e421e",
+        "name": "Envia e-mail",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2.1,
+        "position": [
+          2620,
+          360
+        ],
+        "credentials": {
+          "smtp": {
+            "id": "olJyC1pWfLHMpFBP",
+            "name": "SMTP account - contato@psicologacamilarosa"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Obtém HTML da página": {
+        "main": [
+          [
+            {
+              "node": "Extrai os elementos do HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extrai os elementos do HTML": {
+        "main": [
+          [
+            {
+              "node": "Gera lista de itens",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gera lista de itens": {
+        "main": [
+          [
+            {
+              "node": "Filter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Filter": {
+        "main": [
+          [
+            {
+              "node": "Atribui tags HTML e id customizado",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Atribui tags HTML e id customizado": {
+        "main": [
+          [
+            {
+              "node": "Gera tabela html",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gera tabela html": {
+        "main": [
+          [
+            {
+              "node": "Gera o HTML",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gera o HTML": {
+        "main": [
+          [
+            {
+              "node": "Envia e-mail",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "4443fc86-627a-423b-b913-38468191fe60",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2025-01-09T21:36:13.262Z",
+        "createdAt": "2025-01-09T21:36:13.262Z",
+        "role": "workflow:owner",
+        "workflowId": "4rzlhGOjOtHylEl8",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]

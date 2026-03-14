@@ -1,0 +1,252 @@
+[
+  {
+    "updatedAt": "2025-01-09T21:25:24.948Z",
+    "createdAt": "2024-11-11T18:01:13.523Z",
+    "id": "gNYX0bbJb2gVcuAK",
+    "name": "APX _ Test",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "functionCode": "const { data } = items[0].json;\nconst orderDate = new Date(data.created_at);\n\nreturn [\n  {\n    json: {\n      customerName: data.customer.name,\n      customerEmail: data.customer.email,\n      productName: data.products[0].name,\n      productId: data.products[0].id,\n      orderDate: orderDate.toISOString()\n    }\n  }\n];"
+        },
+        "name": "Extract Order Data",
+        "type": "n8n-nodes-base.function",
+        "typeVersion": 1,
+        "position": [
+          1580,
+          480
+        ],
+        "id": "c8c0ea14-20b1-4e48-8c71-22f65418d9ea"
+      },
+      {
+        "parameters": {},
+        "name": "Wait 30 Days",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1,
+        "position": [
+          1780,
+          480
+        ],
+        "id": "79b21ad8-df1b-40cc-8e89-df5731f47857"
+      },
+      {
+        "parameters": {
+          "url": "https://api.tiny.com.br/api2/produtos.obter.php",
+          "options": {},
+          "queryParametersUi": {
+            "parameter": [
+              {
+                "name": "id",
+                "value": "={{$json[\"productId\"]}}"
+              },
+              {
+                "name": "token",
+                "value": "YOUR_TINY_API_TOKEN"
+              }
+            ]
+          }
+        },
+        "name": "Check Product Stock",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 1,
+        "position": [
+          1980,
+          480
+        ],
+        "id": "ddcf8f5d-3320-4618-867c-1c74d19065ad"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "number": [
+              {
+                "value1": "={{$json[\"productStock\"]}}",
+                "operation": "larger"
+              }
+            ]
+          }
+        },
+        "name": "Stock Available?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 1,
+        "position": [
+          2180,
+          480
+        ],
+        "id": "95b5045a-cdc5-4450-b161-00f5f6b96acc"
+      },
+      {
+        "parameters": {
+          "authentication": "basicAuth",
+          "requestMethod": "POST",
+          "url": "https://api.mailerlite.com/api/v2/email/send",
+          "options": {},
+          "bodyParametersUi": {
+            "parameter": [
+              {
+                "name": "email",
+                "value": "={{$json[\"customerEmail\"]}}"
+              },
+              {
+                "name": "subject",
+                "value": "Seu doce favorito está de volta!"
+              },
+              {
+                "name": "content",
+                "value": "Olá, {{$json[\"customerName\"]}}! Que tal renovar seu estoque de {{$json[\"productName\"]}}? Aproveite nosso desconto e experimente novamente!"
+              }
+            ]
+          },
+          "headerParametersUi": {
+            "parameter": [
+              {
+                "name": "Authorization",
+                "value": "Bearer YOUR_MAILERLITE_API_KEY"
+              }
+            ]
+          }
+        },
+        "name": "Send Reorder Email",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 1,
+        "position": [
+          2380,
+          480
+        ],
+        "id": "6e4669dc-5888-4f2c-bbc6-02b7140656e1"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "b0f809bf-cdaf-4be1-b02f-c25afa0726f1",
+          "options": {}
+        },
+        "id": "4cd6ba77-d88c-4f78-bcd7-fbacb0c753fe",
+        "name": "JivoChat Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          1060,
+          -280
+        ],
+        "webhookId": "b0f809bf-cdaf-4be1-b02f-c25afa0726f1"
+      },
+      {
+        "parameters": {
+          "path": "new-order",
+          "options": {}
+        },
+        "name": "Nuvemshop Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          1380,
+          480
+        ],
+        "webhookMethods": {
+          "default": {
+            "responseMode": "onReceived"
+          }
+        },
+        "id": "7e21e65f-6c1c-4264-8cf3-a6f5dcbf3ac6"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "08e26dad-6f2e-4b9c-a4fc-7de5739a687b",
+          "options": {}
+        },
+        "id": "25634e62-8030-4fb2-8efc-79994e7ad5fa",
+        "name": "Tiny Vendas",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          360,
+          180
+        ],
+        "webhookId": "08e26dad-6f2e-4b9c-a4fc-7de5739a687b"
+      }
+    ],
+    "connections": {
+      "Extract Order Data": {
+        "main": [
+          [
+            {
+              "node": "Wait 30 Days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait 30 Days": {
+        "main": [
+          [
+            {
+              "node": "Check Product Stock",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Check Product Stock": {
+        "main": [
+          [
+            {
+              "node": "Stock Available?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Stock Available?": {
+        "main": [
+          [
+            {
+              "node": "Send Reorder Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Nuvemshop Webhook": {
+        "main": [
+          [
+            {
+              "node": "Extract Order Data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "86ffdb97-d5fd-47df-ac74-a816632bfd9b",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2024-11-11T18:01:13.523Z",
+        "createdAt": "2024-11-11T18:01:13.523Z",
+        "role": "workflow:owner",
+        "workflowId": "gNYX0bbJb2gVcuAK",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]

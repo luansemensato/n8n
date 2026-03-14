@@ -1,0 +1,247 @@
+[
+  {
+    "updatedAt": "2025-01-20T06:34:32.517Z",
+    "createdAt": "2025-01-20T06:29:31.336Z",
+    "id": "ADQNOm4sPxqROw77",
+    "name": "Lembrete de agendamento",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 7
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          400,
+          1420
+        ],
+        "id": "9fbad183-2dbe-47cb-aae5-2484190ef073",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "calendar": {
+            "__rl": true,
+            "value": "psicologacamilarosa@gmail.com",
+            "mode": "list",
+            "cachedResultName": "psicologacamilarosa@gmail.com"
+          },
+          "returnAll": true,
+          "options": {
+            "timeMin": "={{ new Date(new Date().setDate(new Date().getDate())).toISOString().split('T')[0] + 'T00:00:00' }}",
+            "timeMax": "={{ new Date(new Date().setDate(new Date().getDate() + 2)).toISOString().split('T')[0] + 'T00:00:00' }}"
+          }
+        },
+        "type": "n8n-nodes-base.googleCalendar",
+        "typeVersion": 1.2,
+        "position": [
+          620,
+          1420
+        ],
+        "id": "6cc19835-c968-40cd-a01d-e74e67db8afe",
+        "name": "Google Calendar",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "jwBpLc9Qwkx7Dq0D",
+            "name": "Google Calendar - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          840,
+          1420
+        ],
+        "id": "bc4baf21-e491-4598-ae67-0bae509b91da",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "aggregate": "aggregateAllItemData",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.aggregate",
+        "typeVersion": 1,
+        "position": [
+          1080,
+          1420
+        ],
+        "id": "424a4707-08b2-4ec5-8f41-296357bb8e2d",
+        "name": "Aggregate"
+      },
+      {
+        "parameters": {
+          "jsCode": "const events = $item(\"0\").$node[\"Aggregate\"].json[\"data\"]  \n\nconst processEvents = events => events.map(({ summary = \"\", start, end }) => ({\n  whatsapp: summary.includes(\"telefone;\") ? `55${summary.split(\"telefone;\")[1].match(/\\d+/)[0]}@s.whatsapp.net` : null,\n startTime: start?.dateTime?.slice(11, 16) || \"\",\n  endTime: end?.dateTime?.slice(11, 16) || \"\"\n}));\n\nreturn processEvents(events)"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1280,
+          1420
+        ],
+        "id": "ad1b939c-47d5-4c43-b885-4104a457058c",
+        "name": "Code"
+      },
+      {
+        "parameters": {
+          "amount": 2
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1660,
+          1420
+        ],
+        "id": "f45a27dc-8622-416b-a218-69ef5dd3aae7",
+        "name": "Wait",
+        "webhookId": "883f27a5-e270-46c2-906b-35f0f3a77c13"
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "psicologacamilarosa",
+          "remoteJid": "5541996787181@s.whatsapp.net",
+          "messageText": "oi",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          1480,
+          1420
+        ],
+        "id": "67f36411-793c-4585-9a3a-7b00b438560a",
+        "name": "Evolution API",
+        "credentials": {
+          "evolutionApi": {
+            "id": "929o86uLbyCp0kG3",
+            "name": "Evolution - psicologacamilarosa"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Google Calendar",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Calendar": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Aggregate",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Aggregate": {
+        "main": [
+          [
+            {
+              "node": "Code",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code": {
+        "main": [
+          [
+            {
+              "node": "Evolution API",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+      "Schedule Trigger": [
+        {
+          "json": {
+            "timestamp": "2025-01-08T13:11:44.733-03:00",
+            "Readable date": "January 8th 2025, 1:11:44 pm",
+            "Readable time": "1:11:44 pm",
+            "Day of week": "Wednesday",
+            "Year": "2025",
+            "Month": "January",
+            "Day of month": "08",
+            "Hour": "13",
+            "Minute": "11",
+            "Second": "44",
+            "Timezone": "America/Sao_Paulo (UTC-03:00)"
+          }
+        }
+      ]
+    },
+    "versionId": "35e32a6a-5c18-4748-9108-87043781f420",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2025-01-20T06:29:31.336Z",
+        "createdAt": "2025-01-20T06:29:31.336Z",
+        "role": "workflow:owner",
+        "workflowId": "ADQNOm4sPxqROw77",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]

@@ -1,0 +1,195 @@
+[
+  {
+    "updatedAt": "2025-01-20T06:10:43.562Z",
+    "createdAt": "2025-01-19T20:44:29.826Z",
+    "id": "QXFrfjYJi0JXm241",
+    "name": "Errors Handler",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "06a14d7a-278e-4ed8-b458-8f8e2a9c4474",
+        "name": "Error Trigger",
+        "type": "n8n-nodes-base.errorTrigger",
+        "typeVersion": 1,
+        "position": [
+          -580,
+          480
+        ]
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "psicologacamilarosa",
+          "remoteJid": "5541996787181@s.whatsapp.net",
+          "messageText": "=🔔 Notificação de Erro no Workflow 🔔\n\n⚠️ Ocorreu um erro durante a execução do workflow *{{ $('Error Trigger').item.json.workflow.name }}*.\n\n📝 Descrição do erro:\n{{ $json.execution.error.message }}\n{{ $json.execution.error.description }}\n\n🔗 Detalhes e execução:\nAcesse o Workflow 👉 {{ $json.execution.url }}\n\n📄 ID do Workflow: {{ $json.execution.id }}\n\nPor favor, verifique o erro e tome as medidas necessárias.",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          -300,
+          360
+        ],
+        "id": "6b21aa01-f053-4c9a-aa26-68767a73b31e",
+        "name": "Evolution API",
+        "credentials": {
+          "evolutionApi": {
+            "id": "929o86uLbyCp0kG3",
+            "name": "Evolution - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+          "toEmail": "Luan <luansemensato@gmail.com>",
+          "subject": "=Erro no workflow {{ $('Error Trigger').item.json.workflow.name }}",
+          "html": "=<html>\n\n<h2>\n🔴 Erro no workflow <b>{{ $('Error Trigger').item.json.workflow.name }}</b>\n</h2>\n\n<p>⚠️ Ocorreu um erro durante a execução do workflow: <b>{{ $('Error Trigger').item.json.workflow.name }}</b>.</p>\n\n<p><b>📝 Descrição do erro:</b><br/>\n{{ $json.execution.error.message }}<br/>\n{{ $json.execution.error.description }}</p>\n\n<p><b>Tentativas:</b> {{ $('Error Trigger').item.json.execution.retryOf }}</p>\n\n<p><b>Acesse o Workflow:</b><br/>\n{{ $json.execution.url }}</p>\n\n<p><b>📄 ID do Workflow:</b> {{ $json.execution.id }}</p>\n\n<p>Por favor, verifique o erro e tome as medidas necessárias.</p>\n\n</html>",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 2.1,
+        "position": [
+          -300,
+          600
+        ],
+        "id": "b110b376-7471-4f1d-bf42-7ef29006cc34",
+        "name": "Send Email",
+        "credentials": {
+          "smtp": {
+            "id": "olJyC1pWfLHMpFBP",
+            "name": "SMTP account - contato@psicologacamilarosa"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Error Trigger": {
+        "main": [
+          [
+            {
+              "node": "Evolution API",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Send Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "8ca9d8fb-fbba-42e9-9f9e-6386a143039b",
+    "activeVersionId": "8ca9d8fb-fbba-42e9-9f9e-6386a143039b",
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2025-01-19T20:44:29.826Z",
+        "createdAt": "2025-01-19T20:44:29.826Z",
+        "role": "workflow:owner",
+        "workflowId": "QXFrfjYJi0JXm241",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": {
+      "updatedAt": "2026-01-28T12:32:27.095Z",
+      "createdAt": "2026-01-28T12:32:27.095Z",
+      "versionId": "8ca9d8fb-fbba-42e9-9f9e-6386a143039b",
+      "workflowId": "QXFrfjYJi0JXm241",
+      "nodes": [
+        {
+          "parameters": {},
+          "id": "06a14d7a-278e-4ed8-b458-8f8e2a9c4474",
+          "name": "Error Trigger",
+          "type": "n8n-nodes-base.errorTrigger",
+          "typeVersion": 1,
+          "position": [
+            -580,
+            480
+          ]
+        },
+        {
+          "parameters": {
+            "resource": "messages-api",
+            "instanceName": "psicologacamilarosa",
+            "remoteJid": "5541996787181@s.whatsapp.net",
+            "messageText": "=🔔 Notificação de Erro no Workflow 🔔\n\n⚠️ Ocorreu um erro durante a execução do workflow *{{ $('Error Trigger').item.json.workflow.name }}*.\n\n📝 Descrição do erro:\n{{ $json.execution.error.message }}\n{{ $json.execution.error.description }}\n\n🔗 Detalhes e execução:\nAcesse o Workflow 👉 {{ $json.execution.url }}\n\n📄 ID do Workflow: {{ $json.execution.id }}\n\nPor favor, verifique o erro e tome as medidas necessárias.",
+            "options_message": {}
+          },
+          "type": "n8n-nodes-evolution-api.evolutionApi",
+          "typeVersion": 1,
+          "position": [
+            -300,
+            360
+          ],
+          "id": "6b21aa01-f053-4c9a-aa26-68767a73b31e",
+          "name": "Evolution API",
+          "credentials": {
+            "evolutionApi": {
+              "id": "929o86uLbyCp0kG3",
+              "name": "Evolution - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+            "toEmail": "Luan <luansemensato@gmail.com>",
+            "subject": "=Erro no workflow {{ $('Error Trigger').item.json.workflow.name }}",
+            "html": "=<html>\n\n<h2>\n🔴 Erro no workflow <b>{{ $('Error Trigger').item.json.workflow.name }}</b>\n</h2>\n\n<p>⚠️ Ocorreu um erro durante a execução do workflow: <b>{{ $('Error Trigger').item.json.workflow.name }}</b>.</p>\n\n<p><b>📝 Descrição do erro:</b><br/>\n{{ $json.execution.error.message }}<br/>\n{{ $json.execution.error.description }}</p>\n\n<p><b>Tentativas:</b> {{ $('Error Trigger').item.json.execution.retryOf }}</p>\n\n<p><b>Acesse o Workflow:</b><br/>\n{{ $json.execution.url }}</p>\n\n<p><b>📄 ID do Workflow:</b> {{ $json.execution.id }}</p>\n\n<p>Por favor, verifique o erro e tome as medidas necessárias.</p>\n\n</html>",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.emailSend",
+          "typeVersion": 2.1,
+          "position": [
+            -300,
+            600
+          ],
+          "id": "b110b376-7471-4f1d-bf42-7ef29006cc34",
+          "name": "Send Email",
+          "credentials": {
+            "smtp": {
+              "id": "olJyC1pWfLHMpFBP",
+              "name": "SMTP account - contato@psicologacamilarosa"
+            }
+          }
+        }
+      ],
+      "connections": {
+        "Error Trigger": {
+          "main": [
+            [
+              {
+                "node": "Evolution API",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Send Email",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      },
+      "authors": "system migration",
+      "name": null,
+      "description": null,
+      "autosaved": false
+    },
+    "tags": []
+  }
+]

@@ -1,0 +1,202 @@
+[
+  {
+    "updatedAt": "2024-10-25T22:06:57.488Z",
+    "createdAt": "2024-08-08T23:11:59.660Z",
+    "id": "MRZwHbpW9jmU71ov",
+    "name": "Apaixonados Alimentos",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.tiny.com.br/api2/pedido.incluir.php",
+          "sendQuery": true,
+          "queryParameters": {
+            "parameters": [
+              {
+                "name": "token",
+                "value": "={{ $json.query.token }}"
+              },
+              {
+                "name": "pedido",
+                "value": "={{ $json.query.pedido }}"
+              },
+              {
+                "name": "formato",
+                "value": "={{ $json.query.formato }}"
+              }
+            ]
+          },
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "d00526f5-e90f-4880-8c8b-84236a8935d7",
+        "name": "HTTP Request",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1100,
+          360
+        ],
+        "retryOnFail": true,
+        "notesInFlow": false,
+        "executeOnce": false,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://api.tiny.com.br/api2/pedido.incluir.php?token={{ $json.body.token }}",
+          "sendQuery": true,
+          "specifyQuery": "json",
+          "jsonQuery": "={{ $json.query.content }}",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "11f59d02-1cc4-4214-9c18-6cfb99a0580d",
+        "name": "HTTP Request1",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1100,
+          560
+        ],
+        "retryOnFail": true,
+        "notesInFlow": false,
+        "executeOnce": false,
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "tiny-criar-pedido",
+          "options": {}
+        },
+        "id": "2da0be02-59d3-45fa-aea7-c8baefc79106",
+        "name": "CreateOrder",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          880,
+          360
+        ],
+        "webhookId": "80eedf0a-5dec-44a1-8421-8a6a6cf9488e",
+        "notesInFlow": false
+      }
+    ],
+    "connections": {
+      "CreateOrder": {
+        "main": [
+          [
+            {
+              "node": "HTTP Request",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "HTTP Request1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+      "CreateOrder": [
+        {
+          "json": {
+            "headers": {
+              "host": "primary-production-2cc1.up.railway.app",
+              "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1",
+              "content-length": "1134",
+              "accept": "application/json, text/plain, */*",
+              "accept-encoding": "gzip, deflate, br, zstd",
+              "accept-language": "en-US,en;q=0.9,pt;q=0.8",
+              "access-control-allow-origin": "*",
+              "content-type": "application/x-www-form-urlencoded",
+              "origin": "http://localhost:3000",
+              "priority": "u=1, i",
+              "referer": "http://localhost:3000/",
+              "sec-fetch-dest": "empty",
+              "sec-fetch-mode": "cors",
+              "sec-fetch-site": "cross-site",
+              "x-forwarded-for": "187.74.59.29",
+              "x-forwarded-host": "primary-production-2cc1.up.railway.app",
+              "x-forwarded-proto": "https",
+              "x-railway-request-id": "KxaDkicCQj-bnky5ogkG0w_882434190",
+              "x-real-ip": "187.74.59.29"
+            },
+            "params": {},
+            "query": {
+              "content": "{\"pedido\":{\"data_pedido\":\"25/10/2024\",\"cliente\":{\"codigo\":\"1115\",\"nome\":\"SMNT Online - CLIENTE TESTE LUAN\"},\"itens\":[{\"item\":{\"codigo\":\"34\",\"id_produto\":\"886555121\",\"descricao\":\"Kit Teste - 3 bananinha & 2 paçoca - NÃO USAR\",\"unidade\":\"UN\",\"quantidade\":\"1\",\"valor_unitario\":\"0.02\"}}],\"parcelas\":[{\"parcela\":{\"dias\":\"10\",\"data\":\"03/11/2014\",\"valor\":\"0.02\",\"obs\":\"Obs Parcela 1\",\"forma_pagamento\":\"boleto\",\"meio_pagamento\":\"Banco Inter\"}}],\"forma_pagamento\":\"boleto\",\"frete_por_conta\":\"R\",\"situacao\":\"aberto\",\"obs\":\"Minhas ibservações bacanas\"},\"formato\":\"JSON\"}"
+            },
+            "body": {
+              "token": "174d512dbc2105a85b35327547f1ef6b88daa3d5ba723edd22df8bad19cda144",
+              "pedido[data_pedido]": "25/10/2024",
+              "pedido[cliente][codigo]": "1115",
+              "pedido[cliente][nome]": "SMNT Online - CLIENTE TESTE LUAN",
+              "pedido[itens][0][item][codigo]": "34",
+              "pedido[itens][0][item][id_produto]": "886555121",
+              "pedido[itens][0][item][descricao]": "Kit Teste - 3 bananinha & 2 paçoca - NÃO USAR",
+              "pedido[itens][0][item][unidade]": "UN",
+              "pedido[itens][0][item][quantidade]": "1",
+              "pedido[itens][0][item][valor_unitario]": "0.02",
+              "pedido[parcelas][0][parcela][dias]": "10",
+              "pedido[parcelas][0][parcela][data]": "03/11/2014",
+              "pedido[parcelas][0][parcela][valor]": "0.02",
+              "pedido[parcelas][0][parcela][obs]": "Obs Parcela 1",
+              "pedido[parcelas][0][parcela][forma_pagamento]": "boleto",
+              "pedido[parcelas][0][parcela][meio_pagamento]": "Banco Inter",
+              "pedido[forma_pagamento]": "boleto",
+              "pedido[frete_por_conta]": "R",
+              "pedido[situacao]": "aberto",
+              "pedido[obs]": "Minhas ibservações bacanas",
+              "formato": "JSON"
+            },
+            "webhookUrl": "https://primary-production-2cc1.up.railway.app/webhook-test/tiny-criar-pedido",
+            "executionMode": "test"
+          }
+        }
+      ]
+    },
+    "versionId": "ded8dc28-d5c8-41d9-bd7d-e0191c079978",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2024-08-08T23:11:59.660Z",
+        "createdAt": "2024-08-08T23:11:59.660Z",
+        "role": "workflow:owner",
+        "workflowId": "MRZwHbpW9jmU71ov",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]

@@ -1,0 +1,550 @@
+[
+  {
+    "updatedAt": "2025-03-26T13:32:15.917Z",
+    "createdAt": "2025-03-26T13:32:01.491Z",
+    "id": "9lCD5z2aNk0t6AKg",
+    "name": "[v1 old - supabase] Update Knowledge Base - Psicóloga Camila Rosa",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "jsonMode": "expressionData",
+          "jsonData": "={{ $json.texto }}",
+          "options": {
+            "metadata": {
+              "metadataValues": [
+                {
+                  "name": "=file_id",
+                  "value": "={{ $('arquivo_id').item.json.file_id }}"
+                }
+              ]
+            }
+          }
+        },
+        "id": "bb64ddc5-531c-48b0-bf1e-08540484f459",
+        "name": "Default Data Loader",
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1,
+        "position": [
+          1620,
+          420
+        ]
+      },
+      {
+        "parameters": {
+          "model": "text-embedding-3-small",
+          "options": {}
+        },
+        "id": "4f819d0a-516d-4acb-a229-56f92ced6625",
+        "name": "Embeddings OpenAI1",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "typeVersion": 1,
+        "position": [
+          1480,
+          420
+        ],
+        "credentials": {
+          "openAiApi": {
+            "id": "QBE26nTS8bfWjvAM",
+            "name": "OpenAi n8n psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "0f8a9ba7-74d4-4ff7-8b86-41e35532cd72",
+        "name": "Recursive Character Text Splitter",
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "typeVersion": 1,
+        "position": [
+          1640,
+          580
+        ]
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "10646eae-ae46-4327-a4dc-9987c2d76173",
+                "name": "file_id",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "c9e1ed84-5dcc-43c3-999b-cf1d095eba32",
+                "name": "file_mime_type",
+                "value": "={{ $json.mimeType }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "5a78b318-0374-4d84-bd82-86b8346e3034",
+        "name": "arquivo_id",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          320,
+          260
+        ]
+      },
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "triggerOn": "specificFolder",
+          "folderToWatch": {
+            "__rl": true,
+            "value": "1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z",
+            "mode": "list",
+            "cachedResultName": "Knowledge Base",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z"
+          },
+          "event": "fileCreated",
+          "options": {}
+        },
+        "id": "8587687f-d67f-43c6-8518-c5e0bc031316",
+        "name": "arquivo_criado",
+        "type": "n8n-nodes-base.googleDriveTrigger",
+        "typeVersion": 1,
+        "position": [
+          120,
+          160
+        ],
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jMgFKhNE396du7BE",
+            "name": "Google Drive - n8n-web-client - psicologacamilarosa"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "pollTimes": {
+            "item": [
+              {
+                "mode": "everyMinute"
+              }
+            ]
+          },
+          "triggerOn": "specificFolder",
+          "folderToWatch": {
+            "__rl": true,
+            "value": "1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z",
+            "mode": "list",
+            "cachedResultName": "Knowledge Base",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1duRWYu9XRAn9jpGqXnkhPBmjt9eBNO9z"
+          },
+          "event": "fileUpdated",
+          "options": {}
+        },
+        "id": "5fa13501-cc13-4261-aa82-245d71d8eddb",
+        "name": "arquivo_alterado",
+        "type": "n8n-nodes-base.googleDriveTrigger",
+        "typeVersion": 1,
+        "position": [
+          120,
+          360
+        ],
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jMgFKhNE396du7BE",
+            "name": "Google Drive - n8n-web-client - psicologacamilarosa"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "tableId": "documents",
+          "filterType": "string",
+          "filterString": "=metadata->>file_id=like.*{{ $json.file_id }}*"
+        },
+        "id": "7fccc49c-f83a-4ac4-a0af-70df248d6f8c",
+        "name": "deletar_arquivos_antigos",
+        "type": "n8n-nodes-base.supabase",
+        "typeVersion": 1,
+        "position": [
+          500,
+          260
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "supabaseApi": {
+            "id": "1IcBgB4mx2jO9qTR",
+            "name": "Supabase - Psicóloga Camila Rosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "download",
+          "fileId": {
+            "__rl": true,
+            "value": "={{ $('arquivo_id').item.json.file_id }}",
+            "mode": "id"
+          },
+          "options": {
+            "googleFileConversion": {
+              "conversion": {
+                "docsToFormat": "text/plain"
+              }
+            }
+          }
+        },
+        "id": "f96217a4-d094-4503-900d-1f89f90cf99c",
+        "name": "download_arquivo",
+        "type": "n8n-nodes-base.googleDrive",
+        "typeVersion": 3,
+        "position": [
+          680,
+          260
+        ],
+        "executeOnce": true,
+        "credentials": {
+          "googleDriveOAuth2Api": {
+            "id": "jMgFKhNE396du7BE",
+            "name": "Google Drive - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "pdf",
+          "options": {}
+        },
+        "id": "15aad8f6-8e60-49b9-8564-d6881ec9b7cc",
+        "name": "extrair_pdf",
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          1080,
+          160
+        ],
+        "alwaysOutputData": true
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "aecaf0bd-b800-40b7-b348-c1a8ff636ef1",
+                "name": "texto",
+                "value": "={{ $json.text }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "6d2db0a0-abb0-40c0-950e-3ff1cd59c636",
+        "name": "exportar_texto",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1320,
+          260
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "text",
+          "destinationKey": "text",
+          "options": {}
+        },
+        "id": "5beddc9f-1c4b-4b61-9299-56f4ddfbbc7a",
+        "name": "extrair_texto",
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          1080,
+          360
+        ]
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('arquivo_id').item.json.file_mime_type }}",
+                      "rightValue": "application/pdf",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "PDF"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "d67dd12c-f3be-40aa-bc38-e37b75e7d768",
+                      "leftValue": "={{ $('arquivo_id').item.json.file_mime_type }}",
+                      "rightValue": "application/vnd.google-apps.document",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "GOOGLE-TEXTO"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "24916443-f7a0-4ee6-aa39-1f6e31461384",
+        "name": "tipo_arquivo",
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          860,
+          260
+        ]
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "tableName": {
+            "__rl": true,
+            "value": "documents",
+            "mode": "list",
+            "cachedResultName": "documents"
+          },
+          "options": {
+            "queryName": "match_documents"
+          }
+        },
+        "id": "0b7441e5-c73b-4558-bed1-a37ff5b7da58",
+        "name": "supabase_vectorstore",
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "typeVersion": 1,
+        "position": [
+          1520,
+          260
+        ],
+        "credentials": {
+          "supabaseApi": {
+            "id": "1IcBgB4mx2jO9qTR",
+            "name": "Supabase - Psicóloga Camila Rosa"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Default Data Loader": {
+        "ai_document": [
+          [
+            {
+              "node": "supabase_vectorstore",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings OpenAI1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "supabase_vectorstore",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Recursive Character Text Splitter": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Default Data Loader",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "arquivo_id": {
+        "main": [
+          [
+            {
+              "node": "deletar_arquivos_antigos",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "arquivo_criado": {
+        "main": [
+          [
+            {
+              "node": "arquivo_id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "arquivo_alterado": {
+        "main": [
+          [
+            {
+              "node": "arquivo_id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "deletar_arquivos_antigos": {
+        "main": [
+          [
+            {
+              "node": "download_arquivo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "download_arquivo": {
+        "main": [
+          [
+            {
+              "node": "tipo_arquivo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "extrair_pdf": {
+        "main": [
+          [
+            {
+              "node": "exportar_texto",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "exportar_texto": {
+        "main": [
+          [
+            {
+              "node": "supabase_vectorstore",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "extrair_texto": {
+        "main": [
+          [
+            {
+              "node": "exportar_texto",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "tipo_arquivo": {
+        "main": [
+          [
+            {
+              "node": "extrair_pdf",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "extrair_texto",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "America/Sao_Paulo",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "QXFrfjYJi0JXm241"
+    },
+    "staticData": {
+      "node:arquivo_criado": {
+        "lastTimeChecked": "2025-03-16T06:12:36Z"
+      },
+      "node:arquivo_alterado": {
+        "lastTimeChecked": "2025-03-16T06:12:37Z"
+      },
+      "node:arquivo_criado2": {
+        "lastTimeChecked": "2025-03-26T13:27:42Z"
+      },
+      "node:arquivo_alterado2": {
+        "lastTimeChecked": "2025-03-26T13:27:43Z"
+      }
+    },
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "9c388286-40c8-4425-954c-b79caf033c74",
+    "activeVersionId": null,
+    "triggerCount": 2,
+    "shared": [
+      {
+        "updatedAt": "2025-03-26T13:32:01.491Z",
+        "createdAt": "2025-03-26T13:32:01.491Z",
+        "role": "workflow:owner",
+        "workflowId": "9lCD5z2aNk0t6AKg",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]

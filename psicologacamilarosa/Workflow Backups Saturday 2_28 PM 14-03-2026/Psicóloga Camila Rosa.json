@@ -1,0 +1,3214 @@
+[
+  {
+    "updatedAt": "2025-03-17T10:42:05.650Z",
+    "createdAt": "2024-06-13T05:24:43.341Z",
+    "id": "SnHCfPY4Az8uueLT",
+    "name": "Psicóloga Camila Rosa",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "html": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Novo lead cadastrado</title>\n  </head>\n  <body>\n    <div class=\"container\">\n      <p>Nome: {{ $json.name }}</p>\n      <p>E-mail: {{ $json.email }}</p>\n      <p>WhatsApp: {{ $json.phone }}</p>\n      <p>Grupo: {{ $json.group }}</p>\n    </div>\n  </body>\n</html>\n\n<style>\n  * {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-size: 16px;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n      \"Helvetica Neue\", Arial, sans-serif;\n  }\n\n  .container {\n    background-color: #ffffff;\n    font-family: sans-serif;\n    padding: 32px 16px;\n    border-radius: 8px;\n  }\n\n   a {\n    color: #5a6853;\n    font-weight: bold;\n    margin-top: 12px;\n  }\n\n  p {\n    color: #606060;\n    line-height: 1.6;\n    margin-bottom: 8px;\n  }\n\n  .footer {\n    margin-top: 20px;\n  }\n\n  .footer > p {\n    font-size: 14px;\n    color: #9d9d9d;\n  }\n</style>"
+        },
+        "id": "8b871064-74d5-4a96-8dec-c6bb18a50347",
+        "name": "HTML New Lead",
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          3420,
+          880
+        ]
+      },
+      {
+        "parameters": {
+          "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+          "toEmail": "=psicologacamilarosa@gmail.com",
+          "subject": "=🎉 Novo lead cadastrado - {{ $node['Baserow - createLead1'].json.group }}",
+          "text": "=",
+          "html": "={{ $json.html }}",
+          "options": {}
+        },
+        "name": "Send New Lead Email",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 1,
+        "position": [
+          3680,
+          880
+        ],
+        "id": "8e2e0e92-85d0-4f76-83b6-fb5a1208616b",
+        "credentials": {
+          "smtp": {
+            "id": "olJyC1pWfLHMpFBP",
+            "name": "SMTP account - contato@psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "html": "\n<!DOCTYPE html>\n<html lang=\"pt-br\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Obrigado por se cadastrar!</title>\n  </head>\n  <body>\n    <div class=\"container\">\n      <p>Olá, {{ $node['Baserow - createLead1'].json.name }}. Tudo bem?</p>\n\n      <p>O seu cadastro está confirmado!</p>\n      <p>Em breve, <strong>entrarei em contato com você por WhatsApp</strong>.</p>\n      <p>Obrigado!</p>\n      \n      <div class=\"footer\">\n        <p>\n          <strong>Camila Rosa</strong><br />\n          Psicóloga<br />\n          <a href=\"https://www.instagram.com/psicologacamilarosa/\" target=\"_blank\">@psicologacamilarosa</a><br />\n          <a href=\"https://psicologacamilarosa.com.br/\" target=\"_blank\">psicologacamilarosa.com.br</a>\n        </p>\n      </div>\n    </div>\n  </body>\n</html>\n\n<style>\n  * {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-size: 16px;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n      \"Helvetica Neue\", Arial, sans-serif;\n  }\n\n  .container {\n    background-color: #ffffff;\n    font-family: sans-serif;\n    padding: 32px 16px;\n    border-radius: 8px;\n  }\n\n   a {\n    color: #5a6853;\n    font-weight: bold;\n    margin-top: 12px;\n  }\n\n  p {\n    color: #606060;\n    line-height: 1.6;\n    margin-bottom: 8px;\n  }\n\n  .footer {\n    margin-top: 20px;\n  }\n\n  .footer > p {\n    font-size: 14px;\n    color: #9d9d9d;\n  }\n</style>\n"
+        },
+        "id": "6c04df53-ffd6-4040-be42-d7df9a9f8d5e",
+        "name": "HTML Lead Confirmation",
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          3420,
+          680
+        ]
+      },
+      {
+        "parameters": {
+          "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+          "toEmail": "={{ $node['Baserow - createLead1'].json.email }}",
+          "subject": "=O seu cadastro está confirmado!",
+          "text": "=",
+          "html": "={{ $json.html }}",
+          "options": {}
+        },
+        "name": "Send Lead Confirmation",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 1,
+        "position": [
+          3680,
+          680
+        ],
+        "id": "26ecbb91-e657-4c58-ba0a-0931a580082f",
+        "credentials": {
+          "smtp": {
+            "id": "olJyC1pWfLHMpFBP",
+            "name": "SMTP account - contato@psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "ad5ef9b3-baa2-469c-bc38-9391339e2e9f",
+                "leftValue": "={{ $json.body.data.formName }}",
+                "rightValue": "Lista de Espera | Terapia",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "6afc434f-f668-4d56-8701-779fef45fb69",
+        "name": "If5",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          2680,
+          480
+        ]
+      },
+      {
+        "parameters": {
+          "listId": "66778135d970430a1bb34c40",
+          "name": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }} ({{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }})",
+          "description": "=Nome: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }}\nE-mail: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}\nWhatsApp: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}\n\n{{ $node['Tally Webhook'].json.body.data.fields.map(item => item.label + \" \" + item.value)}}",
+          "additionalFields": {}
+        },
+        "id": "9173dfea-4414-4368-b231-b791b7ea43b8",
+        "name": "Trello New Card - Espera Terapia",
+        "type": "n8n-nodes-base.trello",
+        "typeVersion": 1,
+        "position": [
+          2900,
+          480
+        ],
+        "credentials": {
+          "trelloApi": {
+            "id": "bC7OzHUGE8PVkSwZ",
+            "name": "Trello account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "ad5ef9b3-baa2-469c-bc38-9391339e2e9f",
+                "leftValue": "={{ $json.body.data.formName }}",
+                "rightValue": "Lista de Espera | Supervisão em Grupo",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              },
+              {
+                "id": "07aa355c-d39e-4fcc-9419-844617944c0b",
+                "leftValue": "={{ $json.body.data.formName }}",
+                "rightValue": "Supervisão para Psicólogos",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              },
+              {
+                "id": "72e22820-df16-4332-ad6f-4df0e06e44da",
+                "leftValue": "={{ $json.body.data.formName }}",
+                "rightValue": "[embed - SITE] Supervisão para Psicólogos",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              },
+              {
+                "id": "50cac07e-08f5-4e0f-8e39-6a510b037ea2",
+                "leftValue": "={{ $json.body.data.formName }}",
+                "rightValue": "[embed- LP] Supervisão para Psicólogos",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              },
+              {
+                "id": "751b8752-7e5d-441d-88e1-4a1dbc517f64",
+                "leftValue": "={{ $json.body.data.formName }}",
+                "rightValue": "[embed - SITE] Supervisão em Grupo para Psicólogos",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              },
+              {
+                "id": "1e998f45-bb1d-4e0a-9291-3f33f4eaec86",
+                "leftValue": "={{ $json.body.data.formName }}",
+                "rightValue": "[embed - LP] Supervisão em Grupo para Psicólogos",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "id": "25a60bb8-9305-48c9-8731-f7949099df17",
+        "name": "If6",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          2680,
+          280
+        ]
+      },
+      {
+        "parameters": {
+          "listId": "66778efe991c39a0c2e03a66",
+          "name": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }} ({{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }})",
+          "description": "=Nome: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }}\nE-mail: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}\nWhatsApp: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}\n\n{{ $node['Tally Webhook'].json.body.data.fields.map(item => item.label + \" \" + item.value)}}",
+          "additionalFields": {}
+        },
+        "id": "9c057581-1c32-49f5-8c6f-b626fb62e3be",
+        "name": "Trello New Card - Espera Supervisão",
+        "type": "n8n-nodes-base.trello",
+        "typeVersion": 1,
+        "position": [
+          2900,
+          280
+        ],
+        "credentials": {
+          "trelloApi": {
+            "id": "bC7OzHUGE8PVkSwZ",
+            "name": "Trello account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+          "toEmail": "={{ $node['Baserow - createLead'].json.email }}",
+          "subject": "=Seu capítulo gratuito do ebook \"Diálogos que transformam\"",
+          "text": "=",
+          "html": "={{ $json.html }}",
+          "options": {}
+        },
+        "name": "Send Lead Confirmation1",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 1,
+        "position": [
+          3680,
+          1900
+        ],
+        "id": "5ca2d796-ac97-48b6-8d5c-07b067cd7f2f",
+        "credentials": {
+          "smtp": {
+            "id": "olJyC1pWfLHMpFBP",
+            "name": "SMTP account - contato@psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "html": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Capítulo gratuito de \"Diálogos que transformam\"</title>\n  </head>\n  <body>\n    <div class=\"container\">\n      <p>Olá, {{ $json.name }}. Tudo bem?</p>\n\n      <p>Muito obrigada pelo seu interesse no Ebook \"Diálogos que transformam\". Estou muito feliz em compartilhar o primeiro capítulo deste ebook com você!</p>\n      <p>Clique no link abaixo para baixar o PDF do primeiro capítulo gratuito:</p>\n      <p><a href=\"https://bit.ly/3KZKgKj\" target=\"_blank\">Baixar Capítulo 1</a></p>\n      <p>Espero que você aproveite este primeiro capítulo e que ele seja um passo significativo para uma comunicação mais saudável e uma relação mais harmoniosa.</p>\n      <p>Mas isso é apenas o começo! O ebook completo oferece ainda mais ferramentas e insights para fortalecer sua conexão com seu parceiro.</p>\n      <p><a href=\"https://lp.psicologacamilarosa.com.br/dialogos-que-transformam-estrategias-praticas-de-comunicacao-e-resolucao-de-conflitos-entre-casais/\" target=\"_blank\">Adquira o ebook completo agora!</a></p>\n      <p>Se tiver alguma dúvida ou precisar de ajuda, sinta-se à vontade para entrar em contato.</p>\n\n      <div class=\"footer\">\n        <p>\n          <strong>Camila Rosa</strong><br />\n          Psicóloga<br />\n          <a href=\"https://www.instagram.com/psicologacamilarosa/\" target=\"_blank\">@psicologacamilarosa</a><br />\n          <a href=\"https://psicologacamilarosa.com.br/\" target=\"_blank\">psicologacamilarosa.com.br</a>\n        </p>\n      </div>\n    </div>\n  </body>\n</html>\n\n<style>\n  * {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-size: 16px;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n      \"Helvetica Neue\", Arial, sans-serif;\n  }\n\n  .container {\n    background-color: #ffffff;\n    font-family: sans-serif;\n    padding: 32px 16px;\n    border-radius: 8px;\n  }\n\n   a {\n    color: #5a6853;\n    font-weight: bold;\n    margin-top: 12px;\n  }\n\n  p {\n    color: #606060;\n    line-height: 1.6;\n    margin-bottom: 8px;\n  }\n\n  .footer {\n    margin-top: 20px;\n  }\n\n  .footer > p {\n    font-size: 14px;\n    color: #9d9d9d;\n  }\n</style>"
+        },
+        "id": "32c0b376-11e1-45cb-8d7a-5faa56d0fe13",
+        "name": "HTML Lead Ebook Cap 1 Confirmation",
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          3460,
+          1900
+        ]
+      },
+      {
+        "parameters": {
+          "html": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Novo lead cadastrado</title>\n  </head>\n  <body>\n    <div class=\"container\">\n      <p>Nome: {{ $json.name }}</p>\n      <p>E-mail: {{ $json.email }}</p>\n      <p>WhatsApp: {{ $json.phone }}</p>\n      <p>Grupo: {{ $json.group }}</p>\n    </div>\n  </body>\n</html>\n\n<style>\n  * {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-size: 16px;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n      \"Helvetica Neue\", Arial, sans-serif;\n  }\n\n  .container {\n    background-color: #ffffff;\n    font-family: sans-serif;\n    padding: 32px 16px;\n    border-radius: 8px;\n  }\n\n   a {\n    color: #5a6853;\n    font-weight: bold;\n    margin-top: 12px;\n  }\n\n  p {\n    color: #606060;\n    line-height: 1.6;\n    margin-bottom: 8px;\n  }\n\n  .footer {\n    margin-top: 20px;\n  }\n\n  .footer > p {\n    font-size: 14px;\n    color: #9d9d9d;\n  }\n</style>"
+        },
+        "id": "dcdd2ad9-78e3-4966-8985-f3b7ff4ee57d",
+        "name": "HTML New Lead1",
+        "type": "n8n-nodes-base.html",
+        "typeVersion": 1.2,
+        "position": [
+          3460,
+          1700
+        ]
+      },
+      {
+        "parameters": {
+          "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+          "toEmail": "=psicologacamilarosa@gmail.com",
+          "subject": "=🎉 Novo lead cadastrado - {{ $node['Baserow - createLead'].json.group }}",
+          "text": "=",
+          "html": "={{ $json.html }}",
+          "options": {}
+        },
+        "name": "Send New Lead Email1",
+        "type": "n8n-nodes-base.emailSend",
+        "typeVersion": 1,
+        "position": [
+          3680,
+          1700
+        ],
+        "id": "fbb2cc45-c961-4350-9f11-f4bdb011548e",
+        "credentials": {
+          "smtp": {
+            "id": "olJyC1pWfLHMpFBP",
+            "name": "SMTP account - contato@psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "email": "={{ $node['Baserow - createLead1'].json.email }}",
+          "additionalFields": {
+            "customFieldsUi": {
+              "customFieldsValues": [
+                {
+                  "fieldId": "phone",
+                  "value": "={{ $node['Baserow - createLead1'].json.phone }}"
+                },
+                {
+                  "fieldId": "tags",
+                  "value": "={{ $node['Baserow - createLead1'].json.group }}"
+                }
+              ]
+            },
+            "name": "={{ $node['Baserow - createLead1'].json.name }}"
+          }
+        },
+        "id": "0253b65d-6421-4c53-8e2f-20fe04af3974",
+        "name": "MailerLite New Subscriber ",
+        "type": "n8n-nodes-base.mailerLite",
+        "typeVersion": 1,
+        "position": [
+          3420,
+          1080
+        ],
+        "credentials": {
+          "mailerLiteApi": {
+            "id": "vV0Fof0Hs69o1T0R",
+            "name": "Mailer Lite API Key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "email": "={{ $node['Baserow - createLead'].json.email }}",
+          "additionalFields": {
+            "customFieldsUi": {
+              "customFieldsValues": [
+                {
+                  "fieldId": "phone",
+                  "value": "={{ $node['Baserow - createLead'].json.phone }}"
+                },
+                {
+                  "fieldId": "tags",
+                  "value": "={{ $node['Baserow - createLead'].json.group }}"
+                }
+              ]
+            },
+            "name": "={{ $node['Baserow - createLead'].json.name }}"
+          }
+        },
+        "id": "a9825ca1-2d65-4935-a622-a61f4732ee60",
+        "name": "MailerLite New Subscriber 1",
+        "type": "n8n-nodes-base.mailerLite",
+        "typeVersion": 1,
+        "position": [
+          3460,
+          1500
+        ],
+        "credentials": {
+          "mailerLiteApi": {
+            "id": "vV0Fof0Hs69o1T0R",
+            "name": "Mailer Lite API Key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "databaseId": 117970,
+          "tableId": 311371,
+          "limit": 1,
+          "additionalOptions": {
+            "filters": {
+              "fields": [
+                {
+                  "field": 2250466,
+                  "value": "={{ $json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}"
+                },
+                {
+                  "field": 2250465,
+                  "value": "={{ $json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}"
+                }
+              ]
+            }
+          }
+        },
+        "id": "0edae735-3c8c-4857-afd7-74b566039c2a",
+        "name": "Baserow - getLead",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          2680,
+          1700
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "databaseId": 117970,
+          "tableId": 311371,
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": 2250462,
+                "fieldValue": "={{ $node['Tally Webhook - Ebook - Cap. 1 grátis'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }}"
+              },
+              {
+                "fieldId": 2250465,
+                "fieldValue": "={{ $node['Tally Webhook - Ebook - Cap. 1 grátis'].json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}"
+              },
+              {
+                "fieldId": 2250466,
+                "fieldValue": "={{ $node['Tally Webhook - Ebook - Cap. 1 grátis'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}"
+              },
+              {
+                "fieldId": 2250467,
+                "fieldValue": "=[Tally] {{ $node['Tally Webhook - Ebook - Cap. 1 grátis'].json.body.data.formName }}"
+              }
+            ]
+          }
+        },
+        "id": "afdef3ad-2a0d-4266-8cf3-63376937abf1",
+        "name": "Baserow - createLead",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          3160,
+          1700
+        ],
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "databaseId": 117970,
+          "tableId": 311371,
+          "limit": 1,
+          "additionalOptions": {
+            "filters": {
+              "fields": [
+                {
+                  "field": 2250466,
+                  "value": "={{ $json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}_2"
+                },
+                {
+                  "field": 2250465,
+                  "value": "={{ $json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}"
+                }
+              ]
+            }
+          }
+        },
+        "id": "e60befbf-d60b-45e7-9f5b-577c29460ffa",
+        "name": "Baserow - getLead1",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          2680,
+          880
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "databaseId": 117970,
+          "tableId": 311371,
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": 2250462,
+                "fieldValue": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }}"
+              },
+              {
+                "fieldId": 2250465,
+                "fieldValue": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}"
+              },
+              {
+                "fieldId": 2250466,
+                "fieldValue": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}"
+              },
+              {
+                "fieldId": 2250467,
+                "fieldValue": "=[Tally] {{ $node['Tally Webhook'].json.body.data.formName }}"
+              }
+            ]
+          }
+        },
+        "id": "3776b3c7-1aed-4bca-a8ec-91de97f4521e",
+        "name": "Baserow - createLead1",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          3140,
+          880
+        ],
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "mailerlite-webhook",
+          "options": {}
+        },
+        "name": "MailerLite Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          2460,
+          3060
+        ],
+        "webhookId": "YOUR_MAILERLITE_WEBHOOK_PATH",
+        "id": "0856899f-d0a8-4cea-b452-e4d67b3a8bdf"
+      },
+      {
+        "parameters": {
+          "databaseId": 117970,
+          "tableId": 311371,
+          "limit": 1,
+          "additionalOptions": {
+            "filters": {
+              "fields": [
+                {
+                  "field": 2250465,
+                  "value": "={{ $json.body.email }}"
+                }
+              ]
+            }
+          }
+        },
+        "id": "949d1e12-d601-4d7b-9f31-571666b1165e",
+        "name": "Baserow - getLead2",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          2680,
+          3060
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "databaseId": 117970,
+          "tableId": 311371,
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": 2250462,
+                "fieldValue": "={{ $node['MailerLite Webhook'].json.body.fields.name }}"
+              },
+              {
+                "fieldId": 2250465,
+                "fieldValue": "={{ $node['MailerLite Webhook'].json.body.email }}"
+              },
+              {
+                "fieldId": 2250466,
+                "fieldValue": "={{ $node['MailerLite Webhook'].json.body.fields.phone }}"
+              },
+              {
+                "fieldId": 2250467,
+                "fieldValue": "=[Mailerlite] {{ $node['MailerLite Webhook'].json.body.source }}"
+              }
+            ]
+          }
+        },
+        "id": "8dd247b8-73f5-4582-8f64-2f853379406e",
+        "name": "Baserow - createLead2",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          3160,
+          3160
+        ],
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                "leftValue": "={{ $json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "a3cfa98d-578b-43d3-86ce-04e0fde9e0ad",
+        "name": "leadExists1",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          2900,
+          880
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                "leftValue": "={{ $json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "5f431160-169d-4d74-a8f3-660bc1d4ae42",
+        "name": "leadExists",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          2900,
+          1700
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                "leftValue": "={{ $json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "ae64e3e0-6aa0-4d99-a858-03df3f24e58f",
+        "name": "leadExists2",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          2900,
+          3060
+        ]
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "tally-webhook-ebook-cap-1-gratis",
+          "options": {}
+        },
+        "id": "a3abe875-3fa2-42a6-97c1-027a27eaf096",
+        "name": "Tally Webhook - Ebook - Cap. 1 grátis",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          2440,
+          1700
+        ],
+        "webhookId": "3a628d93-b1f1-42e8-a73d-9c090b2371e5"
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "tally-webhook",
+          "options": {}
+        },
+        "name": "Tally Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 1,
+        "position": [
+          2420,
+          680
+        ],
+        "webhookId": "YOUR_TALLY_WEBHOOK_PATH",
+        "id": "fb04e697-08ec-40dc-9fee-3af055c279c4"
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "databaseId": 117970,
+          "tableId": 311112,
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": 2248153,
+                "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.buyer.name }}"
+              },
+              {
+                "fieldId": 2248233,
+                "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.buyer.email }}"
+              },
+              {
+                "fieldId": 2248234,
+                "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.buyer.checkout_phone }}"
+              },
+              {
+                "fieldId": 2250098,
+                "fieldValue": "=[Hotmart] {{ $('Hotmart Webhook').item.json.body.data.product.name }}"
+              }
+            ]
+          }
+        },
+        "id": "623f004f-ff34-4ac1-98fa-644b0174f051",
+        "name": "Baserow - createClient",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          3160,
+          2480
+        ],
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                "leftValue": "={{ $json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "51506f8e-1e5a-4e47-8902-55038148f6a8",
+        "name": "clientExists",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          2900,
+          2340
+        ]
+      },
+      {
+        "parameters": {
+          "databaseId": 117970,
+          "tableId": 312313,
+          "limit": 1,
+          "additionalOptions": {
+            "filters": {
+              "fields": [
+                {
+                  "field": 2259183,
+                  "value": "={{$node['Hotmart Webhook'].json.body.data.product.id }}"
+                }
+              ]
+            }
+          }
+        },
+        "id": "08d210bb-871e-4aad-92b7-e3f26d816f05",
+        "name": "Baserow - getProduct",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          3460,
+          2340
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                "leftValue": "={{ $json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "77d09ebe-fb52-47a5-a7fb-cc3b7940569d",
+        "name": "productExists",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          3680,
+          2340
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "create",
+          "databaseId": 117970,
+          "tableId": 312313,
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": 2259174,
+                "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.product.name }}"
+              },
+              {
+                "fieldId": 2259183,
+                "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.product.id }}"
+              }
+            ]
+          }
+        },
+        "id": "c15f5c4e-f0ef-4cc5-91e7-b9c708ddb40a",
+        "name": "Baserow - createProduct",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          3920,
+          2480
+        ],
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "databaseId": 117970,
+          "tableId": 311112,
+          "rowId": "={{$node['clientExists'].json.id || $node['Baserow - createClient'].json.id }}",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": 2259173,
+                "fieldValue": "={{$node['productExists'].json.id || $node['Baserow - createProduct'].json.id }}"
+              }
+            ]
+          }
+        },
+        "id": "7569044b-d5da-428b-8dcb-668f19b28635",
+        "name": "Baserow - Associate Product with Client",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          4120,
+          2340
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "databaseId": 117970,
+          "tableId": 311112,
+          "limit": 1,
+          "additionalOptions": {
+            "filters": {
+              "fields": [
+                {
+                  "field": 2248234,
+                  "value": "={{ $json.body.data.buyer.checkout_phone }}"
+                },
+                {
+                  "field": 2248233,
+                  "value": "={{ $json.body.data.buyer.email }}"
+                }
+              ]
+            }
+          }
+        },
+        "id": "b86f9567-2092-40f1-a166-a321a565fffe",
+        "name": "Baserow - getClient",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          2680,
+          2340
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "databaseId": 117970,
+          "tableId": 311371,
+          "rowId": "={{$node['leadExists2'].json.id }}",
+          "fieldsUi": {
+            "fieldValues": [
+              {
+                "fieldId": 2250465,
+                "fieldValue": "{{ $node['MailerLite Webhook'].json.body.email }}"
+              },
+              {
+                "fieldId": 2250462,
+                "fieldValue": "{{ $node['MailerLite Webhook'].json.body.fields.name }}"
+              },
+              {
+                "fieldId": 2250466,
+                "fieldValue": "{{ $node['MailerLite Webhook'].json.body.fields.phone }}"
+              },
+              {
+                "fieldId": 2250467,
+                "fieldValue": "[Mailerlite] {{ $node['MailerLite Webhook'].json.body.source }}"
+              }
+            ]
+          }
+        },
+        "id": "a1889fd7-ac31-4cf0-9c60-216a29fb8e39",
+        "name": "Baserow - Update Lead",
+        "type": "n8n-nodes-base.baserow",
+        "typeVersion": 1,
+        "position": [
+          3160,
+          2980
+        ],
+        "credentials": {
+          "baserowApi": {
+            "id": "ry0JPkTFr8IVo5d3",
+            "name": "Baserow - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "hotmart-webhook",
+          "options": {}
+        },
+        "id": "951eed17-2095-4d08-bfdc-bdd6993f7101",
+        "name": "Hotmart Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          2440,
+          2340
+        ],
+        "webhookId": "654bc769-9d28-4d27-a5ff-5ec55534ff59"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://evolution-api-production-44c2.up.railway.app/message/sendText/psicologacamilarosa",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "7724F68A6488-4B0A-B1F6-7F0B20799688"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"5541997074418@s.whatsapp.net\",\n  \"text\": \"🎉 Novo lead cadastrado - Supervisão: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }} ({{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }})\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          3140,
+          280
+        ],
+        "id": "a45a61dd-98c6-41fd-ac73-df942b3593c1",
+        "name": "evo_send_message1"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://evolution-api-production-44c2.up.railway.app/message/sendText/psicologacamilarosa",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "apikey",
+                "value": "7724F68A6488-4B0A-B1F6-7F0B20799688"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          },
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={\n  \"number\": \"5541997074418@s.whatsapp.net\",\n  \"text\": \"🎉 Novo lead cadastrado - Terapia: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }} ({{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }})\"\n}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          3140,
+          480
+        ],
+        "id": "aec3caee-7922-4010-b02c-40b1a8045c2c",
+        "name": "evo_send_message"
+      }
+    ],
+    "connections": {
+      "HTML New Lead": {
+        "main": [
+          [
+            {
+              "node": "Send New Lead Email",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML Lead Confirmation": {
+        "main": [
+          [
+            {
+              "node": "Send Lead Confirmation",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If5": {
+        "main": [
+          [
+            {
+              "node": "Trello New Card - Espera Terapia",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If6": {
+        "main": [
+          [
+            {
+              "node": "Trello New Card - Espera Supervisão",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML Lead Ebook Cap 1 Confirmation": {
+        "main": [
+          [
+            {
+              "node": "Send Lead Confirmation1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "HTML New Lead1": {
+        "main": [
+          [
+            {
+              "node": "Send New Lead Email1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - getLead": {
+        "main": [
+          [
+            {
+              "node": "leadExists",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - createLead": {
+        "main": [
+          [
+            {
+              "node": "MailerLite New Subscriber 1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "HTML New Lead1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "HTML Lead Ebook Cap 1 Confirmation",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - getLead1": {
+        "main": [
+          [
+            {
+              "node": "leadExists1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - createLead1": {
+        "main": [
+          [
+            {
+              "node": "HTML Lead Confirmation",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "HTML New Lead",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "MailerLite New Subscriber ",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "MailerLite Webhook": {
+        "main": [
+          [
+            {
+              "node": "Baserow - getLead2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - getLead2": {
+        "main": [
+          [
+            {
+              "node": "leadExists2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "leadExists1": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Baserow - createLead1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "leadExists": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Baserow - createLead",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "leadExists2": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Baserow - createLead2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tally Webhook - Ebook - Cap. 1 grátis": {
+        "main": [
+          [
+            {
+              "node": "Baserow - getLead",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Tally Webhook": {
+        "main": [
+          [
+            {
+              "node": "If5",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "If6",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Baserow - getLead1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "clientExists": {
+        "main": [
+          [
+            {
+              "node": "Baserow - getProduct",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Baserow - createClient",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - getProduct": {
+        "main": [
+          [
+            {
+              "node": "productExists",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "productExists": {
+        "main": [
+          [
+            {
+              "node": "Baserow - Associate Product with Client",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Baserow - createProduct",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - createProduct": {
+        "main": [
+          [
+            {
+              "node": "Baserow - Associate Product with Client",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - createClient": {
+        "main": [
+          [
+            {
+              "node": "Baserow - getProduct",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Baserow - getClient": {
+        "main": [
+          [
+            {
+              "node": "clientExists",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Hotmart Webhook": {
+        "main": [
+          [
+            {
+              "node": "Baserow - getClient",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Trello New Card - Espera Supervisão": {
+        "main": [
+          [
+            {
+              "node": "evo_send_message1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Trello New Card - Espera Terapia": {
+        "main": [
+          [
+            {
+              "node": "evo_send_message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "America/Sao_Paulo",
+      "saveManualExecutions": true,
+      "callerPolicy": "workflowsFromSameOwner"
+    },
+    "staticData": {
+      "node:Stripe Trigger": {
+        "webhookId": "we_1PWUQj08UbdTfqkipsVe1Ly1",
+        "webhookEvents": [
+          "invoice.payment_succeeded"
+        ],
+        "webhookSecret": "whsec_jVvLW4QXpMwfZbgYdEq7ADv5wzLRb78e"
+      },
+      "node:Stripe paymentSucceeded": {},
+      "node:Calendly Trigger": {}
+    },
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+      "Send New Lead Email1": [
+        {
+          "json": {
+            "name": "First item",
+            "code": 1
+          }
+        },
+        {
+          "json": {
+            "name": "Second item",
+            "code": 2
+          }
+        }
+      ],
+      "Tally Webhook - Ebook - Cap. 1 grátis": [
+        {
+          "json": {
+            "headers": {
+              "host": "primary-production-2cc1.up.railway.app",
+              "accept": "application/json, text/plain, */*",
+              "content-type": "application/json",
+              "user-agent": "Tally Webhooks",
+              "content-length": "654",
+              "accept-encoding": "gzip, compress, deflate, br",
+              "x-forwarded-for": "35.203.251.43",
+              "x-forwarded-proto": "https",
+              "x-envoy-external-address": "35.203.251.43",
+              "x-request-id": "b0a106b5-64e1-42b6-bc56-e717eca7d213"
+            },
+            "params": {},
+            "query": {},
+            "body": {
+              "eventId": "decb3eac-0e91-4901-9050-19a951f20001",
+              "eventType": "FORM_RESPONSE",
+              "createdAt": "2024-06-26T03:08:54.156Z",
+              "data": {
+                "responseId": "Gb1q4e",
+                "submissionId": "Gb1q4e",
+                "respondentId": "jWzKRQ",
+                "formId": "wMO4ol",
+                "formName": "Capítulo 1 GRÁTIS | Ebook: Diálogos que transformam",
+                "createdAt": "2024-06-26T03:08:54.000Z",
+                "fields": [
+                  {
+                    "key": "question_EqRYBl",
+                    "label": "Qual o seu Nome?",
+                    "type": "INPUT_TEXT",
+                    "value": "Luan Ribeiro"
+                  },
+                  {
+                    "key": "question_rD4W0o",
+                    "label": "Qual seu E-mail?",
+                    "type": "INPUT_EMAIL",
+                    "value": "luansemensato@gmail.com"
+                  },
+                  {
+                    "key": "question_4a6d1r",
+                    "label": "Qual o seu WhatsApp com DDD?",
+                    "type": "INPUT_PHONE_NUMBER",
+                    "value": "+5541996787181"
+                  }
+                ]
+              }
+            },
+            "webhookUrl": "https://primary-production-2cc1.up.railway.app/webhook-test/tally-webhook-ebook-cap-1-gratis",
+            "executionMode": "test"
+          }
+        }
+      ],
+      "Tally Webhook": [
+        {
+          "json": {
+            "headers": {
+              "host": "primary-production-2cc1.up.railway.app",
+              "accept": "application/json, text/plain, */*",
+              "content-type": "application/json",
+              "user-agent": "Tally Webhooks",
+              "content-length": "1553",
+              "accept-encoding": "gzip, compress, deflate, br",
+              "x-forwarded-for": "107.178.237.154",
+              "x-forwarded-proto": "https",
+              "x-envoy-external-address": "107.178.237.154",
+              "x-request-id": "431b761a-b1c0-48c5-8406-096ba5bdbdcb"
+            },
+            "params": {},
+            "query": {},
+            "body": {
+              "eventId": "7a569ad4-b333-4d55-b490-d01d95cfa049",
+              "eventType": "FORM_RESPONSE",
+              "createdAt": "2024-06-28T01:54:35.917Z",
+              "data": {
+                "responseId": "KGPNYA",
+                "submissionId": "KGPNYA",
+                "respondentId": "jWzKRQ",
+                "formId": "n0M0KP",
+                "formName": "Lista de Espera | Terapia",
+                "createdAt": "2024-06-28T01:54:35.000Z",
+                "fields": [
+                  {
+                    "key": "question_J14EXR",
+                    "label": "Qual seu e-mail?",
+                    "type": "INPUT_EMAIL",
+                    "value": "luansemensato@gmail.com"
+                  },
+                  {
+                    "key": "question_gbo8Y4",
+                    "label": "Qual o seu nome?",
+                    "type": "INPUT_TEXT",
+                    "value": "Luan"
+                  },
+                  {
+                    "key": "question_yXa8jx",
+                    "label": "Qual o seu telefone com DDD?",
+                    "type": "INPUT_PHONE_NUMBER",
+                    "value": "+5541996787181"
+                  },
+                  {
+                    "key": "question_X5b61Y",
+                    "label": "Você já fez terapia ou será sua primeira experiência?",
+                    "type": "MULTIPLE_CHOICE",
+                    "value": [
+                      "93888959-3937-479a-9c30-ba292a1ef3b0"
+                    ],
+                    "options": [
+                      {
+                        "id": "be1ad520-4736-4117-8bc0-dcc405ce70e4",
+                        "text": "Sim, já fiz terapia anteriormente"
+                      },
+                      {
+                        "id": "93888959-3937-479a-9c30-ba292a1ef3b0",
+                        "text": "Não, será minha primeira experiência"
+                      }
+                    ]
+                  },
+                  {
+                    "key": "question_jeV854",
+                    "label": "Quais os seus objetivos com a terapia?",
+                    "type": "TEXTAREA",
+                    "value": "aaa"
+                  },
+                  {
+                    "key": "question_2j6919",
+                    "label": "A terapia é um acompanhamento contínuo com sessões semanais de 50 minutos.",
+                    "type": "CHECKBOXES",
+                    "value": [
+                      "02a93e28-c0c7-4b1e-95af-6dcbac56a637"
+                    ],
+                    "options": [
+                      {
+                        "id": "02a93e28-c0c7-4b1e-95af-6dcbac56a637",
+                        "text": "✔️ Ciente"
+                      }
+                    ]
+                  },
+                  {
+                    "key": "question_2j6919_02a93e28-c0c7-4b1e-95af-6dcbac56a637",
+                    "label": "A terapia é um acompanhamento contínuo com sessões semanais de 50 minutos. (✔️ Ciente)",
+                    "type": "CHECKBOXES",
+                    "value": true
+                  }
+                ]
+              }
+            },
+            "webhookUrl": "https://primary-production-2cc1.up.railway.app/webhook-test/tally-webhook",
+            "executionMode": "test"
+          }
+        }
+      ],
+      "Hotmart Webhook": [
+        {
+          "json": {
+            "headers": {
+              "host": "primary-production-2cc1.up.railway.app",
+              "content-length": "1317",
+              "content-type": "application/json",
+              "user-agent": "Jodd HTTP",
+              "x-hotmart-hottok": "dp6s8IfvKVgTTtS2WbwksWKkss4KPy9d110d0d-0ab4-49a2-9714-923878f0b5f1",
+              "x-forwarded-for": "44.221.75.68",
+              "x-forwarded-proto": "https",
+              "x-envoy-external-address": "44.221.75.68",
+              "x-request-id": "0be262bc-b7ba-438c-a20f-270a00bbdbac"
+            },
+            "params": {},
+            "query": {},
+            "body": {
+              "data": {
+                "product": {
+                  "has_co_production": false,
+                  "name": "Produto test postback2",
+                  "id": 0,
+                  "ucode": "fb056612-bcc6-4217-9e6d-2a5d1110ac2f"
+                },
+                "commissions": [
+                  {
+                    "currency_value": "BRL",
+                    "source": "MARKETPLACE",
+                    "value": 149.5
+                  },
+                  {
+                    "currency_value": "BRL",
+                    "source": "PRODUCER",
+                    "value": 1350.5
+                  }
+                ],
+                "purchase": {
+                  "offer": {
+                    "code": "test"
+                  },
+                  "order_date": 1511783344000,
+                  "original_offer_price": {
+                    "currency_value": "BRL",
+                    "value": 1500
+                  },
+                  "price": {
+                    "currency_value": "BRL",
+                    "value": 1500
+                  },
+                  "checkout_country": {
+                    "iso": "BR",
+                    "name": "Brasil"
+                  },
+                  "sckPaymentLink": "sckPaymentLinkTest",
+                  "order_bump": {
+                    "parent_purchase_transaction": "HP02316330308193",
+                    "is_order_bump": true
+                  },
+                  "payment": {
+                    "installments_number": 12,
+                    "type": "CREDIT_CARD"
+                  },
+                  "approved_date": 1511783346000,
+                  "full_price": {
+                    "currency_value": "BRL",
+                    "value": 1500
+                  },
+                  "transaction": "HP16015479281022",
+                  "status": "COMPLETED"
+                },
+                "affiliates": [
+                  {
+                    "affiliate_code": "Q58388177J",
+                    "name": "Affiliate name"
+                  }
+                ],
+                "producer": {
+                  "name": "Producer Test Name"
+                },
+                "subscription": {
+                  "subscriber": {
+                    "code": "I9OT62C3"
+                  },
+                  "plan": {
+                    "name": "plano de teste",
+                    "id": 123
+                  },
+                  "status": "ACTIVE"
+                },
+                "buyer": {
+                  "address": {
+                    "country": "Brasil",
+                    "country_iso": "BR"
+                  },
+                  "name": "Teste Comprador",
+                  "checkout_phone": "99999999900",
+                  "email": "testeComprador271101postman15@example.com"
+                }
+              },
+              "id": "486e40ef-9c04-4ee0-9149-2e12d250c4e5",
+              "creation_date": 1720985837962,
+              "event": "PURCHASE_COMPLETE",
+              "version": "2.0.0"
+            },
+            "webhookUrl": "https://primary-production-2cc1.up.railway.app/webhook-test/hotmart-webhook",
+            "executionMode": "test"
+          }
+        }
+      ]
+    },
+    "versionId": "b1cb69af-3c32-4eba-b362-991deb900a7b",
+    "activeVersionId": "b1cb69af-3c32-4eba-b362-991deb900a7b",
+    "triggerCount": 4,
+    "shared": [
+      {
+        "updatedAt": "2024-06-13T05:24:43.341Z",
+        "createdAt": "2024-06-13T05:24:43.341Z",
+        "role": "workflow:owner",
+        "workflowId": "SnHCfPY4Az8uueLT",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": {
+      "updatedAt": "2026-01-28T12:32:27.095Z",
+      "createdAt": "2026-01-28T12:32:27.095Z",
+      "versionId": "b1cb69af-3c32-4eba-b362-991deb900a7b",
+      "workflowId": "SnHCfPY4Az8uueLT",
+      "nodes": [
+        {
+          "parameters": {
+            "html": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Novo lead cadastrado</title>\n  </head>\n  <body>\n    <div class=\"container\">\n      <p>Nome: {{ $json.name }}</p>\n      <p>E-mail: {{ $json.email }}</p>\n      <p>WhatsApp: {{ $json.phone }}</p>\n      <p>Grupo: {{ $json.group }}</p>\n    </div>\n  </body>\n</html>\n\n<style>\n  * {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-size: 16px;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n      \"Helvetica Neue\", Arial, sans-serif;\n  }\n\n  .container {\n    background-color: #ffffff;\n    font-family: sans-serif;\n    padding: 32px 16px;\n    border-radius: 8px;\n  }\n\n   a {\n    color: #5a6853;\n    font-weight: bold;\n    margin-top: 12px;\n  }\n\n  p {\n    color: #606060;\n    line-height: 1.6;\n    margin-bottom: 8px;\n  }\n\n  .footer {\n    margin-top: 20px;\n  }\n\n  .footer > p {\n    font-size: 14px;\n    color: #9d9d9d;\n  }\n</style>"
+          },
+          "id": "8b871064-74d5-4a96-8dec-c6bb18a50347",
+          "name": "HTML New Lead",
+          "type": "n8n-nodes-base.html",
+          "typeVersion": 1.2,
+          "position": [
+            3420,
+            880
+          ]
+        },
+        {
+          "parameters": {
+            "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+            "toEmail": "=psicologacamilarosa@gmail.com",
+            "subject": "=🎉 Novo lead cadastrado - {{ $node['Baserow - createLead1'].json.group }}",
+            "text": "=",
+            "html": "={{ $json.html }}",
+            "options": {}
+          },
+          "name": "Send New Lead Email",
+          "type": "n8n-nodes-base.emailSend",
+          "typeVersion": 1,
+          "position": [
+            3680,
+            880
+          ],
+          "id": "8e2e0e92-85d0-4f76-83b6-fb5a1208616b",
+          "credentials": {
+            "smtp": {
+              "id": "olJyC1pWfLHMpFBP",
+              "name": "SMTP account - contato@psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "html": "\n<!DOCTYPE html>\n<html lang=\"pt-br\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Obrigado por se cadastrar!</title>\n  </head>\n  <body>\n    <div class=\"container\">\n      <p>Olá, {{ $node['Baserow - createLead1'].json.name }}. Tudo bem?</p>\n\n      <p>O seu cadastro está confirmado!</p>\n      <p>Em breve, <strong>entrarei em contato com você por WhatsApp</strong>.</p>\n      <p>Obrigado!</p>\n      \n      <div class=\"footer\">\n        <p>\n          <strong>Camila Rosa</strong><br />\n          Psicóloga<br />\n          <a href=\"https://www.instagram.com/psicologacamilarosa/\" target=\"_blank\">@psicologacamilarosa</a><br />\n          <a href=\"https://psicologacamilarosa.com.br/\" target=\"_blank\">psicologacamilarosa.com.br</a>\n        </p>\n      </div>\n    </div>\n  </body>\n</html>\n\n<style>\n  * {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-size: 16px;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n      \"Helvetica Neue\", Arial, sans-serif;\n  }\n\n  .container {\n    background-color: #ffffff;\n    font-family: sans-serif;\n    padding: 32px 16px;\n    border-radius: 8px;\n  }\n\n   a {\n    color: #5a6853;\n    font-weight: bold;\n    margin-top: 12px;\n  }\n\n  p {\n    color: #606060;\n    line-height: 1.6;\n    margin-bottom: 8px;\n  }\n\n  .footer {\n    margin-top: 20px;\n  }\n\n  .footer > p {\n    font-size: 14px;\n    color: #9d9d9d;\n  }\n</style>\n"
+          },
+          "id": "6c04df53-ffd6-4040-be42-d7df9a9f8d5e",
+          "name": "HTML Lead Confirmation",
+          "type": "n8n-nodes-base.html",
+          "typeVersion": 1.2,
+          "position": [
+            3420,
+            680
+          ]
+        },
+        {
+          "parameters": {
+            "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+            "toEmail": "={{ $node['Baserow - createLead1'].json.email }}",
+            "subject": "=O seu cadastro está confirmado!",
+            "text": "=",
+            "html": "={{ $json.html }}",
+            "options": {}
+          },
+          "name": "Send Lead Confirmation",
+          "type": "n8n-nodes-base.emailSend",
+          "typeVersion": 1,
+          "position": [
+            3680,
+            680
+          ],
+          "id": "26ecbb91-e657-4c58-ba0a-0931a580082f",
+          "credentials": {
+            "smtp": {
+              "id": "olJyC1pWfLHMpFBP",
+              "name": "SMTP account - contato@psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "conditions": {
+              "options": {
+                "caseSensitive": true,
+                "leftValue": "",
+                "typeValidation": "strict"
+              },
+              "conditions": [
+                {
+                  "id": "ad5ef9b3-baa2-469c-bc38-9391339e2e9f",
+                  "leftValue": "={{ $json.body.data.formName }}",
+                  "rightValue": "Lista de Espera | Terapia",
+                  "operator": {
+                    "type": "string",
+                    "operation": "equals",
+                    "name": "filter.operator.equals"
+                  }
+                }
+              ],
+              "combinator": "and"
+            },
+            "options": {}
+          },
+          "id": "6afc434f-f668-4d56-8701-779fef45fb69",
+          "name": "If5",
+          "type": "n8n-nodes-base.if",
+          "typeVersion": 2,
+          "position": [
+            2680,
+            480
+          ]
+        },
+        {
+          "parameters": {
+            "listId": "66778135d970430a1bb34c40",
+            "name": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }} ({{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }})",
+            "description": "=Nome: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }}\nE-mail: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}\nWhatsApp: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}\n\n{{ $node['Tally Webhook'].json.body.data.fields.map(item => item.label + \" \" + item.value)}}",
+            "additionalFields": {}
+          },
+          "id": "9173dfea-4414-4368-b231-b791b7ea43b8",
+          "name": "Trello New Card - Espera Terapia",
+          "type": "n8n-nodes-base.trello",
+          "typeVersion": 1,
+          "position": [
+            2900,
+            480
+          ],
+          "credentials": {
+            "trelloApi": {
+              "id": "bC7OzHUGE8PVkSwZ",
+              "name": "Trello account"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "conditions": {
+              "options": {
+                "caseSensitive": true,
+                "leftValue": "",
+                "typeValidation": "strict"
+              },
+              "conditions": [
+                {
+                  "id": "ad5ef9b3-baa2-469c-bc38-9391339e2e9f",
+                  "leftValue": "={{ $json.body.data.formName }}",
+                  "rightValue": "Lista de Espera | Supervisão em Grupo",
+                  "operator": {
+                    "type": "string",
+                    "operation": "contains"
+                  }
+                },
+                {
+                  "id": "07aa355c-d39e-4fcc-9419-844617944c0b",
+                  "leftValue": "={{ $json.body.data.formName }}",
+                  "rightValue": "Supervisão para Psicólogos",
+                  "operator": {
+                    "type": "string",
+                    "operation": "contains"
+                  }
+                },
+                {
+                  "id": "72e22820-df16-4332-ad6f-4df0e06e44da",
+                  "leftValue": "={{ $json.body.data.formName }}",
+                  "rightValue": "[embed - SITE] Supervisão para Psicólogos",
+                  "operator": {
+                    "type": "string",
+                    "operation": "contains"
+                  }
+                },
+                {
+                  "id": "50cac07e-08f5-4e0f-8e39-6a510b037ea2",
+                  "leftValue": "={{ $json.body.data.formName }}",
+                  "rightValue": "[embed- LP] Supervisão para Psicólogos",
+                  "operator": {
+                    "type": "string",
+                    "operation": "contains"
+                  }
+                },
+                {
+                  "id": "751b8752-7e5d-441d-88e1-4a1dbc517f64",
+                  "leftValue": "={{ $json.body.data.formName }}",
+                  "rightValue": "[embed - SITE] Supervisão em Grupo para Psicólogos",
+                  "operator": {
+                    "type": "string",
+                    "operation": "contains"
+                  }
+                },
+                {
+                  "id": "1e998f45-bb1d-4e0a-9291-3f33f4eaec86",
+                  "leftValue": "={{ $json.body.data.formName }}",
+                  "rightValue": "[embed - LP] Supervisão em Grupo para Psicólogos",
+                  "operator": {
+                    "type": "string",
+                    "operation": "contains"
+                  }
+                }
+              ],
+              "combinator": "or"
+            },
+            "options": {}
+          },
+          "id": "25a60bb8-9305-48c9-8731-f7949099df17",
+          "name": "If6",
+          "type": "n8n-nodes-base.if",
+          "typeVersion": 2,
+          "position": [
+            2680,
+            280
+          ]
+        },
+        {
+          "parameters": {
+            "listId": "66778efe991c39a0c2e03a66",
+            "name": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }} ({{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }})",
+            "description": "=Nome: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }}\nE-mail: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}\nWhatsApp: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}\n\n{{ $node['Tally Webhook'].json.body.data.fields.map(item => item.label + \" \" + item.value)}}",
+            "additionalFields": {}
+          },
+          "id": "9c057581-1c32-49f5-8c6f-b626fb62e3be",
+          "name": "Trello New Card - Espera Supervisão",
+          "type": "n8n-nodes-base.trello",
+          "typeVersion": 1,
+          "position": [
+            2900,
+            280
+          ],
+          "credentials": {
+            "trelloApi": {
+              "id": "bC7OzHUGE8PVkSwZ",
+              "name": "Trello account"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+            "toEmail": "={{ $node['Baserow - createLead'].json.email }}",
+            "subject": "=Seu capítulo gratuito do ebook \"Diálogos que transformam\"",
+            "text": "=",
+            "html": "={{ $json.html }}",
+            "options": {}
+          },
+          "name": "Send Lead Confirmation1",
+          "type": "n8n-nodes-base.emailSend",
+          "typeVersion": 1,
+          "position": [
+            3680,
+            1900
+          ],
+          "id": "5ca2d796-ac97-48b6-8d5c-07b067cd7f2f",
+          "credentials": {
+            "smtp": {
+              "id": "olJyC1pWfLHMpFBP",
+              "name": "SMTP account - contato@psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "html": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Capítulo gratuito de \"Diálogos que transformam\"</title>\n  </head>\n  <body>\n    <div class=\"container\">\n      <p>Olá, {{ $json.name }}. Tudo bem?</p>\n\n      <p>Muito obrigada pelo seu interesse no Ebook \"Diálogos que transformam\". Estou muito feliz em compartilhar o primeiro capítulo deste ebook com você!</p>\n      <p>Clique no link abaixo para baixar o PDF do primeiro capítulo gratuito:</p>\n      <p><a href=\"https://bit.ly/3KZKgKj\" target=\"_blank\">Baixar Capítulo 1</a></p>\n      <p>Espero que você aproveite este primeiro capítulo e que ele seja um passo significativo para uma comunicação mais saudável e uma relação mais harmoniosa.</p>\n      <p>Mas isso é apenas o começo! O ebook completo oferece ainda mais ferramentas e insights para fortalecer sua conexão com seu parceiro.</p>\n      <p><a href=\"https://lp.psicologacamilarosa.com.br/dialogos-que-transformam-estrategias-praticas-de-comunicacao-e-resolucao-de-conflitos-entre-casais/\" target=\"_blank\">Adquira o ebook completo agora!</a></p>\n      <p>Se tiver alguma dúvida ou precisar de ajuda, sinta-se à vontade para entrar em contato.</p>\n\n      <div class=\"footer\">\n        <p>\n          <strong>Camila Rosa</strong><br />\n          Psicóloga<br />\n          <a href=\"https://www.instagram.com/psicologacamilarosa/\" target=\"_blank\">@psicologacamilarosa</a><br />\n          <a href=\"https://psicologacamilarosa.com.br/\" target=\"_blank\">psicologacamilarosa.com.br</a>\n        </p>\n      </div>\n    </div>\n  </body>\n</html>\n\n<style>\n  * {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-size: 16px;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n      \"Helvetica Neue\", Arial, sans-serif;\n  }\n\n  .container {\n    background-color: #ffffff;\n    font-family: sans-serif;\n    padding: 32px 16px;\n    border-radius: 8px;\n  }\n\n   a {\n    color: #5a6853;\n    font-weight: bold;\n    margin-top: 12px;\n  }\n\n  p {\n    color: #606060;\n    line-height: 1.6;\n    margin-bottom: 8px;\n  }\n\n  .footer {\n    margin-top: 20px;\n  }\n\n  .footer > p {\n    font-size: 14px;\n    color: #9d9d9d;\n  }\n</style>"
+          },
+          "id": "32c0b376-11e1-45cb-8d7a-5faa56d0fe13",
+          "name": "HTML Lead Ebook Cap 1 Confirmation",
+          "type": "n8n-nodes-base.html",
+          "typeVersion": 1.2,
+          "position": [
+            3460,
+            1900
+          ]
+        },
+        {
+          "parameters": {
+            "html": "<!DOCTYPE html>\n<html lang=\"pt-br\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Novo lead cadastrado</title>\n  </head>\n  <body>\n    <div class=\"container\">\n      <p>Nome: {{ $json.name }}</p>\n      <p>E-mail: {{ $json.email }}</p>\n      <p>WhatsApp: {{ $json.phone }}</p>\n      <p>Grupo: {{ $json.group }}</p>\n    </div>\n  </body>\n</html>\n\n<style>\n  * {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-size: 16px;\n    font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto,\n      \"Helvetica Neue\", Arial, sans-serif;\n  }\n\n  .container {\n    background-color: #ffffff;\n    font-family: sans-serif;\n    padding: 32px 16px;\n    border-radius: 8px;\n  }\n\n   a {\n    color: #5a6853;\n    font-weight: bold;\n    margin-top: 12px;\n  }\n\n  p {\n    color: #606060;\n    line-height: 1.6;\n    margin-bottom: 8px;\n  }\n\n  .footer {\n    margin-top: 20px;\n  }\n\n  .footer > p {\n    font-size: 14px;\n    color: #9d9d9d;\n  }\n</style>"
+          },
+          "id": "dcdd2ad9-78e3-4966-8985-f3b7ff4ee57d",
+          "name": "HTML New Lead1",
+          "type": "n8n-nodes-base.html",
+          "typeVersion": 1.2,
+          "position": [
+            3460,
+            1700
+          ]
+        },
+        {
+          "parameters": {
+            "fromEmail": "Psicóloga Camila Rosa <contato@psicologacamilarosa.com.br>",
+            "toEmail": "=psicologacamilarosa@gmail.com",
+            "subject": "=🎉 Novo lead cadastrado - {{ $node['Baserow - createLead'].json.group }}",
+            "text": "=",
+            "html": "={{ $json.html }}",
+            "options": {}
+          },
+          "name": "Send New Lead Email1",
+          "type": "n8n-nodes-base.emailSend",
+          "typeVersion": 1,
+          "position": [
+            3680,
+            1700
+          ],
+          "id": "fbb2cc45-c961-4350-9f11-f4bdb011548e",
+          "credentials": {
+            "smtp": {
+              "id": "olJyC1pWfLHMpFBP",
+              "name": "SMTP account - contato@psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "email": "={{ $node['Baserow - createLead1'].json.email }}",
+            "additionalFields": {
+              "customFieldsUi": {
+                "customFieldsValues": [
+                  {
+                    "fieldId": "phone",
+                    "value": "={{ $node['Baserow - createLead1'].json.phone }}"
+                  },
+                  {
+                    "fieldId": "tags",
+                    "value": "={{ $node['Baserow - createLead1'].json.group }}"
+                  }
+                ]
+              },
+              "name": "={{ $node['Baserow - createLead1'].json.name }}"
+            }
+          },
+          "id": "0253b65d-6421-4c53-8e2f-20fe04af3974",
+          "name": "MailerLite New Subscriber ",
+          "type": "n8n-nodes-base.mailerLite",
+          "typeVersion": 1,
+          "position": [
+            3420,
+            1080
+          ],
+          "credentials": {
+            "mailerLiteApi": {
+              "id": "vV0Fof0Hs69o1T0R",
+              "name": "Mailer Lite API Key"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "email": "={{ $node['Baserow - createLead'].json.email }}",
+            "additionalFields": {
+              "customFieldsUi": {
+                "customFieldsValues": [
+                  {
+                    "fieldId": "phone",
+                    "value": "={{ $node['Baserow - createLead'].json.phone }}"
+                  },
+                  {
+                    "fieldId": "tags",
+                    "value": "={{ $node['Baserow - createLead'].json.group }}"
+                  }
+                ]
+              },
+              "name": "={{ $node['Baserow - createLead'].json.name }}"
+            }
+          },
+          "id": "a9825ca1-2d65-4935-a622-a61f4732ee60",
+          "name": "MailerLite New Subscriber 1",
+          "type": "n8n-nodes-base.mailerLite",
+          "typeVersion": 1,
+          "position": [
+            3460,
+            1500
+          ],
+          "credentials": {
+            "mailerLiteApi": {
+              "id": "vV0Fof0Hs69o1T0R",
+              "name": "Mailer Lite API Key"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "databaseId": 117970,
+            "tableId": 311371,
+            "limit": 1,
+            "additionalOptions": {
+              "filters": {
+                "fields": [
+                  {
+                    "field": 2250466,
+                    "value": "={{ $json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}"
+                  },
+                  {
+                    "field": 2250465,
+                    "value": "={{ $json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "0edae735-3c8c-4857-afd7-74b566039c2a",
+          "name": "Baserow - getLead",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            2680,
+            1700
+          ],
+          "alwaysOutputData": true,
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "operation": "create",
+            "databaseId": 117970,
+            "tableId": 311371,
+            "fieldsUi": {
+              "fieldValues": [
+                {
+                  "fieldId": 2250462,
+                  "fieldValue": "={{ $node['Tally Webhook - Ebook - Cap. 1 grátis'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }}"
+                },
+                {
+                  "fieldId": 2250465,
+                  "fieldValue": "={{ $node['Tally Webhook - Ebook - Cap. 1 grátis'].json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}"
+                },
+                {
+                  "fieldId": 2250466,
+                  "fieldValue": "={{ $node['Tally Webhook - Ebook - Cap. 1 grátis'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}"
+                },
+                {
+                  "fieldId": 2250467,
+                  "fieldValue": "=[Tally] {{ $node['Tally Webhook - Ebook - Cap. 1 grátis'].json.body.data.formName }}"
+                }
+              ]
+            }
+          },
+          "id": "afdef3ad-2a0d-4266-8cf3-63376937abf1",
+          "name": "Baserow - createLead",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            3160,
+            1700
+          ],
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "databaseId": 117970,
+            "tableId": 311371,
+            "limit": 1,
+            "additionalOptions": {
+              "filters": {
+                "fields": [
+                  {
+                    "field": 2250466,
+                    "value": "={{ $json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}_2"
+                  },
+                  {
+                    "field": 2250465,
+                    "value": "={{ $json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "e60befbf-d60b-45e7-9f5b-577c29460ffa",
+          "name": "Baserow - getLead1",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            2680,
+            880
+          ],
+          "alwaysOutputData": true,
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "operation": "create",
+            "databaseId": 117970,
+            "tableId": 311371,
+            "fieldsUi": {
+              "fieldValues": [
+                {
+                  "fieldId": 2250462,
+                  "fieldValue": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }}"
+                },
+                {
+                  "fieldId": 2250465,
+                  "fieldValue": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_EMAIL').value }}"
+                },
+                {
+                  "fieldId": 2250466,
+                  "fieldValue": "={{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }}"
+                },
+                {
+                  "fieldId": 2250467,
+                  "fieldValue": "=[Tally] {{ $node['Tally Webhook'].json.body.data.formName }}"
+                }
+              ]
+            }
+          },
+          "id": "3776b3c7-1aed-4bca-a8ec-91de97f4521e",
+          "name": "Baserow - createLead1",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            3140,
+            880
+          ],
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "httpMethod": "POST",
+            "path": "mailerlite-webhook",
+            "options": {}
+          },
+          "name": "MailerLite Webhook",
+          "type": "n8n-nodes-base.webhook",
+          "typeVersion": 1,
+          "position": [
+            2460,
+            3060
+          ],
+          "webhookId": "YOUR_MAILERLITE_WEBHOOK_PATH",
+          "id": "0856899f-d0a8-4cea-b452-e4d67b3a8bdf"
+        },
+        {
+          "parameters": {
+            "databaseId": 117970,
+            "tableId": 311371,
+            "limit": 1,
+            "additionalOptions": {
+              "filters": {
+                "fields": [
+                  {
+                    "field": 2250465,
+                    "value": "={{ $json.body.email }}"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "949d1e12-d601-4d7b-9f31-571666b1165e",
+          "name": "Baserow - getLead2",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            2680,
+            3060
+          ],
+          "alwaysOutputData": true,
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "operation": "create",
+            "databaseId": 117970,
+            "tableId": 311371,
+            "fieldsUi": {
+              "fieldValues": [
+                {
+                  "fieldId": 2250462,
+                  "fieldValue": "={{ $node['MailerLite Webhook'].json.body.fields.name }}"
+                },
+                {
+                  "fieldId": 2250465,
+                  "fieldValue": "={{ $node['MailerLite Webhook'].json.body.email }}"
+                },
+                {
+                  "fieldId": 2250466,
+                  "fieldValue": "={{ $node['MailerLite Webhook'].json.body.fields.phone }}"
+                },
+                {
+                  "fieldId": 2250467,
+                  "fieldValue": "=[Mailerlite] {{ $node['MailerLite Webhook'].json.body.source }}"
+                }
+              ]
+            }
+          },
+          "id": "8dd247b8-73f5-4582-8f64-2f853379406e",
+          "name": "Baserow - createLead2",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            3160,
+            3160
+          ],
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "conditions": {
+              "options": {
+                "caseSensitive": true,
+                "leftValue": "",
+                "typeValidation": "strict"
+              },
+              "conditions": [
+                {
+                  "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                  "leftValue": "={{ $json }}",
+                  "rightValue": "",
+                  "operator": {
+                    "type": "object",
+                    "operation": "notEmpty",
+                    "singleValue": true
+                  }
+                }
+              ],
+              "combinator": "and"
+            },
+            "options": {}
+          },
+          "id": "a3cfa98d-578b-43d3-86ce-04e0fde9e0ad",
+          "name": "leadExists1",
+          "type": "n8n-nodes-base.if",
+          "typeVersion": 2,
+          "position": [
+            2900,
+            880
+          ]
+        },
+        {
+          "parameters": {
+            "conditions": {
+              "options": {
+                "caseSensitive": true,
+                "leftValue": "",
+                "typeValidation": "strict"
+              },
+              "conditions": [
+                {
+                  "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                  "leftValue": "={{ $json }}",
+                  "rightValue": "",
+                  "operator": {
+                    "type": "object",
+                    "operation": "notEmpty",
+                    "singleValue": true
+                  }
+                }
+              ],
+              "combinator": "and"
+            },
+            "options": {}
+          },
+          "id": "5f431160-169d-4d74-a8f3-660bc1d4ae42",
+          "name": "leadExists",
+          "type": "n8n-nodes-base.if",
+          "typeVersion": 2,
+          "position": [
+            2900,
+            1700
+          ]
+        },
+        {
+          "parameters": {
+            "conditions": {
+              "options": {
+                "caseSensitive": true,
+                "leftValue": "",
+                "typeValidation": "strict",
+                "version": 1
+              },
+              "conditions": [
+                {
+                  "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                  "leftValue": "={{ $json }}",
+                  "rightValue": "",
+                  "operator": {
+                    "type": "object",
+                    "operation": "notEmpty",
+                    "singleValue": true
+                  }
+                }
+              ],
+              "combinator": "and"
+            },
+            "options": {}
+          },
+          "id": "ae64e3e0-6aa0-4d99-a858-03df3f24e58f",
+          "name": "leadExists2",
+          "type": "n8n-nodes-base.if",
+          "typeVersion": 2,
+          "position": [
+            2900,
+            3060
+          ]
+        },
+        {
+          "parameters": {
+            "httpMethod": "POST",
+            "path": "tally-webhook-ebook-cap-1-gratis",
+            "options": {}
+          },
+          "id": "a3abe875-3fa2-42a6-97c1-027a27eaf096",
+          "name": "Tally Webhook - Ebook - Cap. 1 grátis",
+          "type": "n8n-nodes-base.webhook",
+          "typeVersion": 2,
+          "position": [
+            2440,
+            1700
+          ],
+          "webhookId": "3a628d93-b1f1-42e8-a73d-9c090b2371e5"
+        },
+        {
+          "parameters": {
+            "httpMethod": "POST",
+            "path": "tally-webhook",
+            "options": {}
+          },
+          "name": "Tally Webhook",
+          "type": "n8n-nodes-base.webhook",
+          "typeVersion": 1,
+          "position": [
+            2420,
+            680
+          ],
+          "webhookId": "YOUR_TALLY_WEBHOOK_PATH",
+          "id": "fb04e697-08ec-40dc-9fee-3af055c279c4"
+        },
+        {
+          "parameters": {
+            "operation": "create",
+            "databaseId": 117970,
+            "tableId": 311112,
+            "fieldsUi": {
+              "fieldValues": [
+                {
+                  "fieldId": 2248153,
+                  "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.buyer.name }}"
+                },
+                {
+                  "fieldId": 2248233,
+                  "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.buyer.email }}"
+                },
+                {
+                  "fieldId": 2248234,
+                  "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.buyer.checkout_phone }}"
+                },
+                {
+                  "fieldId": 2250098,
+                  "fieldValue": "=[Hotmart] {{ $('Hotmart Webhook').item.json.body.data.product.name }}"
+                }
+              ]
+            }
+          },
+          "id": "623f004f-ff34-4ac1-98fa-644b0174f051",
+          "name": "Baserow - createClient",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            3160,
+            2480
+          ],
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "conditions": {
+              "options": {
+                "caseSensitive": true,
+                "leftValue": "",
+                "typeValidation": "strict"
+              },
+              "conditions": [
+                {
+                  "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                  "leftValue": "={{ $json }}",
+                  "rightValue": "",
+                  "operator": {
+                    "type": "object",
+                    "operation": "notEmpty",
+                    "singleValue": true
+                  }
+                }
+              ],
+              "combinator": "and"
+            },
+            "options": {}
+          },
+          "id": "51506f8e-1e5a-4e47-8902-55038148f6a8",
+          "name": "clientExists",
+          "type": "n8n-nodes-base.if",
+          "typeVersion": 2,
+          "position": [
+            2900,
+            2340
+          ]
+        },
+        {
+          "parameters": {
+            "databaseId": 117970,
+            "tableId": 312313,
+            "limit": 1,
+            "additionalOptions": {
+              "filters": {
+                "fields": [
+                  {
+                    "field": 2259183,
+                    "value": "={{$node['Hotmart Webhook'].json.body.data.product.id }}"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "08d210bb-871e-4aad-92b7-e3f26d816f05",
+          "name": "Baserow - getProduct",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            3460,
+            2340
+          ],
+          "alwaysOutputData": true,
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "conditions": {
+              "options": {
+                "caseSensitive": true,
+                "leftValue": "",
+                "typeValidation": "strict"
+              },
+              "conditions": [
+                {
+                  "id": "5ce976be-0f4d-4838-a6b6-df40f194df9f",
+                  "leftValue": "={{ $json }}",
+                  "rightValue": "",
+                  "operator": {
+                    "type": "object",
+                    "operation": "notEmpty",
+                    "singleValue": true
+                  }
+                }
+              ],
+              "combinator": "and"
+            },
+            "options": {}
+          },
+          "id": "77d09ebe-fb52-47a5-a7fb-cc3b7940569d",
+          "name": "productExists",
+          "type": "n8n-nodes-base.if",
+          "typeVersion": 2,
+          "position": [
+            3680,
+            2340
+          ]
+        },
+        {
+          "parameters": {
+            "operation": "create",
+            "databaseId": 117970,
+            "tableId": 312313,
+            "fieldsUi": {
+              "fieldValues": [
+                {
+                  "fieldId": 2259174,
+                  "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.product.name }}"
+                },
+                {
+                  "fieldId": 2259183,
+                  "fieldValue": "={{ $('Hotmart Webhook').item.json.body.data.product.id }}"
+                }
+              ]
+            }
+          },
+          "id": "c15f5c4e-f0ef-4cc5-91e7-b9c708ddb40a",
+          "name": "Baserow - createProduct",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            3920,
+            2480
+          ],
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "operation": "update",
+            "databaseId": 117970,
+            "tableId": 311112,
+            "rowId": "={{$node['clientExists'].json.id || $node['Baserow - createClient'].json.id }}",
+            "fieldsUi": {
+              "fieldValues": [
+                {
+                  "fieldId": 2259173,
+                  "fieldValue": "={{$node['productExists'].json.id || $node['Baserow - createProduct'].json.id }}"
+                }
+              ]
+            }
+          },
+          "id": "7569044b-d5da-428b-8dcb-668f19b28635",
+          "name": "Baserow - Associate Product with Client",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            4120,
+            2340
+          ],
+          "alwaysOutputData": true,
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "databaseId": 117970,
+            "tableId": 311112,
+            "limit": 1,
+            "additionalOptions": {
+              "filters": {
+                "fields": [
+                  {
+                    "field": 2248234,
+                    "value": "={{ $json.body.data.buyer.checkout_phone }}"
+                  },
+                  {
+                    "field": 2248233,
+                    "value": "={{ $json.body.data.buyer.email }}"
+                  }
+                ]
+              }
+            }
+          },
+          "id": "b86f9567-2092-40f1-a166-a321a565fffe",
+          "name": "Baserow - getClient",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            2680,
+            2340
+          ],
+          "alwaysOutputData": true,
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "operation": "update",
+            "databaseId": 117970,
+            "tableId": 311371,
+            "rowId": "={{$node['leadExists2'].json.id }}",
+            "fieldsUi": {
+              "fieldValues": [
+                {
+                  "fieldId": 2250465,
+                  "fieldValue": "{{ $node['MailerLite Webhook'].json.body.email }}"
+                },
+                {
+                  "fieldId": 2250462,
+                  "fieldValue": "{{ $node['MailerLite Webhook'].json.body.fields.name }}"
+                },
+                {
+                  "fieldId": 2250466,
+                  "fieldValue": "{{ $node['MailerLite Webhook'].json.body.fields.phone }}"
+                },
+                {
+                  "fieldId": 2250467,
+                  "fieldValue": "[Mailerlite] {{ $node['MailerLite Webhook'].json.body.source }}"
+                }
+              ]
+            }
+          },
+          "id": "a1889fd7-ac31-4cf0-9c60-216a29fb8e39",
+          "name": "Baserow - Update Lead",
+          "type": "n8n-nodes-base.baserow",
+          "typeVersion": 1,
+          "position": [
+            3160,
+            2980
+          ],
+          "credentials": {
+            "baserowApi": {
+              "id": "ry0JPkTFr8IVo5d3",
+              "name": "Baserow - psicologacamilarosa"
+            }
+          }
+        },
+        {
+          "parameters": {
+            "httpMethod": "POST",
+            "path": "hotmart-webhook",
+            "options": {}
+          },
+          "id": "951eed17-2095-4d08-bfdc-bdd6993f7101",
+          "name": "Hotmart Webhook",
+          "type": "n8n-nodes-base.webhook",
+          "typeVersion": 2,
+          "position": [
+            2440,
+            2340
+          ],
+          "webhookId": "654bc769-9d28-4d27-a5ff-5ec55534ff59"
+        },
+        {
+          "parameters": {
+            "method": "POST",
+            "url": "https://evolution-api-production-44c2.up.railway.app/message/sendText/psicologacamilarosa",
+            "sendHeaders": true,
+            "headerParameters": {
+              "parameters": [
+                {
+                  "name": "apikey",
+                  "value": "7724F68A6488-4B0A-B1F6-7F0B20799688"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            },
+            "sendBody": true,
+            "specifyBody": "json",
+            "jsonBody": "={\n  \"number\": \"5541997074418@s.whatsapp.net\",\n  \"text\": \"🎉 Novo lead cadastrado - Supervisão: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }} ({{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }})\"\n}",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.httpRequest",
+          "typeVersion": 4.2,
+          "position": [
+            3140,
+            280
+          ],
+          "id": "a45a61dd-98c6-41fd-ac73-df942b3593c1",
+          "name": "evo_send_message1"
+        },
+        {
+          "parameters": {
+            "method": "POST",
+            "url": "https://evolution-api-production-44c2.up.railway.app/message/sendText/psicologacamilarosa",
+            "sendHeaders": true,
+            "headerParameters": {
+              "parameters": [
+                {
+                  "name": "apikey",
+                  "value": "7724F68A6488-4B0A-B1F6-7F0B20799688"
+                },
+                {
+                  "name": "Content-Type",
+                  "value": "application/json"
+                }
+              ]
+            },
+            "sendBody": true,
+            "specifyBody": "json",
+            "jsonBody": "={\n  \"number\": \"5541997074418@s.whatsapp.net\",\n  \"text\": \"🎉 Novo lead cadastrado - Terapia: {{ $node['Tally Webhook'].json.body.data.fields.find(item => item.label === 'Qual o seu Nome?' || item.label === 'Qual o seu nome?').value }} ({{ $node['Tally Webhook'].json.body.data.fields.find(item => item.type === 'INPUT_PHONE_NUMBER').value }})\"\n}",
+            "options": {}
+          },
+          "type": "n8n-nodes-base.httpRequest",
+          "typeVersion": 4.2,
+          "position": [
+            3140,
+            480
+          ],
+          "id": "aec3caee-7922-4010-b02c-40b1a8045c2c",
+          "name": "evo_send_message"
+        }
+      ],
+      "connections": {
+        "HTML New Lead": {
+          "main": [
+            [
+              {
+                "node": "Send New Lead Email",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "HTML Lead Confirmation": {
+          "main": [
+            [
+              {
+                "node": "Send Lead Confirmation",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "If5": {
+          "main": [
+            [
+              {
+                "node": "Trello New Card - Espera Terapia",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "If6": {
+          "main": [
+            [
+              {
+                "node": "Trello New Card - Espera Supervisão",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "HTML Lead Ebook Cap 1 Confirmation": {
+          "main": [
+            [
+              {
+                "node": "Send Lead Confirmation1",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "HTML New Lead1": {
+          "main": [
+            [
+              {
+                "node": "Send New Lead Email1",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Baserow - getLead": {
+          "main": [
+            [
+              {
+                "node": "leadExists",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Baserow - createLead": {
+          "main": [
+            [
+              {
+                "node": "MailerLite New Subscriber 1",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "HTML New Lead1",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "HTML Lead Ebook Cap 1 Confirmation",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Baserow - getLead1": {
+          "main": [
+            [
+              {
+                "node": "leadExists1",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Baserow - createLead1": {
+          "main": [
+            [
+              {
+                "node": "HTML Lead Confirmation",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "HTML New Lead",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "MailerLite New Subscriber ",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "MailerLite Webhook": {
+          "main": [
+            [
+              {
+                "node": "Baserow - getLead2",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Baserow - getLead2": {
+          "main": [
+            [
+              {
+                "node": "leadExists2",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "leadExists1": {
+          "main": [
+            [],
+            [
+              {
+                "node": "Baserow - createLead1",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "leadExists": {
+          "main": [
+            [],
+            [
+              {
+                "node": "Baserow - createLead",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "leadExists2": {
+          "main": [
+            [],
+            [
+              {
+                "node": "Baserow - createLead2",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Tally Webhook - Ebook - Cap. 1 grátis": {
+          "main": [
+            [
+              {
+                "node": "Baserow - getLead",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Tally Webhook": {
+          "main": [
+            [
+              {
+                "node": "If5",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "If6",
+                "type": "main",
+                "index": 0
+              },
+              {
+                "node": "Baserow - getLead1",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "clientExists": {
+          "main": [
+            [
+              {
+                "node": "Baserow - getProduct",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            [
+              {
+                "node": "Baserow - createClient",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Baserow - getProduct": {
+          "main": [
+            [
+              {
+                "node": "productExists",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "productExists": {
+          "main": [
+            [
+              {
+                "node": "Baserow - Associate Product with Client",
+                "type": "main",
+                "index": 0
+              }
+            ],
+            [
+              {
+                "node": "Baserow - createProduct",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Baserow - createProduct": {
+          "main": [
+            [
+              {
+                "node": "Baserow - Associate Product with Client",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Baserow - createClient": {
+          "main": [
+            [
+              {
+                "node": "Baserow - getProduct",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Baserow - getClient": {
+          "main": [
+            [
+              {
+                "node": "clientExists",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Hotmart Webhook": {
+          "main": [
+            [
+              {
+                "node": "Baserow - getClient",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Trello New Card - Espera Supervisão": {
+          "main": [
+            [
+              {
+                "node": "evo_send_message1",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        },
+        "Trello New Card - Espera Terapia": {
+          "main": [
+            [
+              {
+                "node": "evo_send_message",
+                "type": "main",
+                "index": 0
+              }
+            ]
+          ]
+        }
+      },
+      "authors": "system migration",
+      "name": null,
+      "description": null,
+      "autosaved": false
+    },
+    "tags": []
+  }
+]

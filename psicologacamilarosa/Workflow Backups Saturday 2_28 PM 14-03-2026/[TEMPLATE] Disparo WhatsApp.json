@@ -1,0 +1,471 @@
+[
+  {
+    "updatedAt": "2025-01-20T02:57:31.676Z",
+    "createdAt": "2025-01-18T16:51:43.731Z",
+    "id": "6LFVVJV7Ii5mERMw",
+    "name": "[TEMPLATE] Disparo WhatsApp",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "formTitle": "Disparo",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "list",
+                "fieldType": "file",
+                "acceptFileTypes": "csv",
+                "requiredField": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.2,
+        "position": [
+          0,
+          0
+        ],
+        "id": "90e7bdc3-e584-4746-bfdd-a8dce84fa043",
+        "name": "On form submission",
+        "webhookId": "9dc8cad2-eed5-4707-b806-36451754e5cf"
+      },
+      {
+        "parameters": {
+          "binaryPropertyName": "list",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          220,
+          0
+        ],
+        "id": "ade19c4a-13d5-4533-8779-8f38efaf17eb",
+        "name": "Extract from File"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          440,
+          0
+        ],
+        "id": "a07d7d75-1149-4aef-8ae1-64fa52367d50",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=<CLIENTE>\nnome: {{ $json.name }}\ntelefone: {{ $json.phone }}\n</CLIENTE>",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "Você é um assistente comercial especializado em criar mensagens personalizadas para WhatsApp, com o objetivo de destacar os benefícios das soluções da empresa **SMNT.Digital**. A SMNT.Digital é uma empresa inovadora que desenvolve automações baseadas em Inteligência Artificial, voltadas para grandes negócios, ajudando a otimizar processos das empresas.\n\n### Diretrizes para o Agente:\n1. **Objetivo da Mensagem:**\n   - Criar uma mensagem curta, direta e impactante que transmita o valor da automação para agendamentos e prospecção.\n   - O foco é gerar interesse e engajamento no cliente, incentivando-o a considerar os serviços da DinastIA.\n\n2. **Tonalidade:**\n   - Use um tom profissional, mas amigável e acessível.\n   - Destaque a inovação e a eficiência proporcionadas pelas soluções de automação.\n\n3. **Estrutura da Mensagem:**\n   - Inicie com uma saudação personalizada, chamando o cliente pelo nome (quando possível).\n   - Apresente brevemente o serviço oferecido, conectando-o às necessidades do cliente.\n   - Destaque um benefício-chave das automações (ex.: economia de tempo, aumento de leads qualificados, ou agendamentos mais eficientes).\n   - Finalize com uma call-to-action clara, como: \"Gostaria de saber mais? Entre em contato!\"\n\n4. **Restrições:**\n   - Nunca envie mensagens genéricas ou muito longas.\n   - Evite jargões técnicos que possam confundir o cliente.\n   - Não mencione preços ou termos específicos, a menos que solicitado explicitamente.\n\n### Exemplo de Mensagem Personalizada:\n\"Olá, [Nome do Cliente]! Aqui é da SMNT.Digital, uma empresa que transforma agendamentos e prospecção com automação inteligente. Com nossas soluções, você economiza tempo e aumenta a eficiência da sua equipe. Gostaria de saber como podemos ajudar seu negócio a crescer? Fale conosco!\""
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.7,
+        "position": [
+          700,
+          0
+        ],
+        "id": "dd00f80b-53d7-4c91-8ffb-3b368698c803",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "operation": "appendOrUpdate",
+          "documentId": {
+            "__rl": true,
+            "value": "1u8HaDVuNUa8uNbqr57epl2s1FAFxcZtKG2fFC_Awk1M",
+            "mode": "list",
+            "cachedResultName": "list",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u8HaDVuNUa8uNbqr57epl2s1FAFxcZtKG2fFC_Awk1M/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 339472866,
+            "mode": "list",
+            "cachedResultName": "messages",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u8HaDVuNUa8uNbqr57epl2s1FAFxcZtKG2fFC_Awk1M/edit#gid=339472866"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "id": "={{$json.messageTimestamp }}",
+              "nome": "={{ $('Loop Over Items').item.json.nome }}",
+              "numero": "={{ $('Loop Over Items').item.json.numero }}",
+              "data_hora": "={{ $now.format(\"dd/MM/yyyy hh:mm\") }}",
+              "mensagem": "={{ $('AI Agent').item.json.output }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "nome",
+                "displayName": "nome",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "numero",
+                "displayName": "numero",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "data_hora",
+                "displayName": "data_hora",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "mensagem",
+                "displayName": "mensagem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          1280,
+          0
+        ],
+        "id": "b6391d50-d259-4de7-87b2-1b6b946dab35",
+        "name": "Google Sheets",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "nmdcnQARvUANp3ra",
+            "name": "Google Sheets - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1500,
+          0
+        ],
+        "id": "00dfd683-3472-4e52-88c6-01b10820b3aa",
+        "name": "Wait",
+        "webhookId": "cc452fcc-21ef-4020-82d6-8e51f511b851"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.1,
+        "position": [
+          440,
+          240
+        ],
+        "id": "d23f867c-0802-4d93-96a6-b0a35c44e941",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "aYh6OxiTKlkwTrPm",
+            "name": "OpenAi n8n key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "\"sua mensagem aqui\""
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.2,
+        "position": [
+          1060,
+          400
+        ],
+        "id": "d53d2137-26e3-4568-aba8-8d5da0b0df8d",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+        "typeVersion": 1,
+        "position": [
+          760,
+          240
+        ],
+        "id": "acc439bb-a613-4faa-8bce-14d4a002aee2",
+        "name": "Calculator"
+      },
+      {
+        "parameters": {
+          "options": {
+            "prompt": "Instructions:\n--------------\n{instructions}\n--------------\nCompletion:\n--------------\n{completion}\n--------------\n\nAbove, the Completion did not satisfy the constraints given in the Instructions.\nError:\n--------------\n{error}\n--------------\n\nPlease try again. Please only respond with an answer that satisfies the constraints laid out in the Instructions:"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+        "typeVersion": 1,
+        "position": [
+          880,
+          240
+        ],
+        "id": "8b3a4cc3-a466-46f1-9122-fdf835ced441",
+        "name": "Auto-fixing Output Parser"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.1,
+        "position": [
+          880,
+          400
+        ],
+        "id": "6e872c13-dadd-40e6-9a4a-aac7ddf1bd85",
+        "name": "OpenAI Chat Model1",
+        "credentials": {
+          "openAiApi": {
+            "id": "QBE26nTS8bfWjvAM",
+            "name": "OpenAi n8n psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "psicologacamilarosa",
+          "remoteJid": "={{ $('Loop Over Items').item.json.phone }}@s.whatsapp.net",
+          "messageText": "={{ $json.output }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          1060,
+          0
+        ],
+        "id": "fca0c318-5b34-4a3d-8e66-fd4b9faa8032",
+        "name": "Evolution API",
+        "credentials": {
+          "evolutionApi": {
+            "id": "929o86uLbyCp0kG3",
+            "name": "Evolution - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "contextWindowLength": 10
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          620,
+          240
+        ],
+        "id": "631502f9-577e-42a9-a976-7cb2c557c976",
+        "name": "Window Buffer Memory"
+      }
+    ],
+    "connections": {
+      "On form submission": {
+        "main": [
+          [
+            {
+              "node": "Extract from File",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Extract from File": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Evolution API",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Sheets": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Auto-fixing Output Parser",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculator": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Auto-fixing Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Auto-fixing Output Parser",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Evolution API": {
+        "main": [
+          [
+            {
+              "node": "Google Sheets",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Window Buffer Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "America/Sao_Paulo",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "QXFrfjYJi0JXm241"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "627a317e-418c-4234-9aa7-012293f6dfc0",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2025-01-18T16:51:43.731Z",
+        "createdAt": "2025-01-18T16:51:43.731Z",
+        "role": "workflow:owner",
+        "workflowId": "6LFVVJV7Ii5mERMw",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]

@@ -1,0 +1,4131 @@
+[
+  {
+    "updatedAt": "2025-01-15T10:37:28.381Z",
+    "createdAt": "2025-01-09T21:27:42.028Z",
+    "id": "J1V9CDH8rM6ppDQH",
+    "name": "APX _ Router",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "03391f69-7059-4905-aaba-9269bf54e2da",
+        "name": "Chat Trigger",
+        "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+        "typeVersion": 1,
+        "position": [
+          960,
+          360
+        ],
+        "webhookId": "551b2b0c-d7b0-4ae0-a6da-2329ea578194"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "268709a8-bba0-4405-b477-701fdf95e8fa",
+        "name": "OpenAI Chat Model",
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1,
+        "position": [
+          1140,
+          580
+        ],
+        "credentials": {
+          "openAiApi": {
+            "id": "aYh6OxiTKlkwTrPm",
+            "name": "OpenAi n8n key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "You are a helpful assistant"
+          }
+        },
+        "id": "9a12ca96-848e-44de-91c7-cb6ffc0a7ca6",
+        "name": "AI Agent",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.6,
+        "position": [
+          1220,
+          360
+        ]
+      },
+      {
+        "parameters": {
+          "contextWindowLength": 50
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          1300,
+          580
+        ],
+        "id": "78bcbab1-8056-422a-89c4-3153e4bf5f03",
+        "name": "Window Buffer Memory"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://accounts.tiny.com.br/realms/tiny/protocol/openid-connect/token",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "form-urlencoded",
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "grant_type",
+                "value": "authorization_code"
+              },
+              {
+                "name": "client_id",
+                "value": "tiny-api-5f68a4f420114713499835a39b4f6fa99690b4cc-1736776603"
+              },
+              {
+                "name": "client_secret",
+                "value": "dVVvv9NuTdH9le499lVqsmMFuGPfTWou"
+              },
+              {
+                "name": "redirect_uri",
+                "value": "https://apaixonadosalimentos.com.br"
+              },
+              {
+                "name": "code",
+                "value": "4a0a9a7c-5442-4379-bfc3-a703adae8878.a2a3a98b-65ff-448f-8788-fad9df0bb6e4.b9753726-f75f-4eab-9d53-6bdc03192d98"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1240,
+          -460
+        ],
+        "id": "c844330c-0250-4311-8f36-91a2cfeedad3",
+        "name": "Tiny - Get access_token"
+      },
+      {
+        "parameters": {
+          "url": "https://api.tiny.com.br/public-api/v3/pedidos",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Authorization",
+                "value": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnWXk2cDhkQkU0dDBkZkFvU0J4WkJvbDBkYmpTcEF5Z3FpQm1vY3pMcXJVIn0.eyJleHAiOjE3MzY4OTY3NjEsImlhdCI6MTczNjg4MjM2MSwiYXV0aF90aW1lIjoxNzM2ODgyMzI1LCJqdGkiOiIzZWQzOGIyYy1jNzlhLTRhOGItYTdhMy00NGQ0Zjg2YzJhMzEiLCJpc3MiOiJodHRwczovL2FjY291bnRzLnRpbnkuY29tLmJyL3JlYWxtcy90aW55IiwiYXVkIjoidGlueS1hcGkiLCJzdWIiOiJiNTA1MjdlOS0zOWFmLTQxOTctYjYxOC0wZDdjYmZkNjZhNTMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ0aW55LWFwaS01ZjY4YTRmNDIwMTE0NzEzNDk5ODM1YTM5YjRmNmZhOTk2OTBiNGNjLTE3MzY3NzY2MDMiLCJzZXNzaW9uX3N0YXRlIjoiYTJhM2E5OGItNjVmZi00NDhmLTg3ODgtZmFkOWRmMGJiNmU0Iiwic2NvcGUiOiJvcGVuaWQgZW1haWwgb2ZmbGluZV9hY2Nlc3MiLCJzaWQiOiJhMmEzYTk4Yi02NWZmLTQ0OGYtODc4OC1mYWQ5ZGYwYmI2ZTQiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInJvbGVzIjp7InRpbnktYXBpIjpbInBlZGlkb3MtbGVpdHVyYSIsImVzdG9xdWUtbGVpdHVyYSIsImNvbnRhdG9zLWxlaXR1cmEiLCJwcm9kdXRvcy1sZWl0dXJhIl19LCJlbWFpbCI6ImFwYWl4b25hZG9zLmFsaW1lbnRvc0BnbWFpbC5jb20ifQ.HBuHJ7V0LPGQ2U7yeZ6TaF1auYN06FG8p_pGV3ufCBGMHrxY7O1_SOGdIa_ZbckDlMmSCUHpHaho2Om_T7djnj1uMo0T1-LLH2DFEo6iJiV7ubfJwZJNyHiJ3a3HUYh198mTNIGiJ3pZw9syaErVi3_QjT7lfwt3MDEn0KiToxTESXfWfXFdl5JQASfxZyt1QQDN35nRpQEK9bh3JzVKTGQlj4l5Mh1IimwcuH2KCYUvVlnGURNAgAtNzJVoKB7WrgehTIz41Pn_Fr7kTK7uMIkLSOQIxZ2bukrfinIL63l7WeHl9t7naG99Uz8WENYedyk6o_G5GahDAAPVGOyCVg"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1600,
+          60
+        ],
+        "id": "ca64638f-d1bc-4602-9ae1-661fcdf42c93",
+        "name": "Tiny - GET pedidos",
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://accounts.tiny.com.br/realms/tiny/protocol/openid-connect/token",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ]
+          },
+          "sendBody": true,
+          "bodyParameters": {
+            "parameters": [
+              {
+                "name": "grant_type",
+                "value": "refresh_token"
+              },
+              {
+                "name": "client_id",
+                "value": "tiny-api-5f68a4f420114713499835a39b4f6fa99690b4cc-1736776603"
+              },
+              {
+                "name": "client_secret",
+                "value": "dVVvv9NuTdH9le499lVqsmMFuGPfTWou"
+              },
+              {
+                "name": "refresh_token",
+                "value": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI5MDNkY2IxNi0xNTgwLTQ0NzYtYWY0Mi1lYTFkN2YyNzY4MjcifQ.eyJleHAiOjE3MzY5NDM2NDIsImlhdCI6MTczNjg1NzI0MiwianRpIjoiYTU0MjMwOGUtODA2OC00OTRkLTlmNGYtZTg3YzE1NmEzN2M3IiwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy50aW55LmNvbS5ici9yZWFsbXMvdGlueSIsImF1ZCI6Imh0dHBzOi8vYWNjb3VudHMudGlueS5jb20uYnIvcmVhbG1zL3RpbnkiLCJzdWIiOiIyNjc5Yjc2Mi1jMDgyLTQzMzQtYjk3Mi02NjdkZmU4NjkzMGMiLCJ0eXAiOiJPZmZsaW5lIiwiYXpwIjoidGlueS1hcGktNWY2OGE0ZjQyMDExNDcxMzQ5OTgzNWEzOWI0ZjZmYTk5NjkwYjRjYy0xNzM2Nzc2NjAzIiwic2Vzc2lvbl9zdGF0ZSI6IjJjODI2NjkxLTU5ZTktNDkwZi05Y2FkLWExZjhiZWRjZWY5YSIsInNjb3BlIjoib3BlbmlkIGVtYWlsIG9mZmxpbmVfYWNjZXNzIiwic2lkIjoiMmM4MjY2OTEtNTllOS00OTBmLTljYWQtYTFmOGJlZGNlZjlhIn0.d8jxUNBEJMe4AhFPsVk2B9WQzPkRBbXzJ63eA7CUuZE"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          1240,
+          -220
+        ],
+        "id": "9bd41512-d06c-499a-9e1b-7ce87a92fa77",
+        "name": "Tiny - Get refresh token"
+      }
+    ],
+    "connections": {
+      "Chat Trigger": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Window Buffer Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+      "Tiny - Get refresh token": [
+        {
+          "json": {
+            "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnWXk2cDhkQkU0dDBkZkFvU0J4WkJvbDBkYmpTcEF5Z3FpQm1vY3pMcXJVIn0.eyJleHAiOjE3MzY4ODEyNDgsImlhdCI6MTczNjg2Njg0OCwiYXV0aF90aW1lIjoxNzM2ODUyOTE5LCJqdGkiOiJlNTk2MjI4NS1lYTg3LTQzMDYtYTdjOC0xNjBiOTQ4M2I4YWUiLCJpc3MiOiJodHRwczovL2FjY291bnRzLnRpbnkuY29tLmJyL3JlYWxtcy90aW55IiwiYXVkIjoidGlueS1hcGkiLCJzdWIiOiIyNjc5Yjc2Mi1jMDgyLTQzMzQtYjk3Mi02NjdkZmU4NjkzMGMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ0aW55LWFwaS01ZjY4YTRmNDIwMTE0NzEzNDk5ODM1YTM5YjRmNmZhOTk2OTBiNGNjLTE3MzY3NzY2MDMiLCJzZXNzaW9uX3N0YXRlIjoiMmM4MjY2OTEtNTllOS00OTBmLTljYWQtYTFmOGJlZGNlZjlhIiwic2NvcGUiOiJvcGVuaWQgZW1haWwgb2ZmbGluZV9hY2Nlc3MiLCJzaWQiOiIyYzgyNjY5MS01OWU5LTQ5MGYtOWNhZC1hMWY4YmVkY2VmOWEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInJvbGVzIjp7InRpbnktYXBpIjpbInBlZGlkb3MtbGVpdHVyYSIsImVzdG9xdWUtbGVpdHVyYSIsImNvbnRhdG9zLWxlaXR1cmEiLCJwcm9kdXRvcy1sZWl0dXJhIl19LCJlbWFpbCI6Imx1YW5zZW1lbnNhdG9AZ21haWwuY29tIn0.gZ_uIUAIaxRsZmpLCwhf4fkyfPodts4C9COXREoP8j97_nieQdmH4JyX19Wirxd8ExzYehxp-QHd3pgvIA6FcVjVVpkTWzQaq60pZP5fOfLgIDiDkk1r_T0WtA4tC5yg0FmzRPQvguPTTMYHPVsv0kcUSkappiXvWv76mqVvjdFE6tjbucNRzUHSzAOKXFwALrMcNExxP2jh5VpuF-GHvolg-vB6QNJN-wr191qA7pILD9JIlGHWZZzqmCg0X-k-YzPPYpI0yp-g0Vy-cM4d2WTFJ0FuLB_Z_0Ilex4TtTK01VdNDQkNmSOmubmBTv_9wGTow_KdF-b6NpkHrTddVg",
+            "expires_in": 14400,
+            "refresh_expires_in": 86400,
+            "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI5MDNkY2IxNi0xNTgwLTQ0NzYtYWY0Mi1lYTFkN2YyNzY4MjcifQ.eyJleHAiOjE3MzY5NTMyNDgsImlhdCI6MTczNjg2Njg0OCwianRpIjoiZjI5OTE3YjgtMzY0Mi00MDA2LWIwMTItYmMwNTdmMzM3ZWQ1IiwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy50aW55LmNvbS5ici9yZWFsbXMvdGlueSIsImF1ZCI6Imh0dHBzOi8vYWNjb3VudHMudGlueS5jb20uYnIvcmVhbG1zL3RpbnkiLCJzdWIiOiIyNjc5Yjc2Mi1jMDgyLTQzMzQtYjk3Mi02NjdkZmU4NjkzMGMiLCJ0eXAiOiJPZmZsaW5lIiwiYXpwIjoidGlueS1hcGktNWY2OGE0ZjQyMDExNDcxMzQ5OTgzNWEzOWI0ZjZmYTk5NjkwYjRjYy0xNzM2Nzc2NjAzIiwic2Vzc2lvbl9zdGF0ZSI6IjJjODI2NjkxLTU5ZTktNDkwZi05Y2FkLWExZjhiZWRjZWY5YSIsInNjb3BlIjoib3BlbmlkIGVtYWlsIG9mZmxpbmVfYWNjZXNzIiwic2lkIjoiMmM4MjY2OTEtNTllOS00OTBmLTljYWQtYTFmOGJlZGNlZjlhIn0.0UE3yXmNWPrBfbWlcwKExmwGBHmjL_8GxG8LaWHxOt8",
+            "token_type": "Bearer",
+            "id_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnWXk2cDhkQkU0dDBkZkFvU0J4WkJvbDBkYmpTcEF5Z3FpQm1vY3pMcXJVIn0.eyJleHAiOjE3MzY4ODEyNDgsImlhdCI6MTczNjg2Njg0OCwiYXV0aF90aW1lIjoxNzM2ODUyOTE5LCJqdGkiOiIxNDA4MmMwMS0xNGM0LTRmOGYtYmU3Zi01YjI0OWY5MWY0MTQiLCJpc3MiOiJodHRwczovL2FjY291bnRzLnRpbnkuY29tLmJyL3JlYWxtcy90aW55IiwiYXVkIjoidGlueS1hcGktNWY2OGE0ZjQyMDExNDcxMzQ5OTgzNWEzOWI0ZjZmYTk5NjkwYjRjYy0xNzM2Nzc2NjAzIiwic3ViIjoiMjY3OWI3NjItYzA4Mi00MzM0LWI5NzItNjY3ZGZlODY5MzBjIiwidHlwIjoiSUQiLCJhenAiOiJ0aW55LWFwaS01ZjY4YTRmNDIwMTE0NzEzNDk5ODM1YTM5YjRmNmZhOTk2OTBiNGNjLTE3MzY3NzY2MDMiLCJzZXNzaW9uX3N0YXRlIjoiMmM4MjY2OTEtNTllOS00OTBmLTljYWQtYTFmOGJlZGNlZjlhIiwiYXRfaGFzaCI6Ikduem4yY2RKTVV4cThjS2lFNldWOFEiLCJzaWQiOiIyYzgyNjY5MS01OWU5LTQ5MGYtOWNhZC1hMWY4YmVkY2VmOWEiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImVtYWlsIjoibHVhbnNlbWVuc2F0b0BnbWFpbC5jb20ifQ.Y-Q4eHmJuuHug-XR5SA06C1pIeowudmzWTHDcGGUA2E1fBgfHT00-FQaHBR63Xluj3p28GiKtq1PvDs095Tz4iz9aWBLJdLwyqVudE-G9rSv5jogYrJLUP5__8yYR35MzFNo9qAi2-JAim34pwW59-xijHA2BoXoJy3z29pmIDIHyEpKgP5qjfSJPV_cOFDgiK9Reil63xar1T8OVC0H_V4lxOKewjbLXA_YkZgBC8mabpXiggCo7ezRDxSiTvpHgKuhFDJwPpazJyOdxB9IsLAYeeUUatNbm8Fh0x2yUjHNotLurDsRG5g4OkJ2JTw9TUXAB1d7cgQD4cK3pLvzSQ",
+            "not-before-policy": 0,
+            "session_state": "2c826691-59e9-490f-9cad-a1f8bedcef9a",
+            "scope": "openid email offline_access"
+          }
+        }
+      ],
+      "Tiny - Get access_token": [
+        {
+          "json": {
+            "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnWXk2cDhkQkU0dDBkZkFvU0J4WkJvbDBkYmpTcEF5Z3FpQm1vY3pMcXJVIn0.eyJleHAiOjE3MzY4OTY3NjEsImlhdCI6MTczNjg4MjM2MSwiYXV0aF90aW1lIjoxNzM2ODgyMzI1LCJqdGkiOiIzZWQzOGIyYy1jNzlhLTRhOGItYTdhMy00NGQ0Zjg2YzJhMzEiLCJpc3MiOiJodHRwczovL2FjY291bnRzLnRpbnkuY29tLmJyL3JlYWxtcy90aW55IiwiYXVkIjoidGlueS1hcGkiLCJzdWIiOiJiNTA1MjdlOS0zOWFmLTQxOTctYjYxOC0wZDdjYmZkNjZhNTMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ0aW55LWFwaS01ZjY4YTRmNDIwMTE0NzEzNDk5ODM1YTM5YjRmNmZhOTk2OTBiNGNjLTE3MzY3NzY2MDMiLCJzZXNzaW9uX3N0YXRlIjoiYTJhM2E5OGItNjVmZi00NDhmLTg3ODgtZmFkOWRmMGJiNmU0Iiwic2NvcGUiOiJvcGVuaWQgZW1haWwgb2ZmbGluZV9hY2Nlc3MiLCJzaWQiOiJhMmEzYTk4Yi02NWZmLTQ0OGYtODc4OC1mYWQ5ZGYwYmI2ZTQiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInJvbGVzIjp7InRpbnktYXBpIjpbInBlZGlkb3MtbGVpdHVyYSIsImVzdG9xdWUtbGVpdHVyYSIsImNvbnRhdG9zLWxlaXR1cmEiLCJwcm9kdXRvcy1sZWl0dXJhIl19LCJlbWFpbCI6ImFwYWl4b25hZG9zLmFsaW1lbnRvc0BnbWFpbC5jb20ifQ.HBuHJ7V0LPGQ2U7yeZ6TaF1auYN06FG8p_pGV3ufCBGMHrxY7O1_SOGdIa_ZbckDlMmSCUHpHaho2Om_T7djnj1uMo0T1-LLH2DFEo6iJiV7ubfJwZJNyHiJ3a3HUYh198mTNIGiJ3pZw9syaErVi3_QjT7lfwt3MDEn0KiToxTESXfWfXFdl5JQASfxZyt1QQDN35nRpQEK9bh3JzVKTGQlj4l5Mh1IimwcuH2KCYUvVlnGURNAgAtNzJVoKB7WrgehTIz41Pn_Fr7kTK7uMIkLSOQIxZ2bukrfinIL63l7WeHl9t7naG99Uz8WENYedyk6o_G5GahDAAPVGOyCVg",
+            "expires_in": 14400,
+            "refresh_expires_in": 86400,
+            "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI5MDNkY2IxNi0xNTgwLTQ0NzYtYWY0Mi1lYTFkN2YyNzY4MjcifQ.eyJleHAiOjE3MzY5Njg3NjEsImlhdCI6MTczNjg4MjM2MSwianRpIjoiNDYwMWM0ZWMtZTNmNy00OWNhLTlmNTgtZGY0MzI3Zjk1NzM4IiwiaXNzIjoiaHR0cHM6Ly9hY2NvdW50cy50aW55LmNvbS5ici9yZWFsbXMvdGlueSIsImF1ZCI6Imh0dHBzOi8vYWNjb3VudHMudGlueS5jb20uYnIvcmVhbG1zL3RpbnkiLCJzdWIiOiJiNTA1MjdlOS0zOWFmLTQxOTctYjYxOC0wZDdjYmZkNjZhNTMiLCJ0eXAiOiJPZmZsaW5lIiwiYXpwIjoidGlueS1hcGktNWY2OGE0ZjQyMDExNDcxMzQ5OTgzNWEzOWI0ZjZmYTk5NjkwYjRjYy0xNzM2Nzc2NjAzIiwic2Vzc2lvbl9zdGF0ZSI6ImEyYTNhOThiLTY1ZmYtNDQ4Zi04Nzg4LWZhZDlkZjBiYjZlNCIsInNjb3BlIjoib3BlbmlkIGVtYWlsIG9mZmxpbmVfYWNjZXNzIiwic2lkIjoiYTJhM2E5OGItNjVmZi00NDhmLTg3ODgtZmFkOWRmMGJiNmU0In0.75sFmAxwsVp7MBS1djexZGEaCerqSFRduY0WvrbQMCM",
+            "token_type": "Bearer",
+            "id_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJnWXk2cDhkQkU0dDBkZkFvU0J4WkJvbDBkYmpTcEF5Z3FpQm1vY3pMcXJVIn0.eyJleHAiOjE3MzY4OTY3NjEsImlhdCI6MTczNjg4MjM2MSwiYXV0aF90aW1lIjoxNzM2ODgyMzI1LCJqdGkiOiI0Mzg5NGQ2Ny1lM2NhLTRjMzAtODYwNi03YTY5M2M3NWM1ZDEiLCJpc3MiOiJodHRwczovL2FjY291bnRzLnRpbnkuY29tLmJyL3JlYWxtcy90aW55IiwiYXVkIjoidGlueS1hcGktNWY2OGE0ZjQyMDExNDcxMzQ5OTgzNWEzOWI0ZjZmYTk5NjkwYjRjYy0xNzM2Nzc2NjAzIiwic3ViIjoiYjUwNTI3ZTktMzlhZi00MTk3LWI2MTgtMGQ3Y2JmZDY2YTUzIiwidHlwIjoiSUQiLCJhenAiOiJ0aW55LWFwaS01ZjY4YTRmNDIwMTE0NzEzNDk5ODM1YTM5YjRmNmZhOTk2OTBiNGNjLTE3MzY3NzY2MDMiLCJzZXNzaW9uX3N0YXRlIjoiYTJhM2E5OGItNjVmZi00NDhmLTg3ODgtZmFkOWRmMGJiNmU0IiwiYXRfaGFzaCI6IjVwMmQ2Q0NHa3lEUE5GbUx0NUVXcnciLCJzaWQiOiJhMmEzYTk4Yi02NWZmLTQ0OGYtODc4OC1mYWQ5ZGYwYmI2ZTQiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImVtYWlsIjoiYXBhaXhvbmFkb3MuYWxpbWVudG9zQGdtYWlsLmNvbSJ9.bUCU3txlDMQ1B_FHFdgNSWt7Nis0swd3b1bIay-qwoTgYXh36oJIqDM5-a4yfRZCoVI4We_u9s076Ua6z87kcBTKmhARUQbgX_gmR2E7C_48Bs6Hqs0OXrP4ip88eVkEfwrYDOUcSsW0Th5TyXuVBGFk9WWz5VyPbq7QGRYDZSGas8QzkMC7kLpDlBV9O0bnDwg7GDvNOBDFAYZnmXp2FYOmBeP4X5dPSovchp836rYGFmfwJ7QQcRye12Wj2WgUf2lk2ioUnwvKR-31v6L9ElbSf0d9vb8P7qPAgdEihrVFUEh79bwrvAScn0o3IkJmolFhF-j3XjBeo3Lsbz7AqQ",
+            "not-before-policy": 0,
+            "session_state": "a2a3a98b-65ff-448f-8788-fad9df0bb6e4",
+            "scope": "openid email offline_access"
+          }
+        }
+      ],
+      "Tiny - GET pedidos": [
+        {
+          "json": {
+            "itens": [
+              {
+                "id": 912002565,
+                "situacao": 0,
+                "numeroPedido": 16611,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-14",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "SAMIR R. DA ROCHA PIN",
+                  "codigo": "453",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "12.250.705/0001-46",
+                  "inscricaoEstadual": "9052660120",
+                  "rg": "",
+                  "telefone": "(41) 98845-4354",
+                  "celular": "",
+                  "email": "samirsummer@yahoo.com.br",
+                  "endereco": {
+                    "endereco": "R Frei Henrique De Coimbra",
+                    "numero": "829",
+                    "complemento": "",
+                    "bairro": "Hauer",
+                    "municipio": "Curitiba",
+                    "cep": "81630220",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359244
+                },
+                "valor": "128",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911983898,
+                "situacao": 0,
+                "numeroPedido": 16610,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-14",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "VERDE GRANEL ARMAZEM LTDA",
+                  "codigo": "704",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "26.790.544/0001-98",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9912-9160",
+                  "celular": "(41) 9912-9160",
+                  "email": "ticiane@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Professora Antonia Reginato Vianna",
+                    "numero": "138",
+                    "complemento": "",
+                    "bairro": "Capao Da Imbuia",
+                    "municipio": "Curitiba",
+                    "cep": "82810300",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359499
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911969085,
+                "situacao": 0,
+                "numeroPedido": 16609,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-14",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "MAICON DA SILVA GASTRONOMIA BRASILEIRA LTDA",
+                  "codigo": "738",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "46.379.187/0001-87",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99685-8796",
+                  "celular": "(41) 99685-8796",
+                  "email": "salibasalvador.contadora@gmail.com",
+                  "endereco": {
+                    "endereco": "Avenida Sete De Setembro",
+                    "numero": "4087",
+                    "complemento": "",
+                    "bairro": "Água Verde",
+                    "municipio": "Curitiba",
+                    "cep": "80250205",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359533
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 884086404,
+                  "nome": "Lucília da Silva Pereira"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911943608,
+                "situacao": 0,
+                "numeroPedido": 16608,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-14",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "TERRAMAR PORCOES LTDA",
+                  "codigo": "759",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "47.593.329/0001-77",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99697-2259",
+                  "celular": "",
+                  "email": "victoriaschaidt.vs@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Tenente Francisco Ferreira De Souza",
+                    "numero": "2879",
+                    "complemento": "",
+                    "bairro": "Hauer",
+                    "municipio": "Curitiba",
+                    "cep": "81670410",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359554
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911926718,
+                "situacao": 1,
+                "numeroPedido": 16607,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-14",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "TIBULO FARMA COMERCIO DE MEDICAMENTOS LTDA",
+                  "codigo": "1447",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "43.461.887/0001-28",
+                  "inscricaoEstadual": "9090872440",
+                  "rg": "",
+                  "telefone": "(41) 99145-9792",
+                  "celular": "",
+                  "email": "Farmacenterupacajuru1@gmail.com",
+                  "endereco": {
+                    "endereco": "RUA AMANZOR SOFFIATTI",
+                    "numero": "12",
+                    "complemento": "",
+                    "bairro": "CAJURU",
+                    "municipio": "CURITIBA",
+                    "cep": "82.970-100",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752870306
+                },
+                "valor": "150.36",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911908248,
+                "situacao": 3,
+                "numeroPedido": 16606,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-14",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "GEMEOS RESTAURANTE LTDA",
+                  "codigo": "1512",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "27.342.018/0001-28",
+                  "inscricaoEstadual": "9091426444",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "RUA DOS FERROVIARIOS",
+                    "numero": "630",
+                    "complemento": "",
+                    "bairro": "CAJURU",
+                    "municipio": "CURITIBA",
+                    "cep": "82.920-100",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 753579134
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911907056,
+                "situacao": 1,
+                "numeroPedido": 16605,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-14",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ROTAFARMA - COMERCIO DE MEDICAMENTOS LTDA",
+                  "codigo": "1451",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "76.797.323/0001-10",
+                  "inscricaoEstadual": "1015601554",
+                  "rg": "",
+                  "telefone": "(41) 3015-7025",
+                  "celular": "(41) 99919-2649",
+                  "email": "rotafarma@gmail.com",
+                  "endereco": {
+                    "endereco": "RUA DELEGADO LEOPOLDO BELCZAK",
+                    "numero": "906",
+                    "complemento": "LJ 02",
+                    "bairro": "CAPAO DA IMBUIA",
+                    "municipio": "CURITIBA",
+                    "cep": "82.800-220",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752879168
+                },
+                "valor": "136.72",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911905657,
+                "situacao": 1,
+                "numeroPedido": 16604,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-14",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ACM COMERCIO DE MEDICAMENTOS LTDA",
+                  "codigo": "1448",
+                  "fantasia": "MIX FARMA",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "22.889.912/0001-07",
+                  "inscricaoEstadual": "9070239580",
+                  "rg": "",
+                  "telefone": "(41) 3045-6848",
+                  "celular": "",
+                  "email": "limaecorreia@outlook.com",
+                  "endereco": {
+                    "endereco": "RUA RORAIMA",
+                    "numero": "1395",
+                    "complemento": "",
+                    "bairro": "CAJURU",
+                    "municipio": "CURITIBA",
+                    "cep": "82.930-000",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752872044
+                },
+                "valor": "82",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911838900,
+                "situacao": 0,
+                "numeroPedido": 16603,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-14",
+                "dataPrevista": "2025-01-15",
+                "cliente": {
+                  "nome": "I C SISCOUTTO DISTRIBUIDORA DE ALIMENTOS",
+                  "codigo": "798",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "51.338.941/0001-70",
+                  "inscricaoEstadual": "9105290214",
+                  "rg": "",
+                  "telefone": "(44) 9990-4646",
+                  "celular": "(44) 99734-1743",
+                  "email": "il.dinha@hotmail.com",
+                  "endereco": {
+                    "endereco": "Rua 28 De Junho",
+                    "numero": "1759",
+                    "complemento": "Robinho Auto Mecânica",
+                    "bairro": "Jardim Tupinambá",
+                    "municipio": "Maringá",
+                    "cep": "87040280",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359594
+                },
+                "valor": "1580",
+                "vendedor": {
+                  "id": 896180106,
+                  "nome": "APX - Interno"
+                },
+                "transportador": {
+                  "id": 755286957,
+                  "nome": "Expresso Nordeste",
+                  "fretePorConta": "",
+                  "formaEnvio": {
+                    "id": 883637319,
+                    "nome": "Transportadora"
+                  },
+                  "formaFrete": null,
+                  "codigoRastreamento": "",
+                  "urlRastreamento": ""
+                }
+              },
+              {
+                "id": 911742631,
+                "situacao": 0,
+                "numeroPedido": 16602,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "VMA PRODUTOS NATURAIS EIRELI",
+                  "codigo": "471",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "07.366.486/0001-25",
+                  "inscricaoEstadual": "9033791540",
+                  "rg": "",
+                  "telefone": "(41) 3029-4692",
+                  "celular": "",
+                  "email": "vmandriolli@hotmail.com",
+                  "endereco": {
+                    "endereco": "Rua Doutor Júlio César Ribeiro De Souza",
+                    "numero": "636",
+                    "complemento": "Até 724/725",
+                    "bairro": "Hauer",
+                    "municipio": "Curitiba",
+                    "cep": "81610120",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359262
+                },
+                "valor": "147.4",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911742455,
+                "situacao": 3,
+                "numeroPedido": 16601,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "JOSEMERI FERREIRA DA SILVA SKROCH DOS SANTOS 04403113907",
+                  "codigo": "760",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "44.880.096/0001-03",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9973-1168",
+                  "celular": "",
+                  "email": "gsalgaderias@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Olympio Ferreira",
+                    "numero": "18",
+                    "complemento": "",
+                    "bairro": "Colonia Faria",
+                    "municipio": "Colombo",
+                    "cep": "83412663",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359555
+                },
+                "valor": "64",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911740613,
+                "situacao": 3,
+                "numeroPedido": 16600,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ABOA COMERCIO DE ALIMENTOS EIRELI",
+                  "codigo": "237",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "35.690.971/0001-95",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 98704-5386",
+                  "celular": "",
+                  "email": "aboahortifruti@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Presidente Faria",
+                    "numero": "191",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80020290",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359025
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 884086404,
+                  "nome": "Lucília da Silva Pereira"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911723803,
+                "situacao": 0,
+                "numeroPedido": 16599,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "RESTAURANTE VO ROSINHA LTDA",
+                  "codigo": "249",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "44.104.815/0001-96",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9727-4770",
+                  "celular": "(41) 99860-7077",
+                  "email": "rupelio@auditop.com.br",
+                  "endereco": {
+                    "endereco": "Rua Conselheiro Laurindo",
+                    "numero": "421",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80060100",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359037
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 884086404,
+                  "nome": "Lucília da Silva Pereira"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911721479,
+                "situacao": 0,
+                "numeroPedido": 16598,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "FOCA NO GRILL RESTAURANTE LTDA",
+                  "codigo": "262",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "32.279.188/0001-45",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99820-8373",
+                  "celular": "(41) 3232-7450",
+                  "email": "diego.v.souto@outlook.com",
+                  "endereco": {
+                    "endereco": "Rua Comendador Macedo",
+                    "numero": "101",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80060030",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359050
+                },
+                "valor": "64",
+                "vendedor": {
+                  "id": 884086404,
+                  "nome": "Lucília da Silva Pereira"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911718809,
+                "situacao": 3,
+                "numeroPedido": 16597,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "GRAO GOURMET GASTRONOMIA LTDA",
+                  "codigo": "184",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "24.612.476/0001-41",
+                  "inscricaoEstadual": "9072085326",
+                  "rg": "",
+                  "telefone": "(41) 99199-9950",
+                  "celular": "(41) 99199-9950",
+                  "email": "adm@contabilidadecipriani.com.br",
+                  "endereco": {
+                    "endereco": "R Conselheiro Araujo",
+                    "numero": "90",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80060230",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358972
+                },
+                "valor": "64",
+                "vendedor": {
+                  "id": 884086404,
+                  "nome": "Lucília da Silva Pereira"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911717051,
+                "situacao": 1,
+                "numeroPedido": 16596,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "FARMACIA E DROGARIA WS MOREIRA LTDA",
+                  "codigo": "1604",
+                  "fantasia": "Farmara",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "42.502.574/0001-08",
+                  "inscricaoEstadual": "9089829167",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "(41) 99500-7552",
+                  "email": "dodrariasfarmara@gmail.com",
+                  "endereco": {
+                    "endereco": "RUA IEDA SOLANGE RIBEIRO",
+                    "numero": "839",
+                    "complemento": "",
+                    "bairro": "IPE",
+                    "municipio": "SAO JOSE DOS PINHAIS",
+                    "cep": "83.055-210",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 754725821
+                },
+                "valor": "105.7",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911714922,
+                "situacao": 0,
+                "numeroPedido": 16595,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "JACKELINE FERREIRA DE ARRUDA ARANA EIRELI   Restaurante Esta",
+                  "codigo": "226",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "19.701.936/0001-78",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9188-4517",
+                  "celular": "(41) 99277-3673",
+                  "email": "guedescontabil@gmail.com",
+                  "endereco": {
+                    "endereco": "R Nilo Cairo",
+                    "numero": "318",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80060050",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359014
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 884086404,
+                  "nome": "Lucília da Silva Pereira"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911713989,
+                "situacao": 1,
+                "numeroPedido": 16594,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "FARMACIA & DROGARIA MAXI TAMANDARE LTDA - ME",
+                  "codigo": "1569",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "20.647.505/0001-50",
+                  "inscricaoEstadual": "9066927242",
+                  "rg": "",
+                  "telefone": "(41) 3657-6191",
+                  "celular": "(41) 99718-6757",
+                  "email": "farmaciabw@outlook.com",
+                  "endereco": {
+                    "endereco": "ROD DOS MINERIOS",
+                    "numero": "12266",
+                    "complemento": "TRANQUEIRA",
+                    "bairro": "JD DONA BELIZARIA",
+                    "municipio": "ALMIRANTE TAMANDARE",
+                    "cep": "83.514-000",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 754123358
+                },
+                "valor": "129.44",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911713970,
+                "situacao": 0,
+                "numeroPedido": 16593,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "CARINE DE OLIVEIRA - RESTAURANTE",
+                  "codigo": "222",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "31.308.523/0001-23",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99203-4433",
+                  "celular": "(41) 99203-4433",
+                  "email": "ciacarine@hotmail.com",
+                  "endereco": {
+                    "endereco": "R Francisco Torres",
+                    "numero": "440",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80060130",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359010
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 884086404,
+                  "nome": "Lucília da Silva Pereira"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911711533,
+                "situacao": 3,
+                "numeroPedido": 16592,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "PANIFICADORA FERNANDA PAES LTDA",
+                  "codigo": "1014",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "18.649.182/0001-91",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99823-4440",
+                  "celular": "",
+                  "email": "tasio_tasiano@hotmail.com",
+                  "endereco": {
+                    "endereco": "Rua Jose Ribeiro De Paula",
+                    "numero": "82",
+                    "complemento": "",
+                    "bairro": "Ipe",
+                    "municipio": "São José dos Pinhais",
+                    "cep": "83055528",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359823
+                },
+                "valor": "64",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911705836,
+                "situacao": 1,
+                "numeroPedido": 16591,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "B&C FARMACIA E DROGARIA LTDA",
+                  "codigo": "192",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "44.121.346/0001-13",
+                  "inscricaoEstadual": "9091599381",
+                  "rg": "",
+                  "telefone": "(41) 8896-0496",
+                  "celular": "(41) 8896-0496",
+                  "email": "pietro-bvr@hotmail.com",
+                  "endereco": {
+                    "endereco": "Rua General Carneiro",
+                    "numero": "164",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80060150",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358980
+                },
+                "valor": "64",
+                "vendedor": {
+                  "id": 884086404,
+                  "nome": "Lucília da Silva Pereira"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911694263,
+                "situacao": 1,
+                "numeroPedido": 16590,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "AUTO POSTO MANSAMBO TRANSPORTES RODOVIARIOS LTDA",
+                  "codigo": "1043",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "05.132.165/0001-30",
+                  "inscricaoEstadual": "9026188560",
+                  "rg": "",
+                  "telefone": "(41) 99221-4889",
+                  "celular": "(41) 99221-4889",
+                  "email": "autopostomansambo@gmail.com",
+                  "endereco": {
+                    "endereco": "Avenida Rui Barbosa",
+                    "numero": "6161",
+                    "complemento": "",
+                    "bairro": "Afonso Pena",
+                    "municipio": "São José dos Pinhais",
+                    "cep": "83045350",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359854
+                },
+                "valor": "128",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911688016,
+                "situacao": 0,
+                "numeroPedido": 16589,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "CAMOMILA DA COLONIA COMERCIO DE PRODUTOS NATURAIS LTDA",
+                  "codigo": "996",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "54.378.420/0001-35",
+                  "inscricaoEstadual": "9106150840",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "(41) 3252-4438",
+                  "email": "vendas@camomiladacolonia.com",
+                  "endereco": {
+                    "endereco": "Rua General Carneiro",
+                    "numero": "1352",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80060150",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359802
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911635479,
+                "situacao": 0,
+                "numeroPedido": 16588,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-13",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "VEG COMERCIO DE ALIMENTOS LTDA - Altair",
+                  "codigo": "293",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "29.849.162/0001-80",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 8857-5920",
+                  "celular": "(41) 8857-5920",
+                  "email": "altairpedro07@hotmail.com",
+                  "endereco": {
+                    "endereco": "Rua Da Paz",
+                    "numero": "160",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80060160",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359081
+                },
+                "valor": "105.7",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911539947,
+                "situacao": 5,
+                "numeroPedido": 16587,
+                "ecommerce": {
+                  "id": 8123,
+                  "nome": "Mercado Livre - APX",
+                  "numeroPedidoEcommerce": "2000007002071921",
+                  "numeroPedidoCanalVenda": "",
+                  "canalVenda": ""
+                },
+                "dataCriacao": "2025-01-12",
+                "dataPrevista": "2025-01-21",
+                "cliente": {
+                  "nome": "Rafael Jose de Barros",
+                  "codigo": "1618",
+                  "fantasia": "",
+                  "tipoPessoa": "F",
+                  "cpfCnpj": "012.191.901-36",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rodovia BR",
+                    "numero": "2679",
+                    "complemento": "lanchonet dona chica",
+                    "bairro": "Alto da Lagoa",
+                    "municipio": "Luís Eduardo Magalhães",
+                    "cep": "47.855-026",
+                    "uf": "BA",
+                    "pais": "Brasil"
+                  },
+                  "id": 755250201
+                },
+                "valor": "307.4",
+                "vendedor": null,
+                "transportador": {
+                  "id": 752524510,
+                  "nome": "EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS",
+                  "fretePorConta": "",
+                  "formaEnvio": {
+                    "id": 883864019,
+                    "nome": "Mercado Envios"
+                  },
+                  "formaFrete": {
+                    "id": 884274653,
+                    "nome": "PAC"
+                  },
+                  "codigoRastreamento": "AL939047900BR",
+                  "urlRastreamento": ""
+                }
+              },
+              {
+                "id": 911409805,
+                "situacao": 3,
+                "numeroPedido": 16586,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "FOUR TIME CENTER FITNESS LTDA",
+                  "codigo": "882",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "44.355.085/0001-04",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9806-8487",
+                  "celular": "",
+                  "email": "contato@playcont.com.br",
+                  "endereco": {
+                    "endereco": "Rua Rua Professora Nilce Terezinha Zanetti",
+                    "numero": "1724",
+                    "complemento": "",
+                    "bairro": "Jardim Paulista",
+                    "municipio": "Campina Grande do Sul",
+                    "cep": "83430000",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359680
+                },
+                "valor": "331",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911392789,
+                "situacao": 0,
+                "numeroPedido": 16585,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "BOUTIQUE DA MASSA COMERCIO DE ALIMENTOS LTDA",
+                  "codigo": "606",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "10.478.157/0001-80",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99967-8230",
+                  "celular": "(41) 99967-8230",
+                  "email": "braz@brazcontabilidade.com.br",
+                  "endereco": {
+                    "endereco": "Rua Guaianases",
+                    "numero": "67",
+                    "complemento": "André/Brenda",
+                    "bairro": "Vila Izabel",
+                    "municipio": "Curitiba",
+                    "cep": "80240070",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359401
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911378901,
+                "situacao": 3,
+                "numeroPedido": 16584,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "Venda Direta ",
+                  "codigo": "1594",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "",
+                  "email": "",
+                  "endereco": null,
+                  "id": 754493636
+                },
+                "valor": "99",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911363197,
+                "situacao": 1,
+                "numeroPedido": 16583,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "I HEIDORN E CIA LTDA",
+                  "codigo": "479",
+                  "fantasia": "banca Batel",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "75.169.987/0001-71",
+                  "inscricaoEstadual": "101.30374-81",
+                  "rg": "",
+                  "telefone": "(41) 99837-8050",
+                  "celular": "",
+                  "email": "bancabatel@gmail.com",
+                  "endereco": {
+                    "endereco": "R Praca Miguel Couto",
+                    "numero": "S/N",
+                    "complemento": "Hospital Sta Cruz",
+                    "bairro": "Batel",
+                    "municipio": "Curitiba",
+                    "cep": "80440090",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359270
+                },
+                "valor": "128",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911352382,
+                "situacao": 1,
+                "numeroPedido": 16582,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "A D R M  BAR E RESTAURANTE LTDA",
+                  "codigo": "926",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "43.957.822/0001-78",
+                  "inscricaoEstadual": "9091440439",
+                  "rg": "",
+                  "telefone": "(41) 99531-5804",
+                  "celular": "(41) 9531-5804",
+                  "email": "angiedominik@hotmail.com",
+                  "endereco": {
+                    "endereco": "Rua Emiliano Perneta",
+                    "numero": "860",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80420080",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359725
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911350347,
+                "situacao": 3,
+                "numeroPedido": 16581,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "JOSE FRANCISCO DE AZEVEDO E CIA. LTDA",
+                  "codigo": "370",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "07.516.542/0001-60",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99655-6189",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "R Visconde Do Rio Branco",
+                    "numero": "1717",
+                    "complemento": "Lanchonete",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80420210",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359158
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911342853,
+                "situacao": 0,
+                "numeroPedido": 16580,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "J & M LUCCA COMERCIO DE ALIMENTOS LTDA",
+                  "codigo": "492",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "10.988.668/0001-42",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9115-4544",
+                  "celular": "",
+                  "email": "doroti.delega@buildingprofits.com.br",
+                  "endereco": {
+                    "endereco": "R Visconde Do Rio Branco",
+                    "numero": "1359",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80420210",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359283
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911341964,
+                "situacao": 1,
+                "numeroPedido": 16579,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "RAMOS VERDES LTDA",
+                  "codigo": "410",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "46.512.358/0001-02",
+                  "inscricaoEstadual": "9094781628",
+                  "rg": "",
+                  "telefone": "(41) 99229-4599",
+                  "celular": "(41) 99229-4599",
+                  "email": "evelinestudinski@gmail.com",
+                  "endereco": {
+                    "endereco": "Avenida Vicente Machado",
+                    "numero": "110",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80420010",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359200
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911341666,
+                "situacao": 1,
+                "numeroPedido": 16578,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "Frutaria lima limao",
+                  "codigo": "1615",
+                  "fantasia": "Frutaria Lima Limao",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "57.816.106/0001-85",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "(41) 99832-4142",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Fernando de Noronha",
+                    "numero": "1267",
+                    "complemento": "",
+                    "bairro": "Santa Cândida",
+                    "municipio": "Curitiba",
+                    "cep": "82.640-350",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 755213898
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911337740,
+                "situacao": 1,
+                "numeroPedido": 16577,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ESTRELA BOA VISTA MINIMERCADO LTDA",
+                  "codigo": "860",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "37.292.304/0001-80",
+                  "inscricaoEstadual": "90849500-49",
+                  "rg": "",
+                  "telefone": "(41) 3030-7474",
+                  "celular": "",
+                  "email": "departamentolegal3@centercontabeis.com.br",
+                  "endereco": {
+                    "endereco": "Rua Carlota Straube De Araújo",
+                    "numero": "1422",
+                    "complemento": "",
+                    "bairro": "Boa Vista",
+                    "municipio": "Curitiba",
+                    "cep": "82560330",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359657
+                },
+                "valor": "64",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911330813,
+                "situacao": 1,
+                "numeroPedido": 16576,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "FARMACIA ALECRIM LTDA",
+                  "codigo": "1471",
+                  "fantasia": "FARMACIA ALECRIM",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "00.780.058/0001-03",
+                  "inscricaoEstadual": "1000723513",
+                  "rg": "",
+                  "telefone": "(41) 3015-5920",
+                  "celular": "(43) 99749-2911",
+                  "email": "farmaciaalecrim1671@hotmail.com",
+                  "endereco": {
+                    "endereco": "RUA FERNANDO DE NORONHA",
+                    "numero": "1671",
+                    "complemento": "",
+                    "bairro": "BOA VISTA",
+                    "municipio": "CURITIBA",
+                    "cep": "82.640-350",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 753074892
+                },
+                "valor": "68.36",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911329502,
+                "situacao": 1,
+                "numeroPedido": 16575,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "DECON COMERCIO DE GENEROS ALIMENTICIOS LTDA",
+                  "codigo": "931",
+                  "fantasia": "Supermercado Xavier",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "81.189.508/0001-81",
+                  "inscricaoEstadual": "9032354707",
+                  "rg": "",
+                  "telefone": "(41) 9509-2238",
+                  "celular": "(41) 9509-2238",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Fernando de Noronha",
+                    "numero": "2573",
+                    "complemento": "",
+                    "bairro": "Santa Cândida",
+                    "municipio": "Curitiba",
+                    "cep": "82.650-505",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359730
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911325872,
+                "situacao": 0,
+                "numeroPedido": 16574,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "BOCCACIO RESTAURANTE E PIZZARIA EIRELI",
+                  "codigo": "152",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "82.085.432/0001-07",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9272-9526",
+                  "celular": "(41) 9272-9526",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Av Francisco M. Albizu",
+                    "numero": "136",
+                    "complemento": "",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82600370",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358937
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911323670,
+                "situacao": 6,
+                "numeroPedido": 16573,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "PANIFICADORA DOCE MEL NAZARE LTDA",
+                  "codigo": "932",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "03.220.697/0001-02",
+                  "inscricaoEstadual": "9018758471",
+                  "rg": "",
+                  "telefone": "(41) 3357-0303",
+                  "celular": "(41) 99169-2201",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "R Fernando De Noronha",
+                    "numero": "2157",
+                    "complemento": "",
+                    "bairro": "Santa Candida",
+                    "municipio": "Curitiba",
+                    "cep": "82650505",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359731
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911314928,
+                "situacao": 1,
+                "numeroPedido": 16572,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "SCHWAB & J SCHWAB LTDA - Panificadora Vanessa",
+                  "codigo": "143",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "77.682.078/0001-68",
+                  "inscricaoEstadual": "1015696164",
+                  "rg": "",
+                  "telefone": "(41) 3238-1128",
+                  "celular": "(41) 98808-8184",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "R Domingos F. Maia",
+                    "numero": "410",
+                    "complemento": "",
+                    "bairro": "Bairro Alto",
+                    "municipio": "Curitiba",
+                    "cep": "82820490",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358926
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911304208,
+                "situacao": 6,
+                "numeroPedido": 16571,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ALEXANDRO RODRIGUES DA ROCHA LTDA",
+                  "codigo": "360",
+                  "fantasia": "Ponto do Sabor",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "19.859.509/0001-12",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9656-1775",
+                  "celular": "(41) 3501-8012",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Alberico Flores Bueno",
+                    "numero": "1341",
+                    "complemento": "De 621/622 Ao Fim",
+                    "bairro": "Bairro Alto",
+                    "municipio": "Curitiba",
+                    "cep": "82820070",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359148
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911296181,
+                "situacao": 0,
+                "numeroPedido": 16570,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "BARBEARIA STUDIO DIPLOMATA LTDA",
+                  "codigo": "997",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "53.962.509/0001-81",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 98841-6129",
+                  "celular": "",
+                  "email": "kevinmoedinger18@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua José De Oliveira Franco",
+                    "numero": "1432",
+                    "complemento": "",
+                    "bairro": "Bairro Alto",
+                    "municipio": "Curitiba",
+                    "cep": "82820310",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359803
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911294037,
+                "situacao": 0,
+                "numeroPedido": 16569,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "Marcos assados",
+                  "codigo": "154",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "41.411.211/0001-02",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9603-2367",
+                  "celular": "(41) 98743-0559",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "R Napoleao Bonaparte",
+                    "numero": "1381",
+                    "complemento": "",
+                    "bairro": "Bairro Alto",
+                    "municipio": "Curitiba",
+                    "cep": "82820270",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358939
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911291170,
+                "situacao": 1,
+                "numeroPedido": 16568,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-10",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "G C GONCALVES COMERCIO DE BEBIDAS",
+                  "codigo": "203",
+                  "fantasia": "Gonçalves e Gobbo",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "46.829.866/0001-00",
+                  "inscricaoEstadual": "9095138044",
+                  "rg": "",
+                  "telefone": "(41) 9950-6605",
+                  "celular": "(41) 9950-6605",
+                  "email": "gigio.gd@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Tomazina",
+                    "numero": "345",
+                    "complemento": "",
+                    "bairro": "Ahú",
+                    "municipio": "Curitiba",
+                    "cep": "80540160",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358991
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 911136870,
+                "situacao": 5,
+                "numeroPedido": 16567,
+                "ecommerce": {
+                  "id": 8098,
+                  "nome": "Loja Nuvemshop - APX",
+                  "numeroPedidoEcommerce": "231",
+                  "numeroPedidoCanalVenda": "",
+                  "canalVenda": ""
+                },
+                "dataCriacao": "2025-01-09",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "Fabio Pereira Lima",
+                  "codigo": "1614",
+                  "fantasia": "",
+                  "tipoPessoa": "F",
+                  "cpfCnpj": "248.331.658-13",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(11) 98662-0104",
+                  "celular": "(11) 98662-0104",
+                  "email": "cacauecaramelo79@gmail.com",
+                  "endereco": {
+                    "endereco": "Avenida Mazzei",
+                    "numero": "79",
+                    "complemento": "1º andar - Spot Coworking",
+                    "bairro": "Vila Mazzei",
+                    "municipio": "São Paulo",
+                    "cep": "02.310-000",
+                    "uf": "SP",
+                    "pais": "Brasil"
+                  },
+                  "id": 755195933
+                },
+                "valor": "105.7",
+                "vendedor": null,
+                "transportador": {
+                  "id": 752524510,
+                  "nome": "EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS",
+                  "fretePorConta": "",
+                  "formaEnvio": {
+                    "id": 883637317,
+                    "nome": "Correios"
+                  },
+                  "formaFrete": {
+                    "id": 888425669,
+                    "nome": "PAC CONTRATO AG (03298)"
+                  },
+                  "codigoRastreamento": "AL934228057BR",
+                  "urlRastreamento": "https://rastreamento.correios.com.br/app/index.php"
+                }
+              },
+              {
+                "id": 911075633,
+                "situacao": 0,
+                "numeroPedido": 16566,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-09",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "MARCIO APARECIDO MORAES 70565180959",
+                  "codigo": "828",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "20.226.192/0001-66",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(44) 9153-9468",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Dos Pampas",
+                    "numero": "2132",
+                    "complemento": "Apartamento 3",
+                    "bairro": "Jardim Birigüi",
+                    "municipio": "Umuarama",
+                    "cep": "87505020",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359624
+                },
+                "valor": "2479.5",
+                "vendedor": {
+                  "id": 896180106,
+                  "nome": "APX - Interno"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910913549,
+                "situacao": 5,
+                "numeroPedido": 16565,
+                "ecommerce": {
+                  "id": 8098,
+                  "nome": "Loja Nuvemshop - APX",
+                  "numeroPedidoEcommerce": "230",
+                  "numeroPedidoCanalVenda": "",
+                  "canalVenda": ""
+                },
+                "dataCriacao": "2025-01-08",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "Suelen de Souza Bandeira",
+                  "codigo": "1613",
+                  "fantasia": "",
+                  "tipoPessoa": "F",
+                  "cpfCnpj": "136.084.669-75",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99522-4359",
+                  "celular": "(41) 99522-4359",
+                  "email": "suelenbandeira27@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Atalaia",
+                    "numero": "1287",
+                    "complemento": "casa",
+                    "bairro": "Guaraituba",
+                    "municipio": "Colombo",
+                    "cep": "83.410-100",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 755174771
+                },
+                "valor": "94.8",
+                "vendedor": null,
+                "transportador": {
+                  "id": 752431420,
+                  "nome": "Transportadora LogManager",
+                  "fretePorConta": "",
+                  "formaEnvio": {
+                    "id": 885385224,
+                    "nome": "Transportadora LogManager"
+                  },
+                  "formaFrete": {
+                    "id": 885385227,
+                    "nome": "Transportadora LogManager"
+                  },
+                  "codigoRastreamento": "",
+                  "urlRastreamento": "https://app.logmanager.com.br/tracking"
+                }
+              },
+              {
+                "id": 910891688,
+                "situacao": 0,
+                "numeroPedido": 16564,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-08",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ECOVILLE CAFE LTDA",
+                  "codigo": "753",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "20.009.343/0001-24",
+                  "inscricaoEstadual": "9085058913",
+                  "rg": "",
+                  "telefone": "(41) 8817-0533",
+                  "celular": "(41) 8817-0533",
+                  "email": "jotanovo8@gmail.com",
+                  "endereco": {
+                    "endereco": "ROD CURITIBA PONTA GROSSA BR-277",
+                    "numero": "1437",
+                    "complemento": "",
+                    "bairro": "MOSSUNGUE",
+                    "municipio": "CURITIBA",
+                    "cep": "82.305-100",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359548
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910889163,
+                "situacao": 1,
+                "numeroPedido": 16563,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-08",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "BARIGUI ESPORTES LTDA",
+                  "codigo": "1031",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "03.733.855/0001-10",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 3335-0102",
+                  "celular": "(41) 3335-0102",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Otavio Ganz",
+                    "numero": "290",
+                    "complemento": "",
+                    "bairro": "Santo Inacio",
+                    "municipio": "Curitiba",
+                    "cep": "82010100",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359841
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910879247,
+                "situacao": 3,
+                "numeroPedido": 16562,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-08",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "GREZZAGO RESTAURANTE E GRILL LTDA",
+                  "codigo": "981",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "51.505.516/0001-29",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99276-8668",
+                  "celular": "",
+                  "email": "restaurantegrezzago@gmail.com",
+                  "endereco": {
+                    "endereco": "R Estados Unidos",
+                    "numero": "943",
+                    "complemento": "",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82510050",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359786
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910874225,
+                "situacao": 0,
+                "numeroPedido": 16561,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-08",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "E. MATTOZO RESTAURANTE E LANCHONETE.",
+                  "codigo": "135",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "16.628.780/0001-59",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "(41) 9690-6456",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Marcelino Nogueira",
+                    "numero": "687",
+                    "complemento": "",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82510270",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358918
+                },
+                "valor": "150",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910865266,
+                "situacao": 3,
+                "numeroPedido": 16560,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-08",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "THIAGO FERREIRA DA LUZ",
+                  "codigo": "1007",
+                  "fantasia": "Barbearia império",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "38.542.480/0001-95",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 8409-0418",
+                  "celular": "",
+                  "email": "thitiluz00@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Alberico Flores Bueno",
+                    "numero": "1577",
+                    "complemento": "",
+                    "bairro": "Bairro Alto",
+                    "municipio": "Curitiba",
+                    "cep": "82840170",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359814
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910823741,
+                "situacao": 0,
+                "numeroPedido": 16559,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-08",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "PANIFICADORA E CONFEITARIA LE PARIS LTDA",
+                  "codigo": "132",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "39.526.547/0001-60",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9976-7901",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Avenida Monteiro Tourinho",
+                    "numero": "1079",
+                    "complemento": "Loja",
+                    "bairro": "Tingui",
+                    "municipio": "Curitiba",
+                    "cep": "82600000",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358915
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910809624,
+                "situacao": 1,
+                "numeroPedido": 16558,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-08",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "FN SLOMINSKI MEDICAMENTOS LTDA",
+                  "codigo": "1509",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "35.797.093/0001-01",
+                  "inscricaoEstadual": "9083591606",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "(41) 99895-8658",
+                  "email": "Farmatamandare@gmail.com",
+                  "endereco": {
+                    "endereco": "RUA SAO FRANCISCO",
+                    "numero": "655",
+                    "complemento": "",
+                    "bairro": "JARDIM MONTE SANTO",
+                    "municipio": "ALMIRANTE TAMANDARE",
+                    "cep": "83.501-650",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 753550724
+                },
+                "valor": "82",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910636429,
+                "situacao": 1,
+                "numeroPedido": 16557,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "AUTO POSTO VARELA LTDA",
+                  "codigo": "348",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "04.585.544/0001-13",
+                  "inscricaoEstadual": "9023969693",
+                  "rg": "",
+                  "telefone": "(41) 9742-7409",
+                  "celular": "(41) 9742-7409",
+                  "email": "postovarela@redeprimos.com.br",
+                  "endereco": {
+                    "endereco": "Rua Ozório Duque Estrada",
+                    "numero": "665",
+                    "complemento": "",
+                    "bairro": "Jardim Social",
+                    "municipio": "Curitiba",
+                    "cep": "82520470",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359136
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910626608,
+                "situacao": 0,
+                "numeroPedido": 16556,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "SALUS VEG COMERCIO DE ALIMENTOS LTDA",
+                  "codigo": "171",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "02.594.280/0001-39",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 3356-8020",
+                  "celular": "(41) 98739-9476",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "R Mexico",
+                    "numero": "227",
+                    "complemento": "",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82510060",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358957
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910610662,
+                "situacao": 1,
+                "numeroPedido": 16555,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ACADEMIA BLACK BULL FIT LTDA",
+                  "codigo": "751",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "30.313.594/0001-51",
+                  "inscricaoEstadual": "9078066854",
+                  "rg": "",
+                  "telefone": "(41) 99591-2745",
+                  "celular": "(41) 99591-2745",
+                  "email": "academiablack@gmail.com",
+                  "endereco": {
+                    "endereco": "Avenida Monteiro Tourinho",
+                    "numero": "1415",
+                    "complemento": "",
+                    "bairro": "Atuba",
+                    "municipio": "Curitiba",
+                    "cep": "82600000",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359546
+                },
+                "valor": "191.7",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910605650,
+                "situacao": 1,
+                "numeroPedido": 16554,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "COMERCIO DE ALIMENTOS LE LU LTDA",
+                  "codigo": "1591",
+                  "fantasia": "LANCHONETE DA SINUCA , DA HORTA E DO GOLF",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "09.541.207/0001-48",
+                  "inscricaoEstadual": "9043920909",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "(41) 99513-8220",
+                  "email": "lelulanchonete@outlook.com",
+                  "endereco": {
+                    "endereco": "ROD BR-116",
+                    "numero": "5000",
+                    "complemento": "KM 06",
+                    "bairro": "MAUA",
+                    "municipio": "COLOMBO",
+                    "cep": "83.413-663",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 754447691
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910605231,
+                "situacao": 6,
+                "numeroPedido": 16553,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "D BEL",
+                  "codigo": "595",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "32.778.917/0001-08",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99625-5749",
+                  "celular": "(42) 9997-5321",
+                  "email": "bel.rcmcunha@gmail.com",
+                  "endereco": {
+                    "endereco": "Av Maringá",
+                    "numero": "2692",
+                    "complemento": "",
+                    "bairro": "Atuba",
+                    "municipio": "Pinhais",
+                    "cep": "83326010",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359389
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910600918,
+                "situacao": 1,
+                "numeroPedido": 16552,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "AUTO POSTO PRIMOS DE COLOMBO LTDA",
+                  "codigo": "394",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "72.232.200/0001-80",
+                  "inscricaoEstadual": "1030404420",
+                  "rg": "",
+                  "telefone": "(41) 3675-6654",
+                  "celular": "(41) 9883-3545",
+                  "email": "postotrevotres@redeprimos.com.br",
+                  "endereco": {
+                    "endereco": "Rod Br-116",
+                    "numero": "4286",
+                    "complemento": "",
+                    "bairro": "Maua",
+                    "municipio": "Colombo",
+                    "cep": "83413663",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359183
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910595688,
+                "situacao": 0,
+                "numeroPedido": 16551,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "EMPORIO 4 ESTACOES LTDA",
+                  "codigo": "769",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "10.224.617/0001-44",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 3653-7253",
+                  "celular": "(41) 8494-2907",
+                  "email": "gerencia@emporio4estacoes.com.br",
+                  "endereco": {
+                    "endereco": "Rua Jaguariaiva",
+                    "numero": "163",
+                    "complemento": "",
+                    "bairro": "Alphaville Graciosa",
+                    "municipio": "Pinhais",
+                    "cep": "83327076",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359564
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910595600,
+                "situacao": 1,
+                "numeroPedido": 16550,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "AUTO POSTO ALINDA LTDA",
+                  "codigo": "397",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "02.210.200/0001-02",
+                  "inscricaoEstadual": "9015370707",
+                  "rg": "",
+                  "telefone": "(41) 3338-8596",
+                  "celular": "(41) 99263-3045",
+                  "email": "postounico@unicombustiveis.com.br",
+                  "endereco": {
+                    "endereco": "Est Da Graciosa",
+                    "numero": "1062",
+                    "complemento": "",
+                    "bairro": "Vl Carolina",
+                    "municipio": "Pinhais",
+                    "cep": "83326670",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359186
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910584060,
+                "situacao": 6,
+                "numeroPedido": 16549,
+                "ecommerce": {
+                  "id": 8123,
+                  "nome": "Mercado Livre - APX",
+                  "numeroPedidoEcommerce": "2000006972320453",
+                  "numeroPedidoCanalVenda": "",
+                  "canalVenda": ""
+                },
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "2025-01-07",
+                "cliente": {
+                  "nome": "Fabio Detofol Ziaguinso",
+                  "codigo": "1612",
+                  "fantasia": "",
+                  "tipoPessoa": "F",
+                  "cpfCnpj": "047.876.489-85",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Doutor Motta Júnior",
+                    "numero": "2450",
+                    "complemento": "Ap 52 T3",
+                    "bairro": "Aristocrata",
+                    "municipio": "São José dos Pinhais",
+                    "cep": "83.025-030",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 755140059
+                },
+                "valor": "147",
+                "vendedor": null,
+                "transportador": {
+                  "id": 752431420,
+                  "nome": "Transportadora LogManager",
+                  "fretePorConta": "",
+                  "formaEnvio": {
+                    "id": 883864019,
+                    "nome": "Mercado Envios"
+                  },
+                  "formaFrete": {
+                    "id": 886236934,
+                    "nome": "Envios Flex"
+                  },
+                  "codigoRastreamento": "44324759119",
+                  "urlRastreamento": ""
+                }
+              },
+              {
+                "id": 910580127,
+                "situacao": 0,
+                "numeroPedido": 16548,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ABRAAO NASCIMENTO DA SILVA 01116337290",
+                  "codigo": "178",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "40.502.041/0001-09",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9631-1833",
+                  "celular": "(41) 9631-1833",
+                  "email": "abraao.gazin84@gmail.com",
+                  "endereco": {
+                    "endereco": "Avenida Da Integracao",
+                    "numero": "1739",
+                    "complemento": "",
+                    "bairro": "Bairro Alto",
+                    "municipio": "Curitiba",
+                    "cep": "82840290",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358966
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910579281,
+                "situacao": 1,
+                "numeroPedido": 16547,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "S. R. B. PRODUTOS NATURAIS EIRELI Mega Taurus",
+                  "codigo": "329",
+                  "fantasia": "Mega Taurus",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "17.198.943/0001-73",
+                  "inscricaoEstadual": "9088761569",
+                  "rg": "",
+                  "telefone": "(41) 99734-8607",
+                  "celular": "(41) 9807-5533",
+                  "email": "nfe@megataurus.com.br",
+                  "endereco": {
+                    "endereco": "R Jose Oliveira Franco",
+                    "numero": "1891",
+                    "complemento": "",
+                    "bairro": "Bairro Alto",
+                    "municipio": "Curitiba",
+                    "cep": "82820110",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359117
+                },
+                "valor": "267",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910574241,
+                "situacao": 3,
+                "numeroPedido": 16546,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "LIMAO E MEL COMERCIO DE HORTIFRUTIGRANJEIROS EIRELI",
+                  "codigo": "153",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "21.956.769/0001-58",
+                  "inscricaoEstadual": "9071048427",
+                  "rg": "",
+                  "telefone": "(41) 99682-9815",
+                  "celular": "(41) 98469-9345",
+                  "email": "limao.mel@outlook.com",
+                  "endereco": {
+                    "endereco": "R Alberico Flores Bueno",
+                    "numero": "837",
+                    "complemento": "",
+                    "bairro": "Bairro Alto",
+                    "municipio": "Curitiba",
+                    "cep": "82820070",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358938
+                },
+                "valor": "342",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910542787,
+                "situacao": 3,
+                "numeroPedido": 16545,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-07",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "LA DOLCE PADARIA E CONFEITARIA LTDA",
+                  "codigo": "137",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "29.916.104/0001-22",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99965-8675",
+                  "celular": "(41) 99965-8675",
+                  "email": "mfm0109@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Costa Rica",
+                    "numero": "1471",
+                    "complemento": "",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82515270",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358920
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910482061,
+                "situacao": 5,
+                "numeroPedido": 16544,
+                "ecommerce": {
+                  "id": 8098,
+                  "nome": "Loja Nuvemshop - APX",
+                  "numeroPedidoEcommerce": "229",
+                  "numeroPedidoCanalVenda": "",
+                  "canalVenda": ""
+                },
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "Silvia Helena Sawiniec",
+                  "codigo": "1548",
+                  "fantasia": "",
+                  "tipoPessoa": "F",
+                  "cpfCnpj": "023.945.099-02",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 98446-9766",
+                  "celular": "(41) 98446-9766",
+                  "email": "sil.hs@terra.com.br",
+                  "endereco": {
+                    "endereco": "Rua Nicola Pellanda",
+                    "numero": "3331",
+                    "complemento": "Condomínio Solar Florença",
+                    "bairro": "Umbará",
+                    "municipio": "Curitiba",
+                    "cep": "81.930-360",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 753831647
+                },
+                "valor": "100.65",
+                "vendedor": null,
+                "transportador": {
+                  "id": 752431420,
+                  "nome": "Transportadora LogManager",
+                  "fretePorConta": "",
+                  "formaEnvio": {
+                    "id": 885385224,
+                    "nome": "Transportadora LogManager"
+                  },
+                  "formaFrete": {
+                    "id": 885385227,
+                    "nome": "Transportadora LogManager"
+                  },
+                  "codigoRastreamento": "",
+                  "urlRastreamento": "https://app.logmanager.com.br/tracking"
+                }
+              },
+              {
+                "id": 910432308,
+                "situacao": 1,
+                "numeroPedido": 16543,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "CAFE DA CAMARA LTDA",
+                  "codigo": "787",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "55.397.549/0001-53",
+                  "inscricaoEstadual": "9107562300",
+                  "rg": "",
+                  "telefone": "(41) 9645-7163",
+                  "celular": "(41) 9645-7163",
+                  "email": "intervencao.ascmc@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Barão Do Rio Branco",
+                    "numero": "720",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80010180",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359583
+                },
+                "valor": "105.7",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910419716,
+                "situacao": 1,
+                "numeroPedido": 16542,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "MARTINS E MARTINS LTDA",
+                  "codigo": "1459",
+                  "fantasia": "FARMACIA DROGA CERTA",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "23.170.721/0001-45",
+                  "inscricaoEstadual": "9070306953",
+                  "rg": "",
+                  "telefone": "(41) 3044-6540",
+                  "celular": "(41) 99636-1200",
+                  "email": "farmaciadrogacerta2@hotmail.com",
+                  "endereco": {
+                    "endereco": "RUA RIO GUAPORE",
+                    "numero": "631",
+                    "complemento": "LOJA 08",
+                    "bairro": "BAIRRO ALTO",
+                    "municipio": "CURITIBA",
+                    "cep": "82.840-320",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752998302
+                },
+                "valor": "82",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910410656,
+                "situacao": 0,
+                "numeroPedido": 16541,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "JIG ALIMENTOS LTDA",
+                  "codigo": "326",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "47.399.821/0001-06",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 9991-3228",
+                  "celular": "(41) 9991-3228",
+                  "email": "festivaldagula8@gmail.com",
+                  "endereco": {
+                    "endereco": "R Holanda",
+                    "numero": "164",
+                    "complemento": "",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82510190",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359114
+                },
+                "valor": "105.7",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910403100,
+                "situacao": 3,
+                "numeroPedido": 16540,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ANTONIO DE SOUZA REVISTARIA",
+                  "codigo": "191",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "76.773.118/0001-14",
+                  "inscricaoEstadual": "1015621580",
+                  "rg": "",
+                  "telefone": "(41) 3264-7662",
+                  "celular": "",
+                  "email": "rev.bomjesus@gmail.com",
+                  "endereco": {
+                    "endereco": "R Bom Jesus",
+                    "numero": "1032",
+                    "complemento": "",
+                    "bairro": "Cabral",
+                    "municipio": "Curitiba",
+                    "cep": "80035010",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358979
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910400891,
+                "situacao": 1,
+                "numeroPedido": 16539,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "Quintal das frutas",
+                  "codigo": "1611",
+                  "fantasia": "Quintal das frutas",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "57.906.978/0001-34",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "(41) 99854-6250",
+                  "email": "Daianeoliveira.garcia@gmail.com",
+                  "endereco": {
+                    "endereco": "Avenida Francisco Krüger",
+                    "numero": "2",
+                    "complemento": "",
+                    "bairro": "Cachoeira",
+                    "municipio": "Almirante Tamandaré",
+                    "cep": "83504490",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 755119497
+                },
+                "valor": "218.72",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910400033,
+                "situacao": 1,
+                "numeroPedido": 16538,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "EAT ME CAFE LTDA.",
+                  "codigo": "367",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "30.472.289/0001-02",
+                  "inscricaoEstadual": "9078174665",
+                  "rg": "",
+                  "telefone": "(41) 3026-2502",
+                  "celular": "(41) 3026-2502",
+                  "email": "financeiro@eatmecafe.com.br",
+                  "endereco": {
+                    "endereco": "Rua Comendador Araujo",
+                    "numero": "415",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80420000",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359155
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910399881,
+                "situacao": 1,
+                "numeroPedido": 16537,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "VOSS & BONOSO LTDA",
+                  "codigo": "211",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "00.562.866/0001-96",
+                  "inscricaoEstadual": "9037725576",
+                  "rg": "",
+                  "telefone": "(41) 3329-4052",
+                  "celular": "(41) 3078-4715",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Marechal Deodoro",
+                    "numero": "1805",
+                    "complemento": "",
+                    "bairro": "Alto Da Rua Xv",
+                    "municipio": "Curitiba",
+                    "cep": "80045090",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358999
+                },
+                "valor": "64",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910395097,
+                "situacao": 1,
+                "numeroPedido": 16536,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "A D R M  BAR E RESTAURANTE LTDA",
+                  "codigo": "926",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "43.957.822/0001-78",
+                  "inscricaoEstadual": "9091440439",
+                  "rg": "",
+                  "telefone": "(41) 99531-5804",
+                  "celular": "(41) 9531-5804",
+                  "email": "angiedominik@hotmail.com",
+                  "endereco": {
+                    "endereco": "Rua Emiliano Perneta",
+                    "numero": "860",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80420080",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359725
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910390126,
+                "situacao": 1,
+                "numeroPedido": 16535,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "SUPERMERCADO ESTRELA DO ALMIRANTE LTDA - Jardim Roma",
+                  "codigo": "870",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "51.903.802/0001-42",
+                  "inscricaoEstadual": "9102276377",
+                  "rg": "",
+                  "telefone": "(41) 3393-8648",
+                  "celular": "",
+                  "email": "superestrelafc@hotmail.com",
+                  "endereco": {
+                    "endereco": "Rua Araucária",
+                    "numero": "282",
+                    "complemento": "",
+                    "bairro": "Jardim Roma",
+                    "municipio": "Almirante Tamandaré",
+                    "cep": "83504070",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359667
+                },
+                "valor": "169.7",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910386371,
+                "situacao": 3,
+                "numeroPedido": 16534,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "FABIO JOSE BENTHIEN 01901643956",
+                  "codigo": "969",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "22.935.782/0001-93",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99620-8070",
+                  "celular": "",
+                  "email": "benthien77@gmail.com",
+                  "endereco": {
+                    "endereco": "Avenida Nossa Senhora Da Penha",
+                    "numero": "332",
+                    "complemento": "",
+                    "bairro": "Cristo Rei",
+                    "municipio": "Curitiba",
+                    "cep": "80050550",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359772
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910383732,
+                "situacao": 6,
+                "numeroPedido": 16533,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "Thiago Adilson Portes",
+                  "codigo": "1441",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "46.094.193/0001-98",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Curitiba",
+                    "numero": "258",
+                    "complemento": "",
+                    "bairro": "Colônia São Venâncio",
+                    "municipio": "Almirante Tamandaré",
+                    "cep": "83.504-420",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752839456
+                },
+                "valor": "82",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910382269,
+                "situacao": 1,
+                "numeroPedido": 16532,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "MARCIO GOMES NOGUEIRA FARMACIA",
+                  "codigo": "1446",
+                  "fantasia": "Farmacia nogueira",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "01.665.369/0001-86",
+                  "inscricaoEstadual": "9031447000",
+                  "rg": "",
+                  "telefone": "(41) 3029-2014",
+                  "celular": "(41) 99633-0476",
+                  "email": "Farmacianogueiratangua@gmail.com",
+                  "endereco": {
+                    "endereco": "RUA PROFESSOR ALBERTO KRAUSE",
+                    "numero": "2019",
+                    "complemento": "",
+                    "bairro": "VILA TANGUA",
+                    "municipio": "ALMIRANTE TAMANDARE",
+                    "cep": "83.508-500",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752859611
+                },
+                "valor": "82",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910354822,
+                "situacao": 1,
+                "numeroPedido": 16531,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "EMARTINEZ & DMARTINEZ DROGARIA LTDA",
+                  "codigo": "1473",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "86.999.844/0001-03",
+                  "inscricaoEstadual": "1020171703",
+                  "rg": "",
+                  "telefone": "(41) 9542-4242",
+                  "celular": "(41) 99542-4242",
+                  "email": "masterlamenha@gmail.com",
+                  "endereco": {
+                    "endereco": "RUA VEREADOR WADISLAU BUGALSKI",
+                    "numero": "4827",
+                    "complemento": "",
+                    "bairro": "JARDIM VALMA",
+                    "municipio": "ALMIRANTE TAMANDARE",
+                    "cep": "83.507-270",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 753080126
+                },
+                "valor": "82",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 910344930,
+                "situacao": 0,
+                "numeroPedido": 16529,
+                "ecommerce": null,
+                "dataCriacao": "2025-01-06",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "CARLOS ROBERTO GONCALVES GOMES --vovo Tune",
+                  "codigo": "599",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "31.492.413/0001-64",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99954-3123",
+                  "celular": "",
+                  "email": "angelagg1966@gmail.com",
+                  "endereco": {
+                    "endereco": "R Professor Jose Mauricio Higgins",
+                    "numero": "818",
+                    "complemento": "",
+                    "bairro": "Boqueirao",
+                    "municipio": "Curitiba",
+                    "cep": "81650250",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359393
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 909940176,
+                "situacao": 6,
+                "numeroPedido": 16528,
+                "ecommerce": {
+                  "id": 8123,
+                  "nome": "Mercado Livre - APX",
+                  "numeroPedidoEcommerce": "2000010350363358",
+                  "numeroPedidoCanalVenda": "",
+                  "canalVenda": ""
+                },
+                "dataCriacao": "2025-01-03",
+                "dataPrevista": "2025-01-23",
+                "cliente": {
+                  "nome": "Carlos Augusto Silva",
+                  "codigo": "1610",
+                  "fantasia": "",
+                  "tipoPessoa": "F",
+                  "cpfCnpj": "600.038.047-04",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Lauro Muller",
+                    "numero": "26",
+                    "complemento": "",
+                    "bairro": "Botafogo",
+                    "municipio": "Rio de Janeiro",
+                    "cep": "22.290-160",
+                    "uf": "RJ",
+                    "pais": "Brasil"
+                  },
+                  "id": 754797038
+                },
+                "valor": "103.38",
+                "vendedor": null,
+                "transportador": {
+                  "id": 752524510,
+                  "nome": "EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS",
+                  "fretePorConta": "",
+                  "formaEnvio": {
+                    "id": 883864019,
+                    "nome": "Mercado Envios"
+                  },
+                  "formaFrete": {
+                    "id": 884274653,
+                    "nome": "PAC"
+                  },
+                  "codigoRastreamento": "AL906457765BR",
+                  "urlRastreamento": ""
+                }
+              },
+              {
+                "id": 909593919,
+                "situacao": 6,
+                "numeroPedido": 16527,
+                "ecommerce": {
+                  "id": 8123,
+                  "nome": "Mercado Livre - APX",
+                  "numeroPedidoEcommerce": "2000006933127285",
+                  "numeroPedidoCanalVenda": "",
+                  "canalVenda": ""
+                },
+                "dataCriacao": "2024-12-30",
+                "dataPrevista": "2025-01-09",
+                "cliente": {
+                  "nome": "Restaurante Macedo",
+                  "codigo": "53",
+                  "fantasia": "",
+                  "tipoPessoa": "F",
+                  "cpfCnpj": "028.801.749-88",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Raposo Tavares",
+                    "numero": "65",
+                    "complemento": "",
+                    "bairro": "Piquirivaí",
+                    "municipio": "Campo Mourão",
+                    "cep": "87.318-000",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752326863
+                },
+                "valor": "177.82",
+                "vendedor": null,
+                "transportador": {
+                  "id": 752524510,
+                  "nome": "EMPRESA BRASILEIRA DE CORREIOS E TELEGRAFOS",
+                  "fretePorConta": "",
+                  "formaEnvio": {
+                    "id": 883864019,
+                    "nome": "Mercado Envios"
+                  },
+                  "formaFrete": {
+                    "id": 884274653,
+                    "nome": "PAC"
+                  },
+                  "codigoRastreamento": "AL898926668BR",
+                  "urlRastreamento": ""
+                }
+              },
+              {
+                "id": 909546925,
+                "situacao": 1,
+                "numeroPedido": 16526,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-30",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "CEASAQ CENTRAL DE ABASTECIMENTO SANTA QUITERIA LTDA",
+                  "codigo": "559",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "09.084.226/0001-92",
+                  "inscricaoEstadual": "9041769740",
+                  "rg": "",
+                  "telefone": "(41) 3022-5020",
+                  "celular": "",
+                  "email": "celva.contabil@pop.com.br",
+                  "endereco": {
+                    "endereco": "R Professor Fabio De Souza",
+                    "numero": "1240",
+                    "complemento": "",
+                    "bairro": "Santa Quiteria",
+                    "municipio": "Curitiba",
+                    "cep": "80310230",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359352
+                },
+                "valor": "545",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 909033024,
+                "situacao": 5,
+                "numeroPedido": 16525,
+                "ecommerce": {
+                  "id": 8098,
+                  "nome": "Loja Nuvemshop - APX",
+                  "numeroPedidoEcommerce": "228",
+                  "numeroPedidoCanalVenda": "",
+                  "canalVenda": ""
+                },
+                "dataCriacao": "2024-12-26",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "Silvia Helena Sawiniec",
+                  "codigo": "1548",
+                  "fantasia": "",
+                  "tipoPessoa": "F",
+                  "cpfCnpj": "023.945.099-02",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 98446-9766",
+                  "celular": "(41) 98446-9766",
+                  "email": "sil.hs@terra.com.br",
+                  "endereco": {
+                    "endereco": "Rua Nicola Pellanda",
+                    "numero": "3331",
+                    "complemento": "Condomínio Solar Florença",
+                    "bairro": "Umbará",
+                    "municipio": "Curitiba",
+                    "cep": "81.930-360",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 753831647
+                },
+                "valor": "100.65",
+                "vendedor": null,
+                "transportador": {
+                  "id": 752431420,
+                  "nome": "Transportadora LogManager",
+                  "fretePorConta": "",
+                  "formaEnvio": {
+                    "id": 885385224,
+                    "nome": "Transportadora LogManager"
+                  },
+                  "formaFrete": {
+                    "id": 885385227,
+                    "nome": "Transportadora LogManager"
+                  },
+                  "codigoRastreamento": "",
+                  "urlRastreamento": "https://app.logmanager.com.br/tracking"
+                }
+              },
+              {
+                "id": 908975329,
+                "situacao": 3,
+                "numeroPedido": 16524,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-24",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "RAMOS & GOUVEA BAR E LANCHONETE LTDA",
+                  "codigo": "214",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "40.891.464/0001-50",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 3225-4430",
+                  "celular": "(41) 98836-9385",
+                  "email": "admshinobis@gmail.com",
+                  "endereco": {
+                    "endereco": "R Doutor Faivre",
+                    "numero": "507",
+                    "complemento": "",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80060140",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359002
+                },
+                "valor": "128",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908895005,
+                "situacao": 1,
+                "numeroPedido": 16523,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-24",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "DROGARIA VILA NORI LTDA - ME",
+                  "codigo": "1521",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "72.205.842/0001-90",
+                  "inscricaoEstadual": "1019363844",
+                  "rg": "",
+                  "telefone": "(41) 3338-2229",
+                  "celular": "(41) 99790-1017",
+                  "email": "Resende.willian@hotmail.com",
+                  "endereco": {
+                    "endereco": "RUA RAPOSO TAVARES",
+                    "numero": "1228",
+                    "complemento": "",
+                    "bairro": "PILARZINHO",
+                    "municipio": "CURITIBA",
+                    "cep": "82.100-452",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 753662457
+                },
+                "valor": "68.36",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908766359,
+                "situacao": 1,
+                "numeroPedido": 16522,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-23",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ESTRELA BOA VISTA MINIMERCADO LTDA",
+                  "codigo": "860",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "37.292.304/0001-80",
+                  "inscricaoEstadual": "90849500-49",
+                  "rg": "",
+                  "telefone": "(41) 3030-7474",
+                  "celular": "",
+                  "email": "departamentolegal3@centercontabeis.com.br",
+                  "endereco": {
+                    "endereco": "Rua Carlota Straube De Araújo",
+                    "numero": "1422",
+                    "complemento": "",
+                    "bairro": "Boa Vista",
+                    "municipio": "Curitiba",
+                    "cep": "82560330",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359657
+                },
+                "valor": "128",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908496279,
+                "situacao": 6,
+                "numeroPedido": 16521,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "ANTONIO DE SOUZA REVISTARIA",
+                  "codigo": "191",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "76.773.118/0001-14",
+                  "inscricaoEstadual": "1015621580",
+                  "rg": "",
+                  "telefone": "(41) 3264-7662",
+                  "celular": "",
+                  "email": "rev.bomjesus@gmail.com",
+                  "endereco": {
+                    "endereco": "R Bom Jesus",
+                    "numero": "1032",
+                    "complemento": "",
+                    "bairro": "Cabral",
+                    "municipio": "Curitiba",
+                    "cep": "80035010",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358979
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908494807,
+                "situacao": 1,
+                "numeroPedido": 16520,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "AUTO POSTO QUERUBIM LTDA",
+                  "codigo": "199",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "00.415.128/0001-16",
+                  "inscricaoEstadual": "9013145609",
+                  "rg": "",
+                  "telefone": "(41) 8506-8867",
+                  "celular": "(41) 9694-3329",
+                  "email": "Postoquerubim@yahoo.com.br",
+                  "endereco": {
+                    "endereco": "Rua Isaac Guelmann",
+                    "numero": "4209",
+                    "complemento": "",
+                    "bairro": "Novo Mundo",
+                    "municipio": "Curitiba",
+                    "cep": "81050030",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358987
+                },
+                "valor": "278",
+                "vendedor": {
+                  "id": 884086404,
+                  "nome": "Lucília da Silva Pereira"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908491018,
+                "situacao": 3,
+                "numeroPedido": 16519,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "LANCHONETE GENTIL LTDA",
+                  "codigo": "467",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "75.212.472/0001-07",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 99754-9511",
+                  "celular": "(41) 99754-9511",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "R Henr Itibere Da Cunha",
+                    "numero": "751",
+                    "complemento": "",
+                    "bairro": "Bom Retiro",
+                    "municipio": "Curitiba",
+                    "cep": "80520120",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359258
+                },
+                "valor": "203",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908478993,
+                "situacao": 1,
+                "numeroPedido": 16518,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "BL BUFFET 133 LTDA  - Apaixonados",
+                  "codigo": "658",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "32.293.861/0001-00",
+                  "inscricaoEstadual": "9080066403",
+                  "rg": "",
+                  "telefone": "(41) 9882-0506",
+                  "celular": "",
+                  "email": "restaurantebiffet133@gmail.com",
+                  "endereco": {
+                    "endereco": "Av Vicente Machado",
+                    "numero": "133",
+                    "complemento": "Bárbara",
+                    "bairro": "Centro",
+                    "municipio": "Curitiba",
+                    "cep": "80420010",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359453
+                },
+                "valor": "116.7",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908475419,
+                "situacao": 1,
+                "numeroPedido": 16517,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "G C GONCALVES COMERCIO DE BEBIDAS",
+                  "codigo": "203",
+                  "fantasia": "Gonçalves e Gobbo",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "46.829.866/0001-00",
+                  "inscricaoEstadual": "9095138044",
+                  "rg": "",
+                  "telefone": "(41) 9950-6605",
+                  "celular": "(41) 9950-6605",
+                  "email": "gigio.gd@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Tomazina",
+                    "numero": "345",
+                    "complemento": "",
+                    "bairro": "Ahú",
+                    "municipio": "Curitiba",
+                    "cep": "80540160",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358991
+                },
+                "valor": "139",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908472512,
+                "situacao": 1,
+                "numeroPedido": 16516,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "EMARTINEZ & DMARTINEZ DROGARIA LTDA",
+                  "codigo": "1473",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "86.999.844/0001-03",
+                  "inscricaoEstadual": "1020171703",
+                  "rg": "",
+                  "telefone": "(41) 9542-4242",
+                  "celular": "(41) 99542-4242",
+                  "email": "masterlamenha@gmail.com",
+                  "endereco": {
+                    "endereco": "RUA VEREADOR WADISLAU BUGALSKI",
+                    "numero": "4827",
+                    "complemento": "",
+                    "bairro": "JARDIM VALMA",
+                    "municipio": "ALMIRANTE TAMANDARE",
+                    "cep": "83.507-270",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 753080126
+                },
+                "valor": "68.36",
+                "vendedor": {
+                  "id": 890051560,
+                  "nome": "Thiago Adilson Portes"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908471194,
+                "situacao": 6,
+                "numeroPedido": 16515,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "TEMPERO ESPECIAL COMERCIO DE ALIMENTOS LTDA",
+                  "codigo": "197",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "17.765.295/0001-90",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "",
+                  "celular": "",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Estados Unidos",
+                    "numero": "1610",
+                    "complemento": "Até 1624/1625",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82510050",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358985
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908466674,
+                "situacao": 3,
+                "numeroPedido": 16514,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "BOCA DISTRIBUIDORA DE BEBIDAS E ALIMENTOS LTDA",
+                  "codigo": "174",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "44.386.946/0001-03",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(41) 3598-6068",
+                  "celular": "(41) 99526-6525",
+                  "email": "rstesolin@gmail.com",
+                  "endereco": {
+                    "endereco": "Rua Álvaro Botelho",
+                    "numero": "95",
+                    "complemento": "",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82515290",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358960
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908464062,
+                "situacao": 3,
+                "numeroPedido": 16513,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "A PAULA BARBOZA BATISTA PANIFICADORA E CONFEITARIA",
+                  "codigo": "148",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "26.680.334/0001-47",
+                  "inscricaoEstadual": "9073794932",
+                  "rg": "",
+                  "telefone": "(41) 3086-1769",
+                  "celular": "",
+                  "email": "panificadorabatista.xml@gmail.com",
+                  "endereco": {
+                    "endereco": "R Nicaragua",
+                    "numero": "647",
+                    "complemento": "",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82510170",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752358932
+                },
+                "valor": "75",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908463740,
+                "situacao": 6,
+                "numeroPedido": 16512,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "LAMBACH COMERCIO DE BEBIDAS LTDA",
+                  "codigo": "349",
+                  "fantasia": "",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "46.152.246/0001-80",
+                  "inscricaoEstadual": "",
+                  "rg": "",
+                  "telefone": "(47) 99976-0041",
+                  "celular": "(47) 99976-0041",
+                  "email": "",
+                  "endereco": {
+                    "endereco": "Rua Fagundes Varela",
+                    "numero": "1667",
+                    "complemento": "",
+                    "bairro": "Bacacheri",
+                    "municipio": "Curitiba",
+                    "cep": "82520702",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 752359137
+                },
+                "valor": "64",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              },
+              {
+                "id": 908459209,
+                "situacao": 1,
+                "numeroPedido": 16511,
+                "ecommerce": null,
+                "dataCriacao": "2024-12-20",
+                "dataPrevista": "",
+                "cliente": {
+                  "nome": "VLS GASTRONOMIA E COMERCIO DE ALIMENTOS LTDA",
+                  "codigo": "1536",
+                  "fantasia": "HELOISA GASTRONOMIA",
+                  "tipoPessoa": "J",
+                  "cpfCnpj": "26.068.732/0001-07",
+                  "inscricaoEstadual": "9075226877",
+                  "rg": "",
+                  "telefone": "(41) 98750-7976",
+                  "celular": "(41) 98750-7976",
+                  "email": "heloisabuffetgrill@hotmail.com",
+                  "endereco": {
+                    "endereco": "RUA OCTAVIO SCHIAVON",
+                    "numero": "436",
+                    "complemento": "SLJ SOBRE LOJA",
+                    "bairro": "CAPAO DA IMBUIA",
+                    "municipio": "CURITIBA",
+                    "cep": "82.800-360",
+                    "uf": "PR",
+                    "pais": "Brasil"
+                  },
+                  "id": 753745208
+                },
+                "valor": "64",
+                "vendedor": {
+                  "id": 883668443,
+                  "nome": "João Luis de Souza Neto"
+                },
+                "transportador": null
+              }
+            ],
+            "paginacao": {
+              "limit": 100,
+              "offset": 0,
+              "total": 15362
+            }
+          }
+        }
+      ]
+    },
+    "versionId": "cb984486-c207-49bd-818f-3c834841da68",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2025-01-09T21:27:42.028Z",
+        "createdAt": "2025-01-09T21:27:42.028Z",
+        "role": "workflow:owner",
+        "workflowId": "J1V9CDH8rM6ppDQH",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]

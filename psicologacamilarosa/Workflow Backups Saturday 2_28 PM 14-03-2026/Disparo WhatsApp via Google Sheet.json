@@ -1,0 +1,518 @@
+[
+  {
+    "updatedAt": "2025-02-27T01:49:47.818Z",
+    "createdAt": "2025-02-27T01:08:50.746Z",
+    "id": "ygVEODu1nlhZQ6bu",
+    "name": "Disparo WhatsApp via Google Sheet",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          440,
+          0
+        ],
+        "id": "7565e1ce-fd96-480b-af45-f0d79d9ff072",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=<CLIENTE>\nnome: {{ $json.name }}\ntelefone: {{ $json.phone }}\nempresa: {{ $json.company }}\n</CLIENTE>",
+          "hasOutputParser": true,
+          "options": {
+            "systemMessage": "Você é um assistente comercial especializado em criar mensagens personalizadas para WhatsApp, com o objetivo de destacar os benefícios das soluções da empresa **SMNT.Digital**. A SMNT.Digital é uma empresa inovadora que desenvolve automações baseadas em Inteligência Artificial, voltadas para grandes negócios, ajudando a otimizar processos das empresas.\n\n### Diretrizes para o Agente:\n1. **Objetivo da Mensagem:**\n   - Criar uma mensagem curta, direta e impactante que transmita o valor da automação para agendamentos e prospecção.\n   - O foco é gerar interesse e engajamento no cliente, incentivando-o a considerar os serviços da SMNT.Digital.\n- Ao final da mensagem, envie o link de pdf: https://smntdigital.com.br/wp-content/uploads/2025/02/Criando_Ebook.pdf\n\n2. **Tonalidade:**\n   - Use um tom profissional, mas amigável e acessível.\n   - Destaque a inovação e a eficiência proporcionadas pelas soluções de automação.\n\n3. **Estrutura da Mensagem:**\n   - Inicie com uma saudação personalizada, chamando o cliente pelo nome (quando possível).\n   - Apresente brevemente o serviço oferecido, conectando-o às necessidades do cliente.\n   - Destaque um benefício-chave das automações (ex.: economia de tempo, aumento de leads qualificados, ou agendamentos mais eficientes).\n   - Finalize com uma call-to-action clara, como: \"Gostaria de saber mais? Entre em contato!\"\n\n4. **Restrições:**\n   - Nunca envie mensagens genéricas ou muito longas.\n   - Evite jargões técnicos que possam confundir o cliente.\n   - Não mencione preços ou termos específicos, a menos que solicitado explicitamente.\n\n### Exemplo de Mensagem Personalizada:\n\"Olá, [Nome do Cliente]! Aqui é da SMNT.Digital, uma empresa que transforma agendamentos e prospecção com automação inteligente. Com nossas soluções, você economiza tempo e aumenta a eficiência da sua equipe. Gostaria de saber como podemos ajudar seu negócio a crescer? Fale conosco!\""
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 1.7,
+        "position": [
+          700,
+          0
+        ],
+        "id": "2a4ed95e-c30e-4c23-be65-6aa73b6f6ae0",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {
+          "operation": "appendOrUpdate",
+          "documentId": {
+            "__rl": true,
+            "value": "1u8HaDVuNUa8uNbqr57epl2s1FAFxcZtKG2fFC_Awk1M",
+            "mode": "list",
+            "cachedResultName": "list",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u8HaDVuNUa8uNbqr57epl2s1FAFxcZtKG2fFC_Awk1M/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 339472866,
+            "mode": "list",
+            "cachedResultName": "messages",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1u8HaDVuNUa8uNbqr57epl2s1FAFxcZtKG2fFC_Awk1M/edit#gid=339472866"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "id": "={{$json.messageTimestamp }}",
+              "nome": "={{ $('Loop Over Items').item.json.nome }}",
+              "numero": "={{ $('Loop Over Items').item.json.numero }}",
+              "data_hora": "={{ $now.format(\"dd/MM/yyyy hh:mm\") }}",
+              "mensagem": "={{ $('AI Agent').item.json.output }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "nome",
+                "displayName": "nome",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "numero",
+                "displayName": "numero",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "data_hora",
+                "displayName": "data_hora",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "mensagem",
+                "displayName": "mensagem",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.5,
+        "position": [
+          1280,
+          0
+        ],
+        "id": "13600774-d643-4f76-bf5d-7c5359245886",
+        "name": "Google Sheets",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "nmdcnQARvUANp3ra",
+            "name": "Google Sheets - n8n-web-client - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1500,
+          0
+        ],
+        "id": "b5b4a40e-d0ab-4a79-9066-130e1de8cdee",
+        "name": "Wait",
+        "webhookId": "11ac313c-4e28-4d53-b711-016f3560dd45"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.1,
+        "position": [
+          440,
+          240
+        ],
+        "id": "305b6b48-c721-4707-b4d1-aff8a104ee35",
+        "name": "OpenAI Chat Model",
+        "credentials": {
+          "openAiApi": {
+            "id": "aYh6OxiTKlkwTrPm",
+            "name": "OpenAi n8n key"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsonSchemaExample": "\"sua mensagem aqui\""
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+        "typeVersion": 1.2,
+        "position": [
+          1060,
+          400
+        ],
+        "id": "ec5018f7-c546-49cd-bd33-6f761b1bf1b3",
+        "name": "Structured Output Parser"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+        "typeVersion": 1,
+        "position": [
+          760,
+          240
+        ],
+        "id": "e58b1e33-15ea-4fec-b019-ec36385a8630",
+        "name": "Calculator"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.outputParserAutofixing",
+        "typeVersion": 1,
+        "position": [
+          900,
+          240
+        ],
+        "id": "2d0ad67f-5061-43b9-83be-1b4b3321bf26",
+        "name": "Auto-fixing Output Parser"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+        "typeVersion": 1.1,
+        "position": [
+          880,
+          400
+        ],
+        "id": "228d1ef2-00b3-487d-bcf4-fe1f9736358f",
+        "name": "OpenAI Chat Model1",
+        "credentials": {
+          "openAiApi": {
+            "id": "QBE26nTS8bfWjvAM",
+            "name": "OpenAi n8n psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "instanceName": "psicologacamilarosa",
+          "remoteJid": "={{ $('Loop Over Items').item.json.phone }}@s.whatsapp.net",
+          "messageText": "={{ $json.output }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          1080,
+          0
+        ],
+        "id": "f3ec2d72-7ebb-4384-a627-61c32378edf4",
+        "name": "Evolution API",
+        "credentials": {
+          "evolutionApi": {
+            "id": "929o86uLbyCp0kG3",
+            "name": "Evolution - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('Extract csv').item.json.phone }}"
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.3,
+        "position": [
+          620,
+          240
+        ],
+        "id": "aa020a87-399a-46c1-aacd-e360da9ab334",
+        "name": "Window Buffer Memory"
+      },
+      {
+        "parameters": {
+          "resource": "messages-api",
+          "operation": "send-document",
+          "instanceName": "smntdigital",
+          "remoteJid": "={{ $('Loop Over Items').item.json.phone }}@s.whatsapp.net",
+          "media": "https://smntdigital.com.br/wp-content/uploads/2025/02/Criando_Ebook.pdf",
+          "caption": "={{ $json.output }}",
+          "options_message": {}
+        },
+        "type": "n8n-nodes-evolution-api.evolutionApi",
+        "typeVersion": 1,
+        "position": [
+          900,
+          -260
+        ],
+        "id": "4d2c6bab-65bf-4d9c-8859-a979658b8e0d",
+        "name": "Evolution API1",
+        "credentials": {
+          "evolutionApi": {
+            "id": "929o86uLbyCp0kG3",
+            "name": "Evolution - psicologacamilarosa"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "binaryPropertyName": "list",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.extractFromFile",
+        "typeVersion": 1,
+        "position": [
+          220,
+          0
+        ],
+        "id": "73e899ff-dfd3-4edd-acbf-75e144f2e981",
+        "name": "Extract csv"
+      },
+      {
+        "parameters": {
+          "formTitle": "Disparo",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "list",
+                "fieldType": "file",
+                "acceptFileTypes": "csv",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "pdf",
+                "fieldType": "file",
+                "acceptFileTypes": "pdf",
+                "requiredField": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.2,
+        "position": [
+          0,
+          0
+        ],
+        "id": "9b2e5e74-2106-4a4e-a6bb-31fbfccaec59",
+        "name": "form_submission",
+        "webhookId": "ed6554f0-a12d-40b6-a338-f91bdbbbb948"
+      }
+    ],
+    "connections": {
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Evolution API",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Sheets": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Structured Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "Auto-fixing Output Parser",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calculator": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Auto-fixing Output Parser": {
+        "ai_outputParser": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_outputParser",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "OpenAI Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Auto-fixing Output Parser",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Evolution API": {
+        "main": [
+          [
+            {
+              "node": "Google Sheets",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Window Buffer Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Evolution API1": {
+        "main": [
+          []
+        ]
+      },
+      "Extract csv": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "form_submission": {
+        "main": [
+          [
+            {
+              "node": "Extract csv",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "settings": {
+      "executionOrder": "v1",
+      "timezone": "America/Sao_Paulo",
+      "callerPolicy": "workflowsFromSameOwner",
+      "errorWorkflow": "QXFrfjYJi0JXm241"
+    },
+    "staticData": null,
+    "meta": {
+      "templateCredsSetupCompleted": true
+    },
+    "pinData": {
+      "Extract csv": [
+        {
+          "json": {
+            "name": "Luan",
+            "phone": "5541996787181",
+            "company": "Zeif"
+          }
+        }
+      ]
+    },
+    "versionId": "8e4f0f25-e81a-471c-b5b3-fd2ff449c083",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+      {
+        "updatedAt": "2025-02-27T01:08:50.746Z",
+        "createdAt": "2025-02-27T01:08:50.746Z",
+        "role": "workflow:owner",
+        "workflowId": "ygVEODu1nlhZQ6bu",
+        "projectId": "kIME1uXtRB3VHBZW"
+      }
+    ],
+    "activeVersion": null,
+    "tags": []
+  }
+]
